@@ -1,0 +1,234 @@
+/* custom.css */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+
+:root {
+  --primary: #6366f1;
+  --primary-dark: #4f46e5;
+  --secondary: #8b5cf6;
+  --accent: #06b6d4;
+  --success: #10b981;
+  --warning: #f59e0b;
+  --danger: #ef4444;
+  
+  --primary-subtle: #eef2ff;
+  --secondary-subtle: #f5f3ff;
+  --accent-subtle: #ecfeff;
+  --success-subtle: #d1fae5;
+  --warning-subtle: #fef3c7;
+  --danger-subtle: #fee2e2;
+}
+
+body {
+  font-family: 'Inter', sans-serif;
+}
+
+/* Gradient Text */
+.gradient-text {
+  background: linear-gradient(135deg, var(--primary), var(--secondary), var(--accent));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* Gradient Backgrounds */
+.bg-gradient-primary {
+  background: linear-gradient(135deg, var(--primary), var(--secondary)) !important;
+}
+
+/* Icon Wrappers */
+.icon-wrapper {
+  width: 64px;
+  height: 64px;
+  border-radius: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto;
+}
+
+.icon-wrapper svg {
+  width: 32px;
+  height: 32px;
+}
+
+/* Section Icon */
+.section-icon-wrapper {
+  width: 80px;
+  height: 80px;
+  background: linear-gradient(135deg, var(--primary-subtle), var(--accent-subtle));
+  border-radius: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 1.5rem;
+}
+
+.section-icon-wrapper svg {
+  width: 40px;
+  height: 40px;
+  color: var(--primary);
+}
+
+/* Hover Effects */
+.hover-lift {
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.hover-lift:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1) !important;
+}
+
+/* Custom Button Styles */
+.btn-primary {
+  background-color: var(--primary);
+  border-color: var(--primary);
+}
+
+.btn-primary:hover {
+  background-color: var(--primary-dark);
+  border-color: var(--primary-dark);
+}
+
+.btn-outline-primary {
+  color: var(--primary);
+  border-color: var(--primary);
+}
+
+.btn-outline-primary:hover {
+  background-color: var(--primary);
+  border-color: var(--primary);
+}
+
+/* Custom Badge Styles */
+.badge.bg-primary-subtle {
+  background-color: var(--primary-subtle);
+  color: var(--primary);
+}
+
+.badge.bg-secondary-subtle {
+  background-color: var(--secondary-subtle);
+  color: var(--secondary);
+}
+
+.badge.bg-accent-subtle {
+  background-color: var(--accent-subtle);
+  color: var(--accent);
+}
+
+.badge.bg-success-subtle {
+  background-color: var(--success-subtle);
+  color: var(--success);
+}
+
+.badge.bg-warning-subtle {
+  background-color: var(--warning-subtle);
+  color: var(--warning);
+}
+
+.badge.bg-danger-subtle {
+  background-color: var(--danger-subtle);
+  color: var(--danger);
+}
+
+/* Hero Section */
+.hero-section {
+  background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
+}
+
+/* Progress Bar Customization */
+.progress {
+  background-color: #e2e8f0;
+  border-radius: 10px;
+}
+
+.progress-bar {
+  border-radius: 10px;
+}
+
+/* Tab Button Customization */
+.tab-button {
+  min-width: 200px;
+  justify-content: center;
+}
+
+.tab-button .tab-icon svg {
+  width: 24px;
+  height: 24px;
+}
+
+/* Responsive Adjustments */
+@media (max-width: 768px) {
+  .display-3 {
+    font-size: 2.5rem;
+  }
+  
+  .tab-button {
+    min-width: 100%;
+  }
+  
+  .section-icon-wrapper {
+    width: 60px;
+    height: 60px;
+  }
+  
+  .section-icon-wrapper svg {
+    width: 30px;
+    height: 30px;
+  }
+}
+
+/* Animation Classes */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.fade-in-up {
+  animation: fadeInUp 0.6s ease-out;
+}
+
+/* Custom Utilities */
+.mt-6 {
+  margin-top: 4rem;
+}
+
+.mb-6 {
+  margin-bottom: 4rem;
+}
+
+.py-6 {
+  padding-top: 4rem;
+  padding-bottom: 4rem;
+}
+
+/* Card Customization */
+.card {
+  border-radius: 16px;
+  overflow: hidden;
+  transition: all 0.3s ease;
+}
+
+.card-body {
+  padding: 2rem;
+}
+
+/* Smooth Scroll */
+html {
+  scroll-behavior: smooth;
+}
+
+/* Custom Shadows */
+.shadow-sm {
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06) !important;
+}
+
+.shadow-lg {
+  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04) !important;
+}

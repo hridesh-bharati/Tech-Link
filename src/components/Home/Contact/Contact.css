@@ -1,0 +1,202 @@
+/* =============================
+   CONTACT SECTION
+============================= */
+.contact-section {
+  padding: var(--space-40) 0;
+  background: var(--gradient-light);
+}
+
+/* =============================
+   SECTION HEADER
+============================= */
+.section-header h2 {
+  font-weight: 800;
+  font-size: var(--text-4xl);
+  color: var(--text-primary);
+}
+
+.section-header p {
+  color: var(--text-secondary);
+  margin-top: var(--space-2);
+}
+
+/* =============================
+   GRID
+============================= */
+.contact-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--space-10);
+  margin-top: var(--space-12);
+}
+
+@media (max-width: 992px) {
+  .contact-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* =============================
+   LEFT COLUMN
+============================= */
+.contact-left h3 {
+  font-weight: 700;
+  margin-bottom: var(--space-2);
+  color: var(--text-primary);
+}
+
+.contact-desc {
+  color: var(--text-secondary);
+  margin-bottom: var(--space-8);
+}
+
+/* =============================
+   CONTACT CARDS
+============================= */
+.contact-cards {
+  display: grid;
+  gap: var(--space-3);
+}
+
+.contact-card {
+  display: flex;
+  gap: var(--space-3);
+  padding: var(--space-4);
+  background: var(--bg-light);
+  border-radius: var(--border-radius-lg);
+  text-decoration: none;
+  color: var(--text-primary);
+  box-shadow: var(--shadow-lg);
+  transition: transform var(--transition-base);
+}
+
+.contact-card:hover {
+  transform: translateY(-4px);
+}
+
+.icon-box {
+  width: 44px;
+  height: 44px;
+  background: var(--gradient-primary);
+  color: var(--text-inverse);
+  display: grid;
+  place-items: center;
+  border-radius: var(--border-radius-md);
+}
+
+/* =============================
+   SOCIAL LINKS
+============================= */
+.social-section {
+  margin-top: var(--space-8);
+}
+
+.social-links {
+  display: flex;
+  gap: var(--space-3);
+  margin-top: var(--space-2);
+}
+
+.social-links a {
+  width: 42px;
+  height: 42px;
+  background: var(--bg-light);
+  border-radius: var(--border-radius-full);
+  display: grid;
+  place-items: center;
+  color: var(--primary);
+  box-shadow: var(--shadow-md);
+  transition: transform var(--transition-fast), box-shadow var(--transition-fast);
+}
+
+.social-links a:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-lg);
+}
+
+/* =============================
+   AVAILABILITY
+============================= */
+.availability-box {
+  margin-top: var(--space-8);
+  padding: var(--space-3);
+  background: var(--gradient-secondary);
+  color: var(--text-inverse);
+  border-radius: var(--border-radius-md);
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  font-weight: 600;
+}
+
+.availability-box .dot {
+  width: 10px;
+  height: 10px;
+  background: var(--success);
+  border-radius: var(--border-radius-full);
+}
+
+/* =============================
+   CONTACT FORM
+============================= */
+.contact-form {
+  background: var(--bg-light);
+  padding: var(--space-8);
+  border-radius: var(--border-radius-xl);
+  box-shadow: var(--shadow-xl);
+}
+
+.contact-form h3 {
+  margin-bottom: var(--space-5);
+  font-weight: 700;
+  color: var(--text-primary);
+}
+
+.contact-form input,
+.contact-form textarea {
+  width: 100%;
+  padding: var(--space-3) var(--space-4);
+  margin-bottom: var(--space-3);
+  border-radius: var(--border-radius-lg);
+  border: 1px solid var(--gray-200);
+  outline: none;
+  color: var(--text-primary);
+  background: var(--bg-light);
+}
+
+.contact-form input:focus,
+.contact-form textarea:focus {
+  border-color: var(--primary);
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.2);
+}
+
+/* =============================
+   BUTTON
+============================= */
+.btn-submit {
+  width: 100%;
+  padding: var(--space-3);
+  background: var(--gradient-primary);
+  color: var(--text-inverse);
+  border: none;
+  border-radius: var(--border-radius-md);
+  font-weight: 600;
+  cursor: pointer;
+  transition: transform var(--transition-fast);
+}
+
+.btn-submit:hover {
+  transform: scale(1.02);
+}
+
+/* =============================
+   SUCCESS MESSAGE
+============================= */
+.success-msg {
+  margin-top: var(--space-3);
+  color: var(--success);
+  display: flex;
+  gap: var(--space-2);
+  align-items: center;
+  font-weight: 600;
+}

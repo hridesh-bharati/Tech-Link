@@ -1,0 +1,182 @@
+/* ================= PROJECTS SECTION ================= */
+.projects.section {
+  padding: 100px 0;
+  background: var(--bg-secondary);
+  color: var(--text-primary);
+}
+
+/* ================= TITLE ================= */
+.section-title {
+  text-align: center;
+  margin-bottom: 60px;
+}
+
+.section-title .section-subtitle {
+  color: var(--text-muted);
+  margin-top: 8px;
+}
+
+/* ================= CATEGORIES ================= */
+.project-categories {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 12px;
+  margin-bottom: 50px;
+}
+
+.category-btn {
+  padding: 10px 18px;
+  border-radius: var(--border-radius-full);
+  background: var(--bg-primary);
+  color: var(--text-secondary);
+  border: 1px solid var(--border-color);
+  font-size: var(--text-sm);
+  cursor: pointer;
+  transition: all var(--transition-base);
+}
+
+.category-btn:hover {
+  color: var(--primary);
+  border-color: var(--primary);
+}
+
+.category-btn.active {
+  background: var(--gradient-primary);
+  color: var(--text-inverse);
+  border-color: transparent;
+  box-shadow: var(--shadow-md);
+}
+
+/* ================= GRID ================= */
+.projects-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 30px;
+}
+
+/* ================= CARD ================= */
+.project-card {
+  background: var(--bg-primary);
+  border-radius: var(--border-radius-xl);
+  overflow: hidden;
+  border: 1px solid var(--border-color);
+  box-shadow: var(--shadow-sm);
+  transition: transform var(--transition-base), box-shadow var(--transition-base);
+}
+
+.project-card:hover {
+  box-shadow: var(--shadow-xl);
+}
+
+/* ================= IMAGE ================= */
+.project-image {
+  position: relative;
+  height: 200px;
+  background: var(--gradient-light);
+  display: grid;
+  place-items: center;
+}
+
+.image-placeholder {
+  font-size: 40px;
+  color: var(--gray-400);
+}
+
+/* ================= OVERLAY ================= */
+.project-overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(15, 23, 42, 0.65);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  transition: opacity var(--transition-base);
+}
+
+.project-card:hover .project-overlay {
+  opacity: 1;
+}
+
+.project-links {
+  display: flex;
+  gap: 14px;
+}
+
+.project-link {
+  width: 44px;
+  height: 44px;
+  border-radius: var(--border-radius-full);
+  background: var(--bg-primary);
+  display: grid;
+  place-items: center;
+  color: var(--primary);
+  box-shadow: var(--shadow-md);
+}
+
+/* ================= CONTENT ================= */
+.project-content {
+  padding: 20px;
+}
+
+.project-title {
+  font-size: var(--text-lg);
+  font-weight: 600;
+  margin-bottom: 8px;
+}
+
+.project-description {
+  font-size: var(--text-sm);
+  color: var(--text-secondary);
+  margin-bottom: 14px;
+}
+
+/* ================= TAGS ================= */
+.project-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 16px;
+}
+
+.project-tag {
+  font-size: var(--text-xs);
+  padding: 6px 10px;
+  border-radius: var(--border-radius-full);
+  background: var(--gray-100);
+  color: var(--gray-700);
+}
+
+/* ================= ACTIONS ================= */
+.project-actions {
+  display: flex;
+  gap: 12px;
+}
+
+.project-actions .btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+/* ================= FEATURED (OPTIONAL) ================= */
+.project-card.featured {
+  border: 2px solid var(--primary-light);
+}
+
+/* ================= CTA ================= */
+.text-center.mt-8 {
+  margin-top: 60px;
+}
+
+/* ================= RESPONSIVE ================= */
+@media (max-width: 768px) {
+  .projects-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .project-actions {
+    flex-direction: column;
+  }
+}

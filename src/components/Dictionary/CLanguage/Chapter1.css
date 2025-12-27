@@ -1,0 +1,57 @@
+/* Chapter1.css */
+
+/* Base card styling */
+.chapter-content .card {
+  background-color: var(--bg-light); /* light mode background */
+  border: 1px solid var(--border-color);
+  border-radius: 0.5rem;
+  color: var(--text-primary); /* text color */
+  transition: all 0.3s ease;
+}
+
+/* Dark mode overrides */
+body.dark-mode .chapter-content .card {
+  background-color: var(--bg-dark); /* dark background */
+  border: 1px solid var(--border-color-dark);
+  color: var(--text-white); /* readable text in dark */
+}
+
+/* Card header */
+.chapter-content .card-header {
+  background-color: var(--bg-light);
+  border-bottom: 1px solid var(--border-color);
+}
+
+body.dark-mode .chapter-content .card-header {
+  background-color: var(--bg-dark);
+  border-bottom: 1px solid var(--border-color-dark);
+}
+
+/* Badges inside card */
+.chapter-content .card .badge {
+  transition: all 0.3s ease;
+}
+
+body.dark-mode .chapter-content .card .badge {
+  background-color: var(--primary-dark);
+  color: var(--text-white);
+}
+
+/* Timeline card content */
+.chapter-content .timeline-content {
+  background: var(--bg-light);
+  border: 1px solid var(--border-color);
+  color: var(--text-primary);
+}
+
+body.dark-mode .chapter-content .timeline-content {
+  background: var(--bg-dark);
+  border: 1px solid var(--border-color-dark);
+  color: var(--text-white);
+}
+
+/* Hover effect for cards */
+.chapter-content .card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+}

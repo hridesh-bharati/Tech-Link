@@ -1,0 +1,139 @@
+.skills-section {
+  padding: 100px 0;
+  background: var(--bg-secondary);
+  color: var(--text-primary);
+}
+
+/* TITLE */
+.skills-title {
+  text-align: center;
+  margin-bottom: 60px;
+}
+.skills-title p {
+  color: var(--text-muted);
+}
+
+/* HEADINGS */
+.skills-heading {
+  margin-bottom: 24px;
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+
+/* TECH GRID */
+.skills-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 24px;
+}
+
+/* SKILL CARD */
+.skill-card {
+  background: var(--bg-primary);
+  padding: 20px;
+  border-radius: var(--border-radius-xl);
+  border: 1px solid var(--border-color);
+  box-shadow: var(--shadow-sm);
+}
+
+.skill-icon {
+  width: 48px;
+  height: 48px;
+  border-radius: var(--border-radius-lg);
+  display: grid;
+  place-items: center;
+  margin-bottom: 14px;
+  color: #fff;
+}
+
+.skill-header {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 8px;
+  font-weight: 600;
+}
+
+.skill-bar,
+.soft-skill-bar {
+  height: 8px;
+  background: var(--gray-200);
+  border-radius: 999px;
+  overflow: hidden;
+}
+
+.skill-progress,
+.soft-skill-progress {
+  height: 100%;
+  border-radius: 999px;
+}
+
+/* COLUMNS */
+.skills-columns {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 40px;
+  margin-top: 80px;
+}
+
+/* SOFT */
+.soft-skill {
+  margin-bottom: 16px;
+}
+
+.soft-skill-head {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 6px;
+  color: var(--text-secondary);
+}
+
+/* ================= TOOLS (BRANDED PREMIUM) ================= */
+.tools-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+  gap: 24px;
+}
+
+.tool-card {
+  background: rgba(255,255,255,0.04);
+  backdrop-filter: blur(12px);
+  border-radius: var(--border-radius-xl);
+  padding: 22px 16px;
+  text-align: center;
+  border: 1px solid var(--border-color);
+  cursor: pointer;
+  transition: all .25s ease;
+}
+
+.tool-card:hover {
+  border-color: var(--tool-color);
+  box-shadow: 0 10px 40px var(--tool-glow);
+}
+
+.tool-icon {
+  width: 56px;
+  height: 56px;
+  margin: 0 auto 10px;
+  display: grid;
+  place-items: center;
+  border-radius: var(--border-radius-lg);
+  background: radial-gradient(circle at top, var(--tool-glow), transparent 65%);
+}
+
+.tool-icon i {
+  font-size: 30px;
+  color: var(--tool-color);
+}
+
+.tool-card span {
+  font-size: 14px;
+  font-weight: 600;
+}
+
+/* RESPONSIVE */
+@media (max-width: 900px) {
+  .skills-columns {
+    grid-template-columns: 1fr;
+  }
+}
