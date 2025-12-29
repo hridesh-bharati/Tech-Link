@@ -45,8 +45,8 @@ export default function Header({ isSwipingRef }) {
       <header className={`pf-header ${scrolled ? "pf-blur" : ""}`}>
         <div className="pf-header-inner container-lg">
           
-          {/* Left: Brand & Menu Button */}
-          <div className="pf-header-left d-flex justify-between  w-100">
+          {/* Left: Menu Button & Logo */}
+          <div className="pf-header-left">
             <button
               className="pf-brand-btn"
               onClick={() => setSidebarOpen(true)}
@@ -80,30 +80,32 @@ export default function Header({ isSwipingRef }) {
             </nav>
           )}
 
-          {/* Right: Desktop Actions */}
+          {/* Right: Desktop Actions (Hamburger on Right) */}
           {isDesktop && (
-            <div className="pf-header-actions ms-4">
-              <button 
-                className="pf-theme-toggle"
-                onClick={() => {
-                  const current = localStorage.getItem("theme-mode") || "system";
-                  const next = current === "light" ? "dark" : "light";
-                  localStorage.setItem("theme-mode", next);
-                  document.documentElement.setAttribute("data-theme", next);
-                }}
-                aria-label="Toggle theme"
-              >
-                <i className="bi bi-sun-fill" />
-                <i className="bi bi-moon-fill" />
-              </button>
-              
-              <button 
-                className="pf-settings-btn"
-                onClick={() => setSidebarOpen(true)}
-                aria-label="Open settings"
-              >
-                <i className="bi bi-gear-fill" />
-              </button>
+            <div className="pf-header-right">
+              <div className="pf-header-actions">
+                <button 
+                  className="pf-theme-toggle"
+                  onClick={() => {
+                    const current = localStorage.getItem("theme-mode") || "system";
+                    const next = current === "light" ? "dark" : "light";
+                    localStorage.setItem("theme-mode", next);
+                    document.documentElement.setAttribute("data-theme", next);
+                  }}
+                  aria-label="Toggle theme"
+                >
+                  <i className="bi bi-sun-fill" />
+                  <i className="bi bi-moon-fill" />
+                </button>
+                
+                <button 
+                  className="pf-settings-btn"
+                  onClick={() => setSidebarOpen(true)}
+                  aria-label="Open settings"
+                >
+                  <i className="bi bi-gear-fill" />
+                </button>
+              </div>
             </div>
           )}
         </div>

@@ -4,7 +4,8 @@ import Header from "./Header";
 import Footer from "./Footer";
 import "./Layout.css";
 
-const ROUTES = ["/", "/about", "/learn", "/projects", "/contact"];
+// Main routes only - exact paths
+const MAIN_ROUTES = ["/", "/about", "/learn", "/projects", "/contact"];
 const SWIPE_THRESHOLD = 70;
 const DIRECTION_LOCK = 15;
 const MAX_SWIPE = 120;
@@ -21,8 +22,32 @@ const Layout = () => {
   const [style, setStyle] = useState({});
   const isMobile = window.innerWidth <= 768;
 
+  // Check if current path is EXACTLY a main route
+  const isExactMainRoute = () => {
+    return MAIN_ROUTES.includes(pathname);
+  };
+
+  // Check if we're in a sub-route (like /learn/cpp, /learn/c)
+  const isSubRoute = () => {
+    // If it's exactly a main route, not a sub-route
+    if (MAIN_ROUTES.includes(pathname)) return false;
+    
+    // Check if path starts with any main route + "/"
+    for (const route of MAIN_ROUTES) {
+      if (route !== "/" && pathname.startsWith(route + "/")) {
+        return true;
+      }
+    }
+    return false;
+  };
+
+  // Get current main route index - only for exact main routes
+  const getCurrentRouteIndex = () => {
+    return MAIN_ROUTES.indexOf(pathname);
+  };
+
   const onTouchStart = (e) => {
-    if (!isMobile) return;
+    if (!isMobile || !isExactMainRoute()) return; // ✅ Only exact main routes
 
     const t = e.touches[0];
     start.current = { x: t.clientX, y: t.clientY };
@@ -32,7 +57,7 @@ const Layout = () => {
   };
 
   const onTouchMove = (e) => {
-    if (!isMobile) return;
+    if (!isMobile || !isExactMainRoute()) return; // ✅ Only exact main routes
 
     const t = e.touches[0];
     const dx = t.clientX - start.current.x;
@@ -62,10 +87,10 @@ const Layout = () => {
   };
 
   const onTouchEnd = (e) => {
-    if (!isMobile || !isHorizontal.current) return;
+    if (!isMobile || !isHorizontal.current || !isExactMainRoute()) return;
 
     const dx = e.changedTouches[0].clientX - start.current.x;
-    const index = ROUTES.indexOf(pathname);
+    const currentIndex = getCurrentRouteIndex();
 
     setStyle({
       transform: "translateX(0)",
@@ -77,10 +102,10 @@ const Layout = () => {
       return;
     }
 
-    if (dx < 0 && index < ROUTES.length - 1) {
-      navigate(ROUTES[index + 1]);
-    } else if (dx > 0 && index > 0) {
-      navigate(ROUTES[index - 1]);
+    if (dx < 0 && currentIndex < MAIN_ROUTES.length - 1) {
+      navigate(MAIN_ROUTES[currentIndex + 1]);
+    } else if (dx > 0 && currentIndex > 0) {
+      navigate(MAIN_ROUTES[currentIndex - 1]);
     }
 
     setTimeout(() => {

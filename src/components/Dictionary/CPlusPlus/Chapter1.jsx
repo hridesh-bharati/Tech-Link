@@ -4,7 +4,7 @@ import CodeBox from "../CodeBox/CodeBox";
 
 export default function CppChapter1() {
   return (
-    <div className="chapter-content container-fluid px-3 pb-5">
+    <div className="chapter-content container-fluid px-1 pb-5">
 
       {/* Header */}
       <div className="chapter-header mt-2 mb-4 text-center">

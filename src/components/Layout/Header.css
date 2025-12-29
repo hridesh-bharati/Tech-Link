@@ -68,11 +68,12 @@ body {
   margin: 0 auto;
 }
 
-/* Header Left Section */
+/* Header Left Section - UPDATED */
 .pf-header-left {
   display: flex;
   align-items: center;
-  gap: 1.5rem;
+  gap: 1rem;
+  flex: 1;
 }
 
 .pf-brand-btn {
@@ -88,6 +89,7 @@ body {
   color: var(--c-text);
   font-size: 1.5rem;
   transition: var(--transition);
+  flex-shrink: 0;
 }
 
 .pf-brand-btn:hover {
@@ -99,6 +101,7 @@ body {
   display: flex;
   align-items: center;
   text-decoration: none;
+  margin: 0 auto; /* Center logo on mobile */
 }
 
 .pf-logo {
@@ -122,6 +125,7 @@ body {
   border-radius: var(--nav-radius);
   border: 1px solid var(--c-border);
   box-shadow: 0 2px 8px var(--c-shadow);
+  margin: 0 2rem;
 }
 
 .pf-desktop-nav-item {
@@ -181,6 +185,15 @@ body {
     width: 24px;
     opacity: 1;
   }
+}
+
+/* Header Right Section - NEW */
+.pf-header-right {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  flex: 1;
+  justify-content: flex-end;
 }
 
 /* Header Actions (Desktop) */
@@ -335,6 +348,10 @@ body {
     padding: 0.6rem 1rem;
     font-size: 0.85rem;
   }
+  
+  .pf-desktop-nav {
+    margin: 0 1.5rem;
+  }
 }
 
 /* Desktop */
@@ -350,31 +367,55 @@ body {
   
   /* Show desktop elements */
   .pf-desktop-nav,
-  .pf-header-actions {
+  .pf-header-right {
     display: flex;
   }
   
-  /* Hide menu button on desktop (optional) */
+  /* Hide menu button on desktop */
   .pf-brand-btn {
     display: none;
   }
   
-  /* Adjust body padding */
-  body {
-    padding-bottom: 0;
+  /* Center the logo */
+  .pf-logo-link {
+    margin: 0;
+  }
+  
+  /* Adjust header layout for desktop */
+  .pf-header-left {
+    flex: 1;
+    justify-content: flex-start;
+  }
+  
+  .pf-header-right {
+    flex: 1;
+    justify-content: flex-end;
   }
 }
 
 /* Mobile */
 @media (max-width: 1024px) {
   .pf-desktop-nav,
-  .pf-header-actions {
+  .pf-header-right {
     display: none;
   }
   
   body {
     padding-top: var(--header-h);
     padding-bottom: calc(var(--bottom-h) + 1rem);
+  }
+  
+  .pf-header-inner {
+    padding: 0 1rem;
+  }
+  
+  .pf-header-left {
+    width: 100%;
+    justify-content: space-between;
+  }
+  
+  .pf-logo-link {
+    margin: 0;
   }
 }
 
