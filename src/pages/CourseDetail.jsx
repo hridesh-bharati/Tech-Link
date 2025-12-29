@@ -5,6 +5,7 @@ import { FaArrowLeft, FaBookOpen } from "react-icons/fa";
 import "./CourseDetail.css";
 
 // Import course components
+import Fundamentals from "../components/Dictionary/Fundamentals";
 import CLanguage from "../components/Dictionary/CLanguage";
 import CPlusPlus from "../components/Dictionary/CPlusPlus";
 
@@ -26,7 +27,7 @@ const courses = [
     category: "Programming",
     level: "Intermediate",
     duration: "20 Chapters",
-    component: <CPlusPlus />, 
+    component: <CPlusPlus />,
   },
   {
     id: "python",
@@ -54,6 +55,15 @@ const courses = [
     level: "Beginner",
     duration: "Coming Soon",
     component: <ComingSoon title="HTML Course" />,
+  },
+  {
+    id: "fundamentals",
+    name: "Computer Fundamentals",
+    description: "Learn basic computer concepts step by step.",
+    category: "Basics",
+    level: "Beginner",
+    duration: "8 Chapters",
+    component: <Fundamentals />,
   },
   {
     id: "css",
@@ -141,7 +151,7 @@ export default function CourseDetail() {
             <span className="badge duration-badge">{course.duration}</span>
           </div>
         </div>
-        
+
         <div className="course-info">
           <h1>{course.name}</h1>
           <p className="course-description">{course.description}</p>

@@ -216,7 +216,7 @@ int main() {
               </div>
             </div>
           ))}
-        </div>
+        </div>       
       </section>
 
       {/* Next Chapter Button */}
