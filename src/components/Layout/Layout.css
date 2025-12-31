@@ -1,42 +1,61 @@
+/* src/components/Layout/Layout.css */
 .layout {
   display: flex;
   flex-direction: column;
   min-height: 100vh;
-  overflow: hidden;
+  overflow-x: hidden;
+  position: relative;
 }
 
+/* Header Styles */
 .header {
   position: sticky;
   top: 0;
   z-index: 1000;
   background: white;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
 }
 
+/* Main Content Area */
 .main-content {
   flex: 1;
   width: 100%;
   position: relative;
+  transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  will-change: transform;
+  backface-visibility: hidden;
+}
+
+/* Loading Bar */
+.loading-bar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 3px;
+  background: linear-gradient(90deg, #3498db, #2ecc71, #f39c12);
+  z-index: 9999;
+  transform: translateX(-100%);
   transition: transform 0.3s ease;
 }
 
-/* Prevent swipe conflict with bottom nav */
-.pf-mob-float {
-  touch-action: pan-y pinch-zoom;
-  -webkit-touch-action: pan-y pinch-zoom;
+.loading-bar.active {
+  animation: loading 2s ease-in-out infinite;
 }
 
-/* Main content smooth */
-.main-content {
-  will-change: transform;
+@keyframes loading {
+  0% { transform: translateX(-100%); }
+  50% { transform: translateX(0); }
+  100% { transform: translateX(100%); }
 }
 
-/* Swipe indicator for main routes */
+/* Swipe Indicators */
 .swipe-indicator {
   position: fixed;
   bottom: 80px;
   left: 50%;
   transform: translateX(-50%);
-  background: var(--c-primary);
+  background: var(--c-primary, #00a884);
   color: white;
   padding: 8px 16px;
   border-radius: 20px;
@@ -59,15 +78,7 @@
   50% { transform: translateX(-50%) scale(1.05); }
 }
 
-/* Disable text selection during swipe */
-.layout.swiping * {
-  -webkit-user-select: none;
-  -moz-user-select: none;
-  -ms-user-select: none;
-  user-select: none;
-}
-
-/* Swipe hint arrows */
+/* Side Swipe Arrows */
 .swipe-hint-left,
 .swipe-hint-right {
   position: fixed;
@@ -76,12 +87,12 @@
   width: 40px;
   height: 40px;
   background: rgba(0, 168, 132, 0.1);
-  border: 2px solid var(--c-primary);
+  border: 2px solid var(--c-primary, #00a884);
   border-radius: 50%;
   display: flex;
   align-items: center;
   justify-content: center;
-  color: var(--c-primary);
+  color: var(--c-primary, #00a884);
   font-size: 20px;
   z-index: 998;
   opacity: 0;
@@ -101,22 +112,316 @@
   opacity: 0.5;
 }
 
-/* Mobile optimization */
-@media (max-width: 768px) {
-  .main-content {
-    touch-action: pan-y pinch-zoom;
+/* Performance Badge */
+.performance-badge {
+  position: fixed;
+  bottom: 10px;
+  left: 10px;
+  background: rgba(0, 0, 0, 0.7);
+  color: white;
+  padding: 5px 10px;
+  border-radius: 5px;
+  font-size: 11px;
+  z-index: 1000;
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+/* Swipe State Styles */
+.layout.swiping * {
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
+.layout.swipe-active .main-content {
+  touch-action: none;
+}
+
+/* SEO & Accessibility */
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+.schema-data {
+  display: none;
+}
+
+/* Focus styles for accessibility */
+:focus-visible {
+  outline: 2px solid var(--c-primary, #00a884);
+  outline-offset: 2px;
+  border-radius: 2px;
+}
+
+/* Lazy Loading */
+.lazy-image {
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.lazy-image.loaded {
+  opacity: 1;
+}
+
+/* Print Styles */
+@media print {
+  .no-print,
+  .swipe-indicator,
+  .swipe-hint-left,
+  .swipe-hint-right,
+  .performance-badge,
+  .loading-bar {
+    display: none !important;
   }
   
-  .layout.swipe-active .main-content {
-    touch-action: none;
+  .main-content {
+    margin-top: 0 !important;
+  }
+  
+  a[href]:after {
+    content: " (" attr(href) ")";
+  }
+  
+  body {
+    font-size: 12pt;
+    line-height: 1.5;
+    color: #000 !important;
+    background: #fff !important;
   }
 }
 
-/* Hide swipe indicators on desktop */
+/* Performance Optimizations */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+  
+  .main-content {
+    transition: none !important;
+  }
+  
+  .loading-bar.active {
+    animation: none !important;
+  }
+  
+  .swipe-indicator {
+    animation: none !important;
+  }
+}
+
+/* Mobile Optimizations */
+@media (max-width: 768px) {
+  .main-content {
+    touch-action: pan-y pinch-zoom;
+    -webkit-touch-action: pan-y pinch-zoom;
+  }
+  
+  .pf-mob-float {
+    touch-action: pan-y pinch-zoom;
+    -webkit-touch-action: pan-y pinch-zoom;
+  }
+  
+  /* Adjust swipe indicators for mobile */
+  .swipe-hint-left,
+  .swipe-hint-right {
+    width: 35px;
+    height: 35px;
+    font-size: 18px;
+  }
+  
+  .swipe-hint-left {
+    left: 5px;
+  }
+  
+  .swipe-hint-right {
+    right: 5px;
+  }
+  
+  .swipe-indicator {
+    bottom: 70px;
+    font-size: 11px;
+    padding: 6px 12px;
+  }
+  
+  .performance-badge {
+    display: none; /* Hide on mobile for cleaner UI */
+  }
+}
+
+/* Desktop Optimizations */
 @media (min-width: 769px) {
   .swipe-indicator,
   .swipe-hint-left,
   .swipe-hint-right {
     display: none;
   }
+  
+  .main-content {
+    overflow-x: hidden;
+  }
 }
+
+/* Touch Device Optimizations */
+@media (hover: none) and (pointer: coarse) {
+  .main-content {
+    -webkit-overflow-scrolling: touch;
+  }
+  
+  button, 
+  a, 
+  .clickable {
+    min-height: 44px;
+    min-width: 44px;
+  }
+}
+
+/* Dark Mode Support */
+@media (prefers-color-scheme: dark) {
+  .header {
+    background: #1a1a1a;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+  }
+  
+  .performance-badge {
+    background: rgba(255, 255, 255, 0.1);
+    color: #fff;
+    border-color: rgba(255, 255, 255, 0.2);
+  }
+  
+  .swipe-hint-left,
+  .swipe-hint-right {
+    background: rgba(0, 168, 132, 0.2);
+    border-color: var(--c-primary, #00a884);
+  }
+}
+
+/* High Contrast Mode */
+@media (prefers-contrast: high) {
+  .swipe-hint-left,
+  .swipe-hint-right {
+    border: 3px solid #000;
+    background: #fff;
+  }
+  
+  .performance-badge {
+    border: 2px solid #000;
+  }
+  
+  :focus-visible {
+    outline: 3px solid #000;
+  }
+}
+
+/* Reduced Data Mode */
+@media (prefers-reduced-data: reduce) {
+  .swipe-indicator,
+  .swipe-hint-left,
+  .swipe-hint-right {
+    display: none !important;
+  }
+  
+  .loading-bar {
+    display: none !important;
+  }
+}
+
+/* CSS Variables for Theme */
+:root {
+  --c-primary: #00a884;
+  --c-secondary: #3498db;
+  --c-accent: #f39c12;
+  --c-background: #ffffff;
+  --c-text: #333333;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --c-background: #1a1a1a;
+    --c-text: #f0f0f0;
+  }
+}
+
+/* Utility Classes */
+.no-scroll {
+  overflow: hidden;
+}
+
+.pointer-events-none {
+  pointer-events: none;
+}
+
+.pointer-events-auto {
+  pointer-events: auto;
+}
+
+/* Smooth scrolling for the whole page */
+html {
+  scroll-behavior: smooth;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+}
+
+/* Webkit scrollbar styling */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: #f1f1f1;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #888;
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #555;
+}
+
+@media (prefers-color-scheme: dark) {
+  ::-webkit-scrollbar-track {
+    background: #2a2a2a;
+  }
+  
+  ::-webkit-scrollbar-thumb {
+    background: #555;
+  }
+  
+  ::-webkit-scrollbar-thumb:hover {
+    background: #777;
+  }
+}
+
+/* Firefox scrollbar */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: #888 #f1f1f1;
+}
+
+@media (prefers-color-scheme: dark) {
+  * {
+    scrollbar-color: #555 #2a2a2a;
+  }
+}
+

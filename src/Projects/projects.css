@@ -1,0 +1,127 @@
+.center {
+  text-align: center;
+}
+
+/* GRID */
+.projects-grid {
+  display: grid;
+  gap: var(--space-4);
+  background: var(--bg-secondary);
+  color: var(--text-primary);
+}
+
+/* CARD */
+.project-card {
+  background: var(--bg-surface);
+  border: 1px solid var(--border-color);
+  border-radius: var(--border-radius-lg);
+  padding: var(--space-4);
+  box-shadow: var(--shadow-md);
+  transition: var(--transition-base);
+}
+
+.project-card:hover {
+  box-shadow: var(--shadow-lg);
+}
+
+/* COVER */
+.project-cover {
+  width: 100%;
+  height: 180px;
+  object-fit: cover;
+  border-radius: var(--border-radius-md);
+  margin-bottom: var(--space-3);
+}
+
+.project-cover.placeholder {
+  display: grid;
+  place-items: center;
+  background: var(--gradient-primary);
+  color: var(--text-inverse);
+  font-weight: 700;
+}
+
+/* HEADER */
+.project-header {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: var(--space-2);
+}
+
+.user {
+  display: flex;
+  gap: var(--space-3);
+  align-items: center;
+}
+
+.avatar {
+  width: 42px;
+  height: 42px;
+  border-radius: var(--border-radius-full);
+}
+
+/* TEXT */
+.project-title {
+  margin: var(--space-2) 0;
+}
+
+.project-desc {
+  color: var(--text-secondary);
+}
+
+/* LIKE */
+.like-bar {
+  display: flex;
+  gap: var(--space-2);
+  margin: var(--space-3) 0;
+  align-items: center;
+}
+
+.like-bar button {
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: var(--text-muted);
+}
+
+.like-bar .liked {
+  color: var(--danger);
+}
+
+/* ACTIONS */
+.actions {
+  display: flex;
+  gap: var(--space-3);
+}
+
+.actions a {
+  flex: 1;
+
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-2);
+
+  padding: var(--space-2);
+  border-radius: var(--border-radius-md);
+  font-weight: 600;
+  text-decoration: none;
+
+  background: var(--gray-900);
+  color: var(--text-inverse);
+}
+
+/* FORCE ICON COLOR (lucide fix) */
+.actions a svg {
+  stroke: currentColor;
+}
+
+/* PRIMARY BUTTON */
+.actions a:first-child {
+  background: var(--primary);
+}
+
+/* DARK MODE ICON SAFETY */
+[data-theme="dark"] .actions a {
+  color: #ffffff;
+}

@@ -167,13 +167,6 @@ int Age = 25;
         </div>
       </section>
 
-      {/* Next Button */}
-      <div className="text-center">
-        <a href="#" className="btn btn-lg btn-primary px-5">
-          Next Chapter: C++ Output <i className="bi bi-arrow-right ms-2"></i>
-        </a>
-      </div>
-
     </div>
   );
 }

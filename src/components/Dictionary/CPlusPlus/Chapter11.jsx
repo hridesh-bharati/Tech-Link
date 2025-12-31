@@ -2271,13 +2271,6 @@ int main() {
           </div>
         </div>
       </section>
-
-      {/* Next Button */}
-      <div className="text-center">
-        <a href="#" className="btn btn-lg btn-primary px-5 text-white">
-          Next Chapter: C++ Arrays <i className="bi bi-arrow-right ms-2"></i>
-        </a>
-      </div>
     </div>
   );
 }

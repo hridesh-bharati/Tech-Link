@@ -200,14 +200,6 @@ typedef int marks;`}
           </ul>
         </div>
       </section>
-
-      {/* Next */}
-      <div className="text-center">
-        <a href="#" className="btn btn-lg btn-success px-5">
-          Next Chapter: C++ Type Conversion →
-        </a>
-      </div>
-
     </div>
   );
 }

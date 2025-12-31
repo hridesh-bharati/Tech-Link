@@ -4,14 +4,14 @@ import CodeBox from "../CodeBox/CodeBox";
 
 export default function CppChapter2() {
   return (
-    <div className="chapter-content container-fluid px-3 pb-5">
+    <div className="chapter-content container-fluid px-1 pb-5">
 
       {/* Header */}
       <div className="chapter-header mb-4 text-center">
         <h1 className="h2 fw-bold">
           📘 Chapter 2: C++ Get Started
         </h1>
-        <p className="lead text-muted">Setting up your development environment</p>
+        <p className="lead text-light">Setting up your development environment</p>
       </div>
 
       {/* Hero Section */}
@@ -150,85 +150,6 @@ int main() {
         </div>
       </section>
 
-      {/* Section 4: Online Compilers */}
-      <section className="mb-5">
-        <h2 className="fw-bold mb-3" style={{ color: '#17a2b8' }}>🌐 Online Compilers</h2>
-        <p>If you don't want to install anything, try these online compilers:</p>
-        <div className="row g-3">
-          {[
-            { name: "Programiz", url: "https://www.programiz.com/cpp-programming/online-compiler/", features: "Simple, beginner-friendly" },
-            { name: "Replit", url: "https://replit.com/", features: "Collaborative, project-based" },
-            { name: "OnlineGDB", url: "https://www.onlinegdb.com/online_c++_compiler", features: "Debugger included" },
-            { name: "W3Schools TryIt", url: "https://www.w3schools.com/cpp/trycpp.asp", features: "Built-in examples" }
-          ].map((compiler, idx) => (
-            <div className="col-md-6 col-lg-3" key={idx}>
-              <div className="card h-100 shadow-sm p-3">
-                <h6 className="fw-bold">{compiler.name}</h6>
-                <p className="small text-muted mb-2">{compiler.features}</p>
-                <a href={compiler.url} target="_blank" rel="noopener noreferrer" 
-                   className="btn btn-sm btn-outline-primary w-100">
-                  Try Now
-                </a>
-              </div>
-            </div>
-          ))}
-        </div>
-      </section>
-
-      {/* Section 5: Troubleshooting */}
-      <section className="mb-5">
-        <h2 className="fw-bold mb-3" style={{ color: '#fd7e14' }}>🔧 Common Issues & Solutions</h2>
-        <div className="accordion" id="troubleshootingAccordion">
-          {[
-            { 
-              id: "issue1", 
-              title: "'g++' is not recognized", 
-              solution: "Add MinGW/bin to PATH environment variable or reinstall with correct setup" 
-            },
-            { 
-              id: "issue2", 
-              title: "Permission denied on Linux/Mac", 
-              solution: "Use chmod +x filename or run with sudo if necessary" 
-            },
-            { 
-              id: "issue3", 
-              title: "Include file not found", 
-              solution: "Check spelling of #include <iostream> and ensure standard library is installed" 
-            },
-            { 
-              id: "issue4", 
-              title: "Program compiles but doesn't run", 
-              solution: "Check if you're in the correct directory and file exists" 
-            }
-          ].map((issue, idx) => (
-            <div className="accordion-item" key={idx}>
-              <h3 className="accordion-header">
-                <button className="accordion-button collapsed" type="button" data-bs-toggle="collapse" 
-                        data-bs-target={`#${issue.id}`}>
-                  <i className="bi bi-exclamation-triangle-fill text-warning me-2"></i>
-                  {issue.title}
-                </button>
-              </h3>
-              <div id={issue.id} className="accordion-collapse collapse" data-bs-parent="#troubleshootingAccordion">
-                <div className="accordion-body">
-                  <strong>Solution:</strong> {issue.solution}
-                </div>
-              </div>
-            </div>
-          ))}
-        </div>       
-      </section>
-
-      {/* Next Chapter Button */}
-      <div className="text-center mt-5">
-        <a href="/cpp/syntax" className="btn btn-lg px-5" style={{ 
-          backgroundColor: '#0056b3', 
-          color: 'white',
-          border: 'none'
-        }}>
-          Next Chapter: C++ Syntax <i className="bi bi-arrow-right ms-2"></i>
-        </a>
-      </div>
 
     </div>
   );

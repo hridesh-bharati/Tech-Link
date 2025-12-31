@@ -51,72 +51,141 @@ const CodeBox = ({
   }, [output]);
 
   /* ========= SIMPLE SYNTAX HIGHLIGHT ========= */
-const highlightCode = (code) => {
-  if (!code) return "";
+  const highlightCode = (code) => {
+    if (!code) return "";
 
-  // 1️⃣ Escape HTML chars first
-  code = code
-    .replace(/&/g, "&amp;")
-    .replace(/</g, "&lt;")
-    .replace(/>/g, "&gt;");
+    // First, escape HTML characters
+    code = code
+      .replace(/&/g, "&amp;")
+      .replace(/</g, "&lt;")
+      .replace(/>/g, "&gt;");
 
-  // 2️⃣ Strings first (to avoid highlighting inside strings)
-  code = code.replace(
-    /("([^"\\]|\\.)*")/g,
-    '<span class="hl-string">$1</span>'
-  );
+    // Function to replace patterns while avoiding already highlighted content
+    const safeReplace = (regex, replacement) => {
+      return code.replace(regex, (match, ...groups) => {
+        // Check if this match is inside any HTML tag
+        const position = groups[groups.length - 2]; // Position of the match
+        const before = code.substring(0, position);
+        const after = code.substring(position);
 
-  // 3️⃣ Single line comments
-  code = code.replace(/(\/\/[^\n]*)/g, '<span class="hl-comment">$1</span>');
+        // Check if we're inside an HTML tag
+        const lastTagOpen = before.lastIndexOf('<');
+        const lastTagClose = before.lastIndexOf('>');
 
-  // 4️⃣ Preprocessor directives
-  code = code.replace(
-    /(^#\s*include\b.*)/gm,
-    '<span class="hl-pre">$1</span>'
-  );
+        // If we're inside a tag (opened but not closed), don't replace
+        if (lastTagOpen > lastTagClose) {
+          return match;
+        }
 
-  // 5️⃣ Keywords
-  code = code.replace(
-    /\b(int|float|double|char|void|return|if|else|for|while|do|break|continue|main|printf|scanf)\b/g,
-    '<span class="hl-keyword">$1</span>'
-  );
+        // Apply the replacement
+        if (typeof replacement === 'function') {
+          return replacement(match, ...groups.slice(0, -2));
+        }
+        return match.replace(regex, replacement);
+      });
+    };
 
-  // 6️⃣ Numbers (integers + floats)
-  code = code.replace(
-    /\b(\d+(\.\d+)?)\b/g,
-    '<span class="hl-number">$1</span>'
-  );
+    // Handle multi-line comments first (since they can contain //)
+    code = safeReplace(
+      /\/\*[\s\S]*?\*\//g,
+      '<span class="hl-comment">$&</span>'
+    );
 
-  return code;
-};
+    // Handle single-line comments
+    code = safeReplace(
+      /\/\/[^\n]*/g,
+      '<span class="hl-comment">$&</span>'
+    );
 
+    // Handle strings (they shouldn't be processed for keywords)
+    code = safeReplace(
+      /"([^"\\]|\\.)*"/g,
+      '<span class="hl-string">$&</span>'
+    );
 
+    // Handle preprocessor directives
+    code = safeReplace(
+      /^#\s*[a-zA-Z_][a-zA-Z0-9_]*\b.*/gm,
+      '<span class="hl-pre">$&</span>'
+    );
 
+    // Handle std:: separately
+    code = safeReplace(
+      /std::/g,
+      '<span class="hl-namespace">std</span>::'
+    );
+
+    // Handle numbers
+    code = safeReplace(
+      /\b(\d+(\.\d+)?(?:[eE][+-]?\d+)?)\b/g,
+      '<span class="hl-number">$&</span>'
+    );
+
+    // Define keywords to highlight
+    const keywords = [
+      'int', 'float', 'double', 'char', 'void', 'return', 'if', 'else',
+      'for', 'while', 'do', 'break', 'continue', 'switch', 'case', 'default',
+      'sizeof', 'typedef', 'struct', 'enum', 'union', 'const', 'static',
+      'extern', 'auto', 'register', 'volatile', 'goto',
+      // C++ specific
+      'class', 'public', 'private', 'protected', 'new', 'delete', 'this',
+      'virtual', 'override', 'final', 'template', 'typename', 'namespace',
+      'using', 'try', 'catch', 'throw', 'operator', 'friend', 'inline',
+      'mutable', 'explicit', 'typeid', 'const_cast', 'dynamic_cast',
+      'static_cast', 'reinterpret_cast', 'bool', 'true', 'false',
+      'nullptr', 'decltype', 'noexcept', 'thread_local', 'alignas',
+      'alignof', 'char16_t', 'char32_t', 'constexpr'
+    ];
+
+    // Highlight keywords
+    keywords.forEach(keyword => {
+      const keywordRegex = new RegExp(`\\b${keyword}\\b`, 'g');
+      code = safeReplace(keywordRegex, `<span class="hl-keyword">${keyword}</span>`);
+    });
+
+    // Handle std library keywords
+    const stdKeywords = [
+      'cout', 'cin', 'endl', 'cerr', 'clog', 'string', 'vector', 'map',
+      'set', 'list', 'deque', 'queue', 'stack', 'pair', 'tuple', 'array'
+    ];
+
+    stdKeywords.forEach(keyword => {
+      const stdKeywordRegex = new RegExp(`(std::|\\b)${keyword}\\b`, 'g');
+      code = safeReplace(stdKeywordRegex, (match) => {
+        if (match.startsWith('std::')) {
+          // We already handled std:: above, so just wrap the keyword
+          return `std::<span class="hl-keyword">${keyword}</span>`;
+        }
+        return `<span class="hl-keyword">${keyword}</span>`;
+      });
+    });
+
+    return code;
+  };
+  /* ========== SIMPLE COPY FUNCTION ========== */
   const handleCopy = async () => {
+    const textToCopy = isEditing ? editedCode : code;
+
     try {
-      if (!navigator.clipboard) {
-        // Fallback for older browsers
+      if (navigator.clipboard && window.isSecureContext) {
+        await navigator.clipboard.writeText(textToCopy);
+      } else {
+        // Fallback method
         const textArea = document.createElement('textarea');
-        textArea.value = editedCode;
+        textArea.value = textToCopy;
+        textArea.style.position = 'fixed';
+        textArea.style.left = '-999999px';
+        textArea.style.top = '-999999px';
         document.body.appendChild(textArea);
         textArea.select();
         document.execCommand('copy');
         document.body.removeChild(textArea);
-      } else {
-        await navigator.clipboard.writeText(editedCode);
       }
 
       setCopied(true);
       setTimeout(() => setCopied(false), 2000);
-
-      // Optional: Show a more visible feedback
-      const copyBtn = event.currentTarget;
-      copyBtn.classList.add('copy-success');
-      setTimeout(() => copyBtn.classList.remove('copy-success'), 500);
-
     } catch (error) {
       console.error('Copy failed:', error);
-      alert('Failed to copy code. Please select and copy manually.');
     }
   };
 
@@ -147,10 +216,10 @@ const highlightCode = (code) => {
   };
 
   const loadExample = () => {
-    setEditedCode(`#include <stdio.h>
+    setEditedCode(`#include <iostream>
 
 int main() {
-    printf("Hello, World!\\n");
+    std::cout << "Hello, World!" << std::endl;
     return 0;
 }`);
     setIsEditing(true);
@@ -169,18 +238,22 @@ int main() {
           {executable && (
             <>
               <button onClick={runCode} disabled={isRunning}>
-                <FaPlay /> Run
+                <FaPlay /> {isRunning ? "Running..." : "Run"}
               </button>
               <button onClick={() => setIsEditing(!isEditing)}>
-                {isEditing ? <FaEye /> : <FaEdit />}
+                {isEditing ? <FaEye /> : <FaEdit />} {isEditing ? "View" : "Edit"}
               </button>
-              <button onClick={resetCode}>
-                <FaUndo />
+              <button onClick={resetCode} title="Reset to original">
+                <FaUndo /> Reset
               </button>
             </>
           )}
-          <button onClick={handleCopy}>
+          <button
+            onClick={handleCopy}
+            className={copied ? "copied" : ""}
+          >
             {copied ? <FaCheck /> : <FaCopy />}
+            {copied ? " Copied!" : " Copy"}
           </button>
         </div>
       </div>
@@ -194,6 +267,18 @@ int main() {
             value={editedCode}
             onChange={(e) => setEditedCode(e.target.value)}
             spellCheck="false"
+            style={{
+              width: '100%',
+              minHeight: '200px',
+              fontFamily: 'monospace',
+              padding: '15px',
+              backgroundColor: '#2d2d2d',
+              color: '#fff',
+              border: 'none',
+              resize: 'vertical',
+              borderRadius: '0 0 5px 5px',
+              outline: 'none'
+            }}
           />
         ) : (
           <div className="code-display">
@@ -207,7 +292,6 @@ int main() {
             <pre className="code-content">
               <code dangerouslySetInnerHTML={{ __html: highlightCode(editedCode) }} />
             </pre>
-
           </div>
         )}
       </div>
@@ -215,6 +299,21 @@ int main() {
       {/* OUTPUT */}
       {executable && output && (
         <div className={`code-box-output ${hasError ? "error" : ""}`}>
+          <div className="output-header">
+            <strong>Output:</strong>
+            <button
+              onClick={() => setOutput("")}
+              style={{
+                background: 'none',
+                border: 'none',
+                color: '#666',
+                cursor: 'pointer',
+                fontSize: '12px'
+              }}
+            >
+              Clear
+            </button>
+          </div>
           <pre ref={outputRef}>{output}</pre>
         </div>
       )}
@@ -223,8 +322,11 @@ int main() {
       {executable && (
         <div className="code-box-footer">
           <button onClick={loadExample}>
-            <FaMagic /> Example
+            <FaMagic /> Load Example
           </button>
+          <small style={{ color: '#666', marginLeft: '10px' }}>
+            Click "Run" to execute the code
+          </small>
         </div>
       )}
     </div>

@@ -1528,13 +1528,6 @@ int main() {
           </div>
         </div>
       </section>
-
-      {/* Next Button */}
-      <div className="text-center">
-        <a href="#" className="btn btn-lg btn-info px-5 text-white">
-          Next Chapter: C++ Operators <i className="bi bi-arrow-right ms-2"></i>
-        </a>
-      </div>
     </div>
   );
 }
