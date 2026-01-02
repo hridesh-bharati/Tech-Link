@@ -1,9 +1,10 @@
 /* CSS Variables - Light & Dark Themes */
 :root {
-  /* Colors */
-  --primary: #2563eb;
-  --primary-dark: #1d4ed8;
-  --primary-light: #60a5fa;
+  /* Colors - Blue theme kept, WhatsApp green added */
+  --primary: #00a884; /* WhatsApp green as primary */
+  --primary-dark: #008e72;
+  --primary-light: rgba(0, 168, 132, 0.1);
+  --primary-blue: #2563eb; /* Original blue kept as separate */
   --secondary: #7c3aed;
   --accent: #06b6d4;
   --success: #10b981;
@@ -35,11 +36,13 @@
   --bg-primary: #ffffff;
   --bg-secondary: #f8fafc;
   --bg-surface: #ffffff;
-  --bg-dark: #0f172a;
+  --bg-card: #ffffff; /* New for cards */
+  --bg-dark: #111b21; /* WhatsApp dark */
   --bg-light: #ffffff;
   
   /* Borders */
   --border-color: #e2e8f0;
+  --border-light: rgba(0, 0, 0, 0.05); /* New */
   --border-radius-sm: 0.375rem;
   --border-radius-md: 0.5rem;
   --border-radius-lg: 0.75rem;
@@ -54,13 +57,16 @@
   --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
   --shadow-2xl: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
   --shadow-inner: inset 0 2px 4px 0 rgba(0, 0, 0, 0.06);
+  --shadow-nav: 0 4px 24px rgba(0, 0, 0, 0.1); /* New for navigation */
   
   /* Gradients */
-  --gradient-primary: linear-gradient(135deg, #2563eb 0%, #7c3aed 100%);
+  --gradient-primary: linear-gradient(135deg, #00a884 0%, #008e72 100%); /* WhatsApp green */
+  --gradient-blue: linear-gradient(135deg, #2563eb 0%, #7c3aed 100%); /* Original blue */
   --gradient-secondary: linear-gradient(135deg, #06b6d4 0%, #10b981 100%);
   --gradient-accent: linear-gradient(135deg, #f59e0b 0%, #ef4444 100%);
   --gradient-dark: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
   --gradient-light: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+  --gradient-whatsapp: linear-gradient(135deg, #111b21 0%, #1e293b 100%); /* New */
   
   /* Typography */
   --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
@@ -113,13 +119,59 @@
   --z-modal: 40;
   --z-popover: 50;
   --z-tooltip: 60;
+  --z-overlay: 70; /* New */
+  
+  /* ===== COMPONENT VARIABLES ===== */
+  /* Sidebar */
+  --sidebar-width: 320px;
+  --sidebar-bg: var(--bg-primary);
+  --sidebar-text: var(--text-primary);
+  --sidebar-border: var(--border-color);
+  --sidebar-shadow: 4px 0 24px rgba(0, 0, 0, 0.2);
+  --sidebar-padding: 1.5rem;
+  --sidebar-item-radius: 0.625rem;
+  --sidebar-item-hover: var(--gray-100);
+  --sidebar-active-bg: var(--primary);
+  --sidebar-active-text: white;
+  --sidebar-danger-color: #ef4444;
+  --sidebar-danger-hover: rgba(239, 68, 68, 0.1);
+  
+  /* Header */
+  --header-height: 70px;
+  --header-bg: var(--bg-primary);
+  --header-blur-bg: rgba(255, 255, 255, 0.85);
+  --header-border: var(--border-color);
+  --header-shadow: 0 2px 8px var(--shadow-sm);
+  
+  /* Navigation */
+  --nav-bg: var(--bg-secondary);
+  --nav-border: var(--border-color);
+  --nav-radius: 0.75rem;
+  --nav-item-padding: 0.75rem 1.25rem;
+  --nav-item-radius: 0.5rem;
+  --nav-item-hover: rgba(255, 255, 255, 0.7);
+  --nav-active-bg: var(--primary);
+  --nav-active-text: white;
+  --nav-active-shadow: 0 4px 12px rgba(0, 168, 132, 0.3);
+  
+  /* Mobile Nav */
+  --mobnav-height: 56px;
+  --mobnav-bg: rgba(255, 255, 255, 0.9);
+  --mobnav-blur: blur(20px);
+  --mobnav-border: var(--border-color);
+  --mobnav-shadow: 0 4px 24px rgba(0, 0, 0, 0.1);
+  --mobnav-item-color: var(--text-muted);
+  --mobnav-active-bg: var(--primary);
+  --mobnav-active-text: white;
+  --mobnav-active-shadow: 0 4px 12px rgba(0, 168, 132, 0.3);
 }
 
-/* Dark Theme */
+/* Dark Theme - WhatsApp inspired with original colors preserved */
 [data-theme="dark"] {
-  --primary: #60a5fa;
-  --primary-dark: #3b82f6;
-  --primary-light: #93c5fd;
+  --primary: #00a884; /* WhatsApp green stays */
+  --primary-dark: #008e72;
+  --primary-light: rgba(0, 168, 132, 0.2);
+  --primary-blue: #60a5fa; /* Original blue in dark mode */
   --secondary: #a78bfa;
   --accent: #22d3ee;
   --success: #34d399;
@@ -127,36 +179,64 @@
   --danger: #f87171;
   --info: #60a5fa;
   
-  --text-primary: #f1f5f9;
-  --text-secondary: #cbd5e1;
-  --text-muted: #94a3b8;
-  --text-inverse: #0f172a;
+  /* Text Colors - WhatsApp dark inspired */
+  --text-primary: #e9edef;
+  --text-secondary: #8696a0;
+  --text-muted: #8696a0;
+  --text-inverse: #111b21;
   
-  --bg-primary: #0f172a;
-  --bg-secondary: #1e293b;
+  /* Backgrounds - WhatsApp dark */
+  --bg-primary: #111b21;
+  --bg-secondary: #202c33;
   --bg-surface: #1e293b;
+  --bg-card: #202c33;
   --bg-dark: #0f172a;
   --bg-light: #1e293b;
   
-  --border-color: #334155;
+  --border-color: #2a3942;
+  --border-light: rgba(255, 255, 255, 0.1);
   
-  --gradient-primary: linear-gradient(135deg, #60a5fa 0%, #a78bfa 100%);
-  --gradient-secondary: linear-gradient(135deg, #22d3ee 0%, #34d399 100%);
-  --gradient-dark: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
-  --gradient-light: linear-gradient(135deg, #334155 0%, #1e293b 100%);
-  
+  /* Darker shadows */
   --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.3);
   --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.4);
   --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.5);
   --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.6);
+  --shadow-2xl: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+  --shadow-nav: 0 4px 24px rgba(0, 0, 0, 0.3);
+  
+  /* Dark mode gradients */
+  --gradient-primary: linear-gradient(135deg, #00a884 0%, #008e72 100%);
+  --gradient-blue: linear-gradient(135deg, #60a5fa 0%, #a78bfa 100%);
+  --gradient-secondary: linear-gradient(135deg, #22d3ee 0%, #34d399 100%);
+  --gradient-dark: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
+  --gradient-whatsapp: linear-gradient(135deg, #202c33 0%, #111b21 100%);
+  
+  /* ===== COMPONENT DARK MODE ===== */
+  /* Sidebar */
+  --sidebar-bg: var(--bg-primary);
+  --sidebar-text: var(--text-primary);
+  --sidebar-border: var(--border-color);
+  --sidebar-item-hover: var(--bg-secondary);
+  
+  /* Header */
+  --header-blur-bg: rgba(17, 27, 33, 0.9);
+  --header-border: rgba(255, 255, 255, 0.05);
+  
+  /* Navigation */
+  --nav-bg: var(--bg-secondary);
+  --nav-item-hover: rgba(255, 255, 255, 0.1);
+  
+  /* Mobile Nav */
+  --mobnav-bg: rgba(17, 27, 33, 0.9);
+  --mobnav-border: var(--border-color);
 }
 
 /* High contrast mode */
 @media (prefers-contrast: high) {
   :root {
-    --primary: #0056b3;
-    --primary-dark: #004494;
-    --primary-light: #0066cc;
+    --primary: #006644; /* Darker green for high contrast */
+    --primary-dark: #004d33;
+    --primary-blue: #0056b3;
     --text-primary: #000000;
     --text-secondary: #333333;
     --border-color: #000000;
@@ -169,3 +249,17 @@
   }
 }
 
+/* Global base styles for dark mode support */
+body {
+  background-color: var(--bg-primary);
+  color: var(--text-primary);
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+/* Ensure smooth transitions for all color changes */
+* {
+  transition: background-color 0.3s ease, 
+              border-color 0.3s ease, 
+              color 0.3s ease,
+              box-shadow 0.3s ease;
+}

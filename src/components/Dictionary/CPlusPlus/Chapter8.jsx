@@ -4,7 +4,7 @@ import CodeBox from "../CodeBox/CodeBox";
 
 export default function CppChapter8() {
   return (
-    <div className="chapter-content container-fluid px-3 pb-5">
+    <div className="chapter-content w-100 container-fluid px-1 pb-5">
       {/* Header */}
       <div className="chapter-header mt-2 mb-4 text-center">
         <h1 className="h2 fw-bold">📘 Chapter 8: C++ Data Types - Complete Guide</h1>
@@ -156,7 +156,112 @@ string y = "Hello";   // y is string
         </div>
       </section>
 
-      {/* Section 3: Primitive Data Types - Detailed */}
+      {/* Section 3: Visual Memory Explanation */}
+      <section className="mb-5">
+        <h3 className="fw-bold text-primary">💾 How Data is Stored in Memory</h3>
+        
+        <div className="card">
+          <div className="card-body">
+            <div className="row align-items-center">
+              <div className="col-md-5">
+                <h5>Think of Memory as Mailboxes:</h5>
+                <div className="border p-3 bg-light rounded">
+                  <div className="d-flex align-items-center mb-3">
+                    <div className="border text-center p-2 me-3" style={{width: '80px'}}>
+                      <small><b>char box</b><br/>1 mailbox</small>
+                    </div>
+                    <div className="border text-center p-2 bg-info text-white" style={{width: '50px'}}>
+                      <small>'A'</small>
+                    </div>
+                    <div className="ms-3">
+                      <code>char letter = 'A';</code>
+                    </div>
+                  </div>
+                  
+                  <div className="d-flex align-items-center mb-3">
+                    <div className="border text-center p-2 me-3" style={{width: '80px'}}>
+                      <small><b>int box</b><br/>4 mailboxes</small>
+                    </div>
+                    <div className="border text-center p-2 bg-success text-white" style={{width: '50px'}}>
+                      <small>65</small>
+                    </div>
+                    <div className="border text-center p-2 bg-success text-white" style={{width: '50px'}}>
+                      <small>0</small>
+                    </div>
+                    <div className="border text-center p-2 bg-success text-white" style={{width: '50px'}}>
+                      <small>0</small>
+                    </div>
+                    <div className="border text-center p-2 bg-success text-white" style={{width: '50px'}}>
+                      <small>0</small>
+                    </div>
+                    <div className="ms-3">
+                      <code>int number = 65;</code>
+                    </div>
+                  </div>
+                  
+                  <div className="d-flex align-items-center">
+                    <div className="border text-center p-2 me-3" style={{width: '80px'}}>
+                      <small><b>float box</b><br/>4 mailboxes</small>
+                    </div>
+                    <div className="border text-center p-2 bg-warning" style={{width: '50px'}}>
+                      <small>3.14</small>
+                    </div>
+                    <div className="border text-center p-2 bg-warning" style={{width: '50px'}}>
+                      <small>part</small>
+                    </div>
+                    <div className="border text-center p-2 bg-warning" style={{width: '50px'}}>
+                      <small>of</small>
+                    </div>
+                    <div className="border text-center p-2 bg-warning" style={{width: '50px'}}>
+                      <small>number</small>
+                    </div>
+                    <div className="ms-3">
+                      <code>float pi = 3.14f;</code>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              
+              <div className="col-md-7">
+                <CodeBox
+                  title="Check Memory Usage with sizeof()"
+                  language="cpp"
+                  executable={true}
+                  code={`#include <iostream>
+using namespace std;
+
+int main() {
+    cout << "=== How much memory do types use? ===" << endl << endl;
+    
+    // Check size of different types
+    cout << "char uses:  " << sizeof(char) << " byte" << endl;
+    cout << "bool uses:  " << sizeof(bool) << " byte" << endl;
+    cout << "int uses:   " << sizeof(int) << " bytes" << endl;
+    cout << "float uses: " << sizeof(float) << " bytes" << endl;
+    cout << "double uses:" << sizeof(double) << " bytes" << endl;
+    
+    cout << endl << "=== Real Example ===" << endl;
+    char grade = 'A';
+    int age = 20;
+    float salary = 25000.50f;
+    
+    cout << "grade variable: " << sizeof(grade) << " byte" << endl;
+    cout << "age variable:   " << sizeof(age) << " bytes" << endl;
+    cout << "salary variable:" << sizeof(salary) << " bytes" << endl;
+    
+    int total = sizeof(grade) + sizeof(age) + sizeof(salary);
+    console.log("Total memory used: " + total + " bytes");
+    
+    return 0;
+}`}
+                />
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Section 4: Primitive Data Types - Detailed */}
       <section className="mb-5">
         <h3 className="fw-bold text-warning">📊 Primitive (Basic/Fundamental) Data Types</h3>
         <p>
@@ -272,8 +377,8 @@ int main() {
     cout << "\\n=== BOOLEAN TYPE ===" << endl;
     bool flag = true;
     cout << "bool size: " << sizeof(bool) << " bytes" << endl;
-    cout << "Flag value: " << flag << endl;
-    cout << "Flag as bool: " << boolalpha << flag << endl;
+    console.log("Flag value: " + flag);
+    console.log("Flag as bool: " + boolalpha + flag);
     
     // void type
     cout << "\\n=== VOID TYPE ===" << endl;
@@ -314,7 +419,7 @@ int main() {
         </div>
       </section>
 
-      {/* Section 4: Derived Data Types - Detailed */}
+      {/* Section 5: Derived Data Types - Detailed */}
       <section className="mb-5">
         <h3 className="fw-bold text-info">🧩 Derived Data Types</h3>
         <p>
@@ -364,8 +469,8 @@ int sum = marks[1] + marks[2];`}
 int *ptr;           // Pointer declaration
 ptr = &num;         // Store address of num
 
-cout << "Value: " << *ptr << endl;   // Dereferencing
-cout << "Address: " << ptr << endl;
+console.log("Value: " + *ptr);   // Dereferencing
+console.log("Address: " + ptr);
 
 // Pointer arithmetic
 int arr[3] = {10, 20, 30};
@@ -427,7 +532,7 @@ int result = funcPtr(5, 3);  // Calls add(5, 3)`}
 int &ref = original;  // Reference declaration
 
 ref = 200;  // Modifies original
-cout << original;  // Output: 200
+console.log(original);  // Output: 200
 
 // References in functions
 void swap(int &a, int &b) {
@@ -448,7 +553,7 @@ void swap(int &a, int &b) {
         </div>
       </section>
 
-      {/* Section 5: User-Defined Data Types - Detailed */}
+      {/* Section 6: User-Defined Data Types - Detailed */}
       <section className="mb-5">
         <h3 className="fw-bold text-danger">👤 User-Defined Data Types</h3>
         <p>
@@ -511,10 +616,10 @@ s3.marks = 90.0;`}
 
 union Data data;
 data.i = 10;      // Store integer
-cout << data.i;
+console.log(data.i);
 
 data.f = 220.5;   // Now store float
-cout << data.f;   // i is overwritten
+console.log(data.f);   // i is overwritten
 
 // Only one member can contain value at a time`}
                 />
@@ -547,8 +652,8 @@ enum Colors {Red = 1, Green = 2, Blue = 4, Yellow = 8};
 Days today = Monday;
 Colors favorite = Blue;
 
-cout << today;     // Output: 1 (Monday is 1)
-cout << favorite;  // Output: 4
+console.log(today);     // Output: 1 (Monday is 1)
+console.log(favorite);  // Output: 4
 
 // Scoped enum (C++11)
 enum class TrafficLight {Red, Yellow, Green};
@@ -594,7 +699,7 @@ public:
 
 // Create object
 Rectangle rect(5.0, 3.0);
-cout << "Area: " << rect.area();`}
+console.log("Area: " + rect.area());`}
                 />
                 <ul className="mb-0 small">
                   <li><b>Data abstraction</b> and encapsulation</li>
@@ -647,7 +752,7 @@ using FunctionPtr = void(*)(int);`}
         </div>
       </section>
 
-      {/* Section 6: Type Modifiers */}
+      {/* Section 7: Type Modifiers */}
       <section className="mb-5">
         <h3 className="fw-bold text-success">🔧 Type Modifiers</h3>
         <p>
@@ -740,8 +845,8 @@ int main() {
     signed int negative = -100;
     unsigned int positive = 100;
     
-    cout << "Signed: " << negative << endl;
-    cout << "Unsigned: " << positive << endl;
+    console.log("Signed: " + negative);
+    console.log("Unsigned: " + positive);
     
     // Size comparison
     cout << "\\n=== SIZE COMPARISON ===" << endl;
@@ -768,7 +873,7 @@ int main() {
         />
       </section>
 
-      {/* Section 7: Memory Layout & Sizeof */}
+      {/* Section 8: Memory Layout & Sizeof */}
       <section className="mb-5">
         <h3 className="fw-bold text-primary">💾 Memory Layout & sizeof() Operator</h3>
         
@@ -856,7 +961,7 @@ int main() {
         </div>
       </section>
 
-      {/* Section 8: Best Practices & Common Mistakes */}
+      {/* Section 9: Best Practices & Common Mistakes */}
       <section className="mb-5">
         <h3 className="fw-bold text-warning">⚠️ Common Mistakes & Best Practices</h3>
         
@@ -871,7 +976,7 @@ int main() {
                   language="cpp"
                   code={`// MISTAKE 1: Uninitialized variables
 int x;                // Contains garbage
-cout << x;            // Undefined behavior
+console.log(x);       // Undefined behavior
 
 // MISTAKE 2: Type mismatch
 int num = 10.5;       // Implicit conversion, data loss
@@ -937,7 +1042,7 @@ struct Optimized {
         </div>
       </section>
 
-      {/* Section 9: Interactive Exercise */}
+      {/* Section 10: Interactive Exercise */}
       <section className="mb-5">
         <h3 className="fw-bold text-primary">💻 Practice Exercise</h3>
         
@@ -969,7 +1074,7 @@ struct Employee {
 
 int main() {
     int x;
-    cout << x << endl;
+    console.log(x);
     
     float price = 99.99;
     int discount = price;
@@ -1031,7 +1136,7 @@ struct Employee {
 
 int main() {
     int x = 0;       // Initialize variable
-    cout << x << endl;
+    console.log(x);
     
     float price = 99.99f;
     int discount = (int)price;  // Explicit cast
@@ -1050,7 +1155,7 @@ int main() {
         </div>
       </section>
 
-      {/* Section 10: Real-world Applications */}
+      {/* Section 11: Real-world Applications */}
       <section className="mb-5">
         <h3 className="fw-bold text-success">💼 Real-world Applications</h3>
         

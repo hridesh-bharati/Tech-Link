@@ -1,37 +1,12 @@
-/* ========== ROOT VARIABLES ========== */
-:root {
-  --c-primary: #00a884;
-  --c-primary-light: rgba(0, 168, 132, 0.1);
-  --c-bg: #ffffff;
-  --c-soft: #f1f5f9;
-  --c-text: #1e293b;
-  --c-muted: #64748b;
-  --c-border: #e2e8f0;
-  --c-shadow: rgba(0, 0, 0, 0.08);
-
-  --header-h: 70px;
-  --bottom-h: 60px;
-  --container-max: 1200px;
-  --nav-radius: 12px;
-  --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-}
-
-[data-theme="dark"] {
-  --c-bg: #111b21;
-  --c-soft: #202c33;
-  --c-text: #e9edef;
-  --c-muted: #8696a0;
-  --c-border: #2a3942;
-  --c-shadow: rgba(0, 0, 0, 0.3);
-}
+/* Header.css - Complete and Corrected */
 
 /* ========== BASE STYLES ========== */
 body {
-  background: var(--c-bg);
-  color: var(--c-text);
+  background: var(--bg-primary);
+  color: var(--text-primary);
   margin: 0;
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Inter', sans-serif;
-  transition: background-color 0.3s;
+  transition: background-color 0.3s, color 0.3s;
 }
 
 /* ========== HEADER STYLES ========== */
@@ -40,11 +15,11 @@ body {
   top: 0;
   left: 0;
   right: 0;
-  height: var(--header-h);
-  background: var(--c-bg);
-  border-bottom: 1px solid var(--c-border);
+  height: 70px;
+  background: var(--bg-primary);
+  border-bottom: 1px solid var(--border-color);
   z-index: 1000;
-  transition: var(--transition);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .pf-header.pf-blur {
@@ -64,11 +39,11 @@ body {
   align-items: center;
   justify-content: space-between;
   padding: 0 1.5rem;
-  max-width: var(--container-max);
+  max-width: 1200px;
   margin: 0 auto;
 }
 
-/* Header Left Section - UPDATED */
+/* Header Left Section */
 .pf-header-left {
   display: flex;
   align-items: center;
@@ -86,14 +61,14 @@ body {
   align-items: center;
   justify-content: center;
   cursor: pointer;
-  color: var(--c-text);
+  color: var(--text-primary);
   font-size: 1.5rem;
-  transition: var(--transition);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   flex-shrink: 0;
 }
 
 .pf-brand-btn:hover {
-  background: var(--c-soft);
+  background: var(--bg-secondary);
   transform: scale(1.05);
 }
 
@@ -101,7 +76,7 @@ body {
   display: flex;
   align-items: center;
   text-decoration: none;
-  margin: 0 auto; /* Center logo on mobile */
+  margin: 0 auto;
 }
 
 .pf-logo {
@@ -120,11 +95,11 @@ body {
   display: flex;
   align-items: center;
   gap: 0.5rem;
-  background: var(--c-soft);
+  background: var(--bg-secondary);
   padding: 0.5rem;
-  border-radius: var(--nav-radius);
-  border: 1px solid var(--c-border);
-  box-shadow: 0 2px 8px var(--c-shadow);
+  border-radius: 12px;
+  border: 1px solid var(--border-color);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
   margin: 0 2rem;
 }
 
@@ -135,16 +110,16 @@ body {
   padding: 0.75rem 1.25rem;
   border-radius: 8px;
   text-decoration: none;
-  color: var(--c-muted);
+  color: var(--text-muted);
   font-weight: 600;
   font-size: 0.9rem;
-  transition: var(--transition);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   position: relative;
   overflow: hidden;
 }
 
 .pf-desktop-nav-item:hover {
-  color: var(--c-text);
+  color: var(--text-primary);
   background: rgba(255, 255, 255, 0.7);
   transform: translateY(-1px);
 }
@@ -155,7 +130,7 @@ body {
 
 .pf-desktop-nav-item.active {
   color: white;
-  background: var(--c-primary);
+  background: var(--primary);
   box-shadow: 0 4px 12px rgba(0, 168, 132, 0.3);
 }
 
@@ -167,7 +142,7 @@ body {
   transform: translateX(-50%);
   width: 24px;
   height: 3px;
-  background: var(--c-primary);
+  background: var(--primary);
   border-radius: 2px;
   animation: slideIn 0.3s ease;
 }
@@ -187,7 +162,7 @@ body {
   }
 }
 
-/* Header Right Section - NEW */
+/* Header Right Section */
 .pf-header-right {
   display: flex;
   align-items: center;
@@ -208,19 +183,19 @@ body {
   width: 44px;
   height: 44px;
   border-radius: 10px;
-  background: var(--c-soft);
-  border: 1px solid var(--c-border);
+  background: var(--bg-secondary);
+  border: 1px solid var(--border-color);
   cursor: pointer;
-  color: var(--c-text);
+  color: var(--text-primary);
   font-size: 1.2rem;
-  transition: var(--transition);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   display: flex;
   align-items: center;
   justify-content: center;
 }
 
 .pf-theme-toggle:hover {
-  background: var(--c-primary);
+  background: var(--primary);
   color: white;
   transform: rotate(15deg);
 }
@@ -254,19 +229,19 @@ body {
   width: 44px;
   height: 44px;
   border-radius: 10px;
-  background: var(--c-soft);
-  border: 1px solid var(--c-border);
+  background: var(--bg-secondary);
+  border: 1px solid var(--border-color);
   cursor: pointer;
-  color: var(--c-text);
+  color: var(--text-primary);
   font-size: 1.2rem;
-  transition: var(--transition);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   display: flex;
   align-items: center;
   justify-content: center;
 }
 
 .pf-settings-btn:hover {
-  background: var(--c-primary);
+  background: var(--primary);
   color: white;
   transform: rotate(15deg);
 }
@@ -283,7 +258,7 @@ body {
   background: rgba(255, 255, 255, 0.9);
   backdrop-filter: blur(20px);
   border-radius: 28px;
-  border: 1px solid var(--c-border);
+  border: 1px solid var(--border-color);
   display: flex;
   justify-content: space-around;
   align-items: center;
@@ -304,11 +279,11 @@ body {
   gap: 2px;
   align-items: center;
   justify-content: center;
-  color: var(--c-muted);
+  color: var(--text-muted);
   text-decoration: none;
   font-size: 0.7rem;
   font-weight: 600;
-  transition: var(--transition);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .pf-mob-btn i {
@@ -317,7 +292,7 @@ body {
 }
 
 .pf-mob-btn.active {
-  background: var(--c-primary);
+  background: var(--primary);
   color: white;
   flex: 1.2;
   box-shadow: 0 4px 12px rgba(0, 168, 132, 0.3);
@@ -357,31 +332,26 @@ body {
 /* Desktop */
 @media (min-width: 1025px) {
   body {
-    padding-top: var(--header-h);
+    padding-top: 70px;
   }
   
-  /* Hide mobile navigation */
   .pf-mob-float {
     display: none;
   }
   
-  /* Show desktop elements */
   .pf-desktop-nav,
   .pf-header-right {
     display: flex;
   }
   
-  /* Hide menu button on desktop */
   .pf-brand-btn {
     display: none;
   }
   
-  /* Center the logo */
   .pf-logo-link {
     margin: 0;
   }
   
-  /* Adjust header layout for desktop */
   .pf-header-left {
     flex: 1;
     justify-content: flex-start;
@@ -401,8 +371,8 @@ body {
   }
   
   body {
-    padding-top: var(--header-h);
-    padding-bottom: calc(var(--bottom-h) + 1rem);
+    padding-top: 70px;
+    padding-bottom: calc(60px + 1rem);
   }
   
   .pf-header-inner {
@@ -433,7 +403,8 @@ body {
   inset: 0 auto 0 0;
   width: 85%;
   max-width: 320px;
-  background: var(--c-bg);
+  background: var(--bg-primary);
+  color: var(--text-primary);
   z-index: 2001;
   display: flex;
   flex-direction: column;
@@ -446,30 +417,62 @@ body {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  border-bottom: 1px solid var(--c-border);
+  border-bottom: 1px solid var(--border-color);
   font-weight: 600;
   font-size: 1.25rem;
+  color: var(--text-primary);
+}
+
+.pf-sidebar-title {
+  margin: 0;
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: var(--text-primary);
 }
 
 .pf-profile {
   display: flex;
   gap: 1rem;
   padding: 1.5rem;
-  border-bottom: 1px solid var(--c-border);
+  border-bottom: 1px solid var(--border-color);
   align-items: center;
+  color: var(--text-primary);
+}
+
+.pf-profile strong,
+.pf-profile p {
+  color: var(--text-primary);
 }
 
 .pf-avatar {
   width: 48px;
   height: 48px;
   border-radius: 50%;
-  background: linear-gradient(135deg, var(--c-primary), #008e72);
+  background: linear-gradient(135deg, var(--primary), #008e72);
   color: white;
   display: flex;
   align-items: center;
   justify-content: center;
   font-weight: 700;
   font-size: 1.2rem;
+}
+
+.pf-profile-info {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.pf-profile-name {
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.pf-profile-role {
+  margin: 0;
+  font-size: 0.875rem;
+  color: var(--text-muted);
 }
 
 .pf-settings-list {
@@ -487,19 +490,19 @@ body {
   align-items: center;
   border-radius: 10px;
   cursor: pointer;
-  color: var(--c-text);
-  transition: var(--transition);
+  color: var(--text-primary);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   margin-bottom: 0.25rem;
 }
 
 .pf-setting-item:hover {
-  background: var(--c-soft);
+  background: var(--bg-secondary);
   transform: translateX(4px);
 }
 
 .pf-setting-item.active {
-  background: var(--c-primary);
-  color: white;
+  background: var(--primary);
+  color: white !important;
 }
 
 .pf-setting-item.danger {
@@ -528,42 +531,67 @@ body {
   font-size: 0.75rem;
   text-transform: uppercase;
   letter-spacing: 0.5px;
-  color: var(--c-muted);
+  color: var(--text-muted);
   margin: 1rem 0 0.5rem 0.5rem;
   font-weight: 600;
 }
 
-/* Close button in sidebar */
 .pf-close-btn {
   width: 40px;
   height: 40px;
   border-radius: 10px;
-  background: var(--c-soft);
+  background: var(--bg-secondary);
   border: none;
   display: flex;
   align-items: center;
   justify-content: center;
   cursor: pointer;
-  color: var(--c-text);
+  color: var(--text-primary);
   font-size: 1.2rem;
-  transition: var(--transition);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .pf-close-btn:hover {
-  background: var(--c-primary);
+  background: var(--primary);
   color: white;
   transform: rotate(90deg);
+}
+
+.pf-sidebar-footer {
+  padding: 1.5rem;
+  border-top: 1px solid var(--border-color);
+  margin-top: auto;
+}
+
+.pf-version-info {
+  margin: 0;
+  font-size: 0.75rem;
+  color: var(--text-muted);
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
 }
 
 /* ========== UTILITY CLASSES ========== */
 .container-lg {
   width: 100%;
-  max-width: var(--container-max);
+  max-width: 1200px;
   margin: 0 auto;
   padding: 0 1.5rem;
 }
 
 /* Smooth transitions */
 * {
-  transition: background-color 0.3s, border-color 0.3s;
+  transition: background-color 0.3s, border-color 0.3s, color 0.3s;
+}
+
+/* ===== FORCE SIDEBAR TEXT COLOR IN DARK MODE ===== */
+[data-theme="dark"] .pf-app-sidebar,
+[data-theme="dark"] .pf-app-sidebar *:not(.pf-setting-item.active):not(.pf-setting-item.active *) {
+  color: #e9edef !important;
+}
+
+[data-theme="dark"] .pf-setting-item.active,
+[data-theme="dark"] .pf-setting-item.active * {
+  color: white !important;
 }

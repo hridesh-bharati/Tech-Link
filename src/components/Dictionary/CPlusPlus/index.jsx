@@ -379,7 +379,7 @@ export default function CPlusPlus() {
             </div>
 
             {/* Content */}
-            <div className="content-area p-0 m-0 p-lg-4">
+            <div className="content-area p-0 m-0 p-lg-1 m-0">
               {renderChapter()}
               
               {/* Navigation at bottom */}

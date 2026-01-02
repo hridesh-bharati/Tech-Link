@@ -19,7 +19,7 @@ export default function CppChapter1() {
           </div>
           <div className="card-body p-3">
             <p>
-              C++ is a powerful programming language created by <b>Bjarne Stroustrup</b> in 1985. 
+              C++ is a powerful programming language created by <b>Bjarne Stroustrup</b> in 1985.
               It extends C language with object-oriented features while maintaining high performance.
             </p>
             <div className="row mt-2">
@@ -60,7 +60,7 @@ int main() {
     return 0;
 }`}
         />
-        
+
         <div className="mt-3">
           <p><b>Compile and Run:</b></p>
           <code className="d-block bg-light p-2 border rounded mb-2">g++ program.cpp -o output</code>
