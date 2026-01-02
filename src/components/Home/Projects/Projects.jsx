@@ -1,118 +1,119 @@
-import React, { useState } from "react";
+import React from "react";
 import { motion, AnimatePresence } from "framer-motion";
+import { Link } from "react-router-dom";
 import GradientText from "../../Shared/GradientText";
 import AnimatedSection from "../../Shared/AnimatedSection";
 import "./Projects.css";
 
-const categories = [
-  { id: "all", name: "All Projects" },
-  { id: "web", name: "Web Applications" },
-  { id: "mobile", name: "Mobile Apps" },
-  { id: "design", name: "UI/UX Design" },
-  { id: "ecommerce", name: "E-commerce" },
-];
-
-const projects = [
+/* ================================
+   ✅ ONLY LIVE PROJECT URLS
+================================ */
+const LIVE_PROJECTS = [
   {
     id: 1,
-    title: "E-commerce Platform",
-    description:
-      "Full-featured e-commerce platform with inventory & payments.",
-    category: "ecommerce",
-    tags: ["React", "Node.js", "MongoDB", "Stripe"],
-    liveUrl: "#",
-    githubUrl: "#",
+    title: "Jibzo Website",
+    description: "Production-ready business website hosted on Vercel.",
+    live: "https://jibzo.vercel.app/",
   },
   {
     id: 2,
-    title: "Task Management App",
-    description:
-      "Collaborative task manager with real-time updates.",
-    category: "web",
-    tags: ["Next.js", "Socket.io", "Tailwind"],
-    liveUrl: "#",
-    githubUrl: "#",
+    title: "Drishtee India",
+    description: "Official website of Drishtee India Computer Center.",
+    live: "https://drishteeindia.com",
   },
 ];
 
-const CategoryButton = ({ active, onClick, children }) => (
-  <motion.button
-    className={`category-btn ${active ? "active" : ""}`}
-    onClick={onClick}
-    whileHover={{ scale: 1.05 }}
-    whileTap={{ scale: 0.95 }}
-  >
-    {children}
-  </motion.button>
-);
+/* ================================
+   Screenshot helper
+================================ */
+const getScreenshot = (url) =>
+  `https://image.thum.io/get/width/800/${url}`;
 
+/* ================================
+   Project Card
+================================ */
 const ProjectCard = ({ project, index }) => (
   <motion.div
     className="project-card"
     initial={{ opacity: 0, y: 30 }}
     animate={{ opacity: 1, y: 0 }}
-    transition={{ delay: index * 0.1 }}
+    transition={{ delay: index * 0.15 }}
     whileHover={{ y: -8 }}
   >
+    {/* 🔥 LIVE WEBSITE PREVIEW */}
+    <div className="project-image">
+      <img
+        src={getScreenshot(project.live)}
+        alt={project.title}
+        loading="lazy"
+      />
+    </div>
+
     <div className="project-content">
       <h3 className="project-title">{project.title}</h3>
-      <p className="project-description">{project.description}</p>
+
+      <p className="project-description">
+        {project.description}
+      </p>
 
       <div className="project-tags">
-        {project.tags.map(tag => (
-          <span key={tag} className="project-tag">{tag}</span>
-        ))}
+        <span className="project-tag">Live</span>
+        <span className="project-tag">Production</span>
       </div>
 
       <div className="project-actions">
-        <a href={project.liveUrl} className="btn btn-primary btn-sm">
+        <a
+          href={project.live}
+          className="btn btn-primary btn-sm"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
           Live Demo
-        </a>
-        <a href={project.githubUrl} className="btn btn-outline btn-sm">
-          View Code
         </a>
       </div>
     </div>
   </motion.div>
 );
 
+/* ================================
+   Projects Section
+================================ */
 const Projects = () => {
-  const [activeCategory, setActiveCategory] = useState("all");
-
-  const filteredProjects =
-    activeCategory === "all"
-      ? projects
-      : projects.filter(p => p.category === activeCategory);
-
   return (
     <section className="projects section" id="projects">
       <div className="container">
         <div className="section-title">
-          <h2><GradientText>My Projects</GradientText></h2>
-          <p className="section-subtitle">Some of my recent work</p>
+          <h2>
+            <GradientText>Featured Projects</GradientText>
+          </h2>
+          <p className="section-subtitle">
+            Live production websites
+          </p>
         </div>
 
         <AnimatedSection>
-          <div className="project-categories">
-            {categories.map(cat => (
-              <CategoryButton
-                key={cat.id}
-                active={activeCategory === cat.id}
-                onClick={() => setActiveCategory(cat.id)}
-              >
-                {cat.name}
-              </CategoryButton>
-            ))}
+          <AnimatePresence>
+            <motion.div className="projects-grid">
+              {LIVE_PROJECTS.map((project, i) => (
+                <ProjectCard
+                  key={project.id}
+                  project={project}
+                  index={i}
+                />
+              ))}
+            </motion.div>
+          </AnimatePresence>
+
+          {/* 🔥 VIEW ALL */}
+          <div style={{ textAlign: "center", marginTop: "2rem" }}>
+            <Link
+              to="/projects"
+              className="btn btn-outline btn-lg"
+            >
+              View All Projects →
+            </Link>
           </div>
         </AnimatedSection>
-
-        <AnimatePresence mode="wait">
-          <motion.div className="projects-grid">
-            {filteredProjects.map((project, i) => (
-              <ProjectCard key={project.id} project={project} index={i} />
-            ))}
-          </motion.div>
-        </AnimatePresence>
       </div>
     </section>
   );

@@ -11,11 +11,14 @@ import {
   Brain, Shield, Smartphone, BarChart3, GitMerge,
   Coffee, Music, Camera, Plane, Gamepad2, Book,
   Heart, Target, Crown, TrendingUp,
-  MessageCircle
+  MessageCircle, Eye, Maximize2, Info
 } from 'lucide-react';
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Cell } from 'recharts';
 
 import "./AboutPage.css"
+
+// =========== SCREENSHOT UTILITY ===========
+const getScreenshot = (url) => `https://image.thum.io/get/width/800/${url}`;
 
 // =========== REUSABLE COMPONENTS ===========
 const GradientText = ({ children, className = '' }) => (
@@ -303,7 +306,6 @@ const topProjects = [
     title: "Drishtee Computer Centre",
     description: "Complete digital platform for Drishtee Computer Centre featuring course management, student registration, online resources, and admin dashboard.",
     technologies: ["React", "Next.js", "MongoDB", "Tailwind CSS", "Vercel"],
-    github: "https://github.com/hrideshbharati/drishtee-computer-centre",
     live: "https://drishteeindia.com",
     stats: { courses: "15+", students: "500+", rating: "4.8/5" },
     icon: <GraduationCap size={24} />
@@ -313,8 +315,7 @@ const topProjects = [
     title: "Jibzo - Social Media Platform",
     description: "Modern social media and instant messaging application with real-time chat, media sharing, user profiles, and community features.",
     technologies: ["React Native", "Node.js", "Firebase", "Socket.io", "AWS"],
-    github: "https://github.com/hrideshbharati/jibzo-app",
-    live: "https://jibzo.vercel.app",
+    live: "https://jibzo.vercel.app/",
     stats: { users: "1K+", messages: "50K+", active: "Daily" },
     icon: <MessageCircle size={24} />
   }
@@ -481,6 +482,7 @@ const SkillCategorySection = ({ category, index }) => (
   </motion.div>
 );
 
+// UPDATED ProjectCard COMPONENT WITH SCREENSHOT
 const ProjectCard = ({ project, index }) => (
   <motion.div
     className="project-card"
@@ -492,7 +494,7 @@ const ProjectCard = ({ project, index }) => (
   >
     <div className="project-header">
       <div className="project-icon">
-        <Code size={28} />
+        {project.icon}
       </div>
       <div>
         <h4 className="project-title">{project.title}</h4>
@@ -500,8 +502,40 @@ const ProjectCard = ({ project, index }) => (
       </div>
     </div>
 
+    {/* Project Screenshot Section */}
+    <div className="project-screenshot-container">
+      <div className="project-screenshot-wrapper">
+        <img
+          src={getScreenshot(project.live)}
+          alt={`${project.title} Screenshot`}
+          className="project-screenshot"
+          loading="lazy"
+          onError={(e) => {
+            e.target.src = 'https://via.placeholder.com/800x450/1a1a2e/ffffff?text=Project+Screenshot';
+          }}
+        />
+        <div className="screenshot-overlay">
+          <a
+            href={project.live}
+            className="screenshot-view-btn"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            <Eye size={18} />
+            View Live
+          </a>
+          <button
+            className="screenshot-fullscreen-btn"
+            onClick={() => window.open(getScreenshot(project.live), '_blank')}
+          >
+            <Maximize2 size={18} />
+          </button>
+        </div>
+      </div>
+    </div>
+
     <div className="project-tech">
-      <h6>Technologies</h6>
+      <h6>Technologies Used</h6>
       <div className="tech-tags">
         {project.technologies.map((tech, i) => (
           <span key={i} className="tech-tag">
@@ -521,10 +555,6 @@ const ProjectCard = ({ project, index }) => (
     </div>
 
     <div className="project-actions">
-      <a href={project.github} className="btn-secondary" target="_blank" rel="noopener noreferrer">
-        <GitBranch size={16} />
-        View Code
-      </a>
       <a href={project.live} className="btn-primary" target="_blank" rel="noopener noreferrer">
         <ExternalLink size={16} />
         Live Demo
@@ -557,12 +587,12 @@ const SkillsChart = () => (
       <ResponsiveContainer width="100%" height={300}>
         <BarChart data={skillsChartData}>
           <CartesianGrid strokeDasharray="3 3" stroke="var(--border-color)" opacity={0.3} />
-          <XAxis 
-            dataKey="skill" 
+          <XAxis
+            dataKey="skill"
             stroke="var(--text-secondary)"
             tick={{ fill: 'var(--text-secondary)', fontSize: 12 }}
           />
-          <YAxis 
+          <YAxis
             stroke="var(--text-secondary)"
             tick={{ fill: 'var(--text-secondary)', fontSize: 12 }}
             domain={[0, 100]}
@@ -575,8 +605,8 @@ const SkillsChart = () => (
               borderRadius: 'var(--border-radius-md)',
             }}
           />
-          <Bar 
-            dataKey="proficiency" 
+          <Bar
+            dataKey="proficiency"
             name="Proficiency %"
             radius={[4, 4, 0, 0]}
           >
@@ -687,7 +717,7 @@ const HeroSection = () => (
             <h3>{personalInfo.name}</h3>
             <p className="profile-title">{personalInfo.title}</p>
 
-            <div className="profile-stats">
+            <div className="profile-stats d-flex">
               <StatCard
                 icon={<Code />}
                 value="50+"
@@ -789,13 +819,14 @@ const HobbiesSection = () => (
   </section>
 );
 
+// UPDATED ProjectsSection COMPONENT
 const ProjectsSection = () => (
   <section className="projects-section">
     <div className="container">
       <SectionHeader
         icon={<Rocket />}
         title={<span>Featured <GradientText>Projects</GradientText></span>}
-        subtitle="Showcasing my best work and technical capabilities"
+        subtitle="Showcasing my best work with live demos and screenshots"
       />
 
       <div className="projects-grid">

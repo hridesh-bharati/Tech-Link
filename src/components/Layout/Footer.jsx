@@ -12,7 +12,8 @@ const Footer = () => {
   const year = new Date().getFullYear();
 
   return (
-    <footer className="footer">
+    <footer className="pf-footer footer">
+         
       {/* Back to top */}
       <button
         className="footer-backtop"

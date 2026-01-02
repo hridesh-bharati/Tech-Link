@@ -184,7 +184,7 @@ const About = () => {
       <div className="container py-lg-5">
         {/* SECTION HEADER */}
         <motion.div
-          className="text-center mb-5"
+          className="text-center mb-3"
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
@@ -235,26 +235,26 @@ const About = () => {
               </div>
             </div>
 
-          {/* STATS CARDS */}
-<div className="row g-3">
-  {stats.map((stat, index) => (
-    <motion.div
-      key={index}
-      className="col-6"
-      initial={{ opacity: 0, y: 20 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      whileHover={{ y: -6, scale: 1.02 }}
-      viewport={{ once: true }}
-      transition={{ delay: index * 0.1, duration: 0.4 }}
-    >
-      <div className="stats-card h-100">
-        <div className="stat-icon">{stat.icon}</div>
-        <div className="stat-number">{stat.number}</div>
-        <div className="stat-label">{stat.label}</div>
-      </div>
-    </motion.div>
-  ))}
-</div>
+            {/* STATS CARDS */}
+            <div className="row g-3">
+              {stats.map((stat, index) => (
+                <motion.div
+                  key={index}
+                  className="col-6"
+                  initial={{ opacity: 0, y: 20 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  whileHover={{ y: -6, scale: 1.02 }}
+                  viewport={{ once: true }}
+                  transition={{ delay: index * 0.1, duration: 0.4 }}
+                >
+                  <div className="stats-card h-100">
+                    <div className="stat-icon">{stat.icon}</div>
+                    <div className="stat-number">{stat.number}</div>
+                    <div className="stat-label">{stat.label}</div>
+                  </div>
+                </motion.div>
+              ))}
+            </div>
 
           </motion.div>
 

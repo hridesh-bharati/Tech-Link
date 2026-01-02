@@ -120,3 +120,11 @@
   font-size: var(--text-xs);
   color: var(--text-muted);
 }
+
+
+/* Hide footer on mobile */
+@media (max-width: 768px) {
+  .pf-footer {
+    display: none !important;
+  }
+}
