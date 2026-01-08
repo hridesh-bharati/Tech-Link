@@ -1,11 +1,12 @@
-// src/pages/LearnPage.jsx
-import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import React, { useState, useMemo } from "react";
+import { useNavigate } from "react-router-dom";
 import {
   MdComputer,
   MdOutlineAccountTree,
-  MdSearch
-} from 'react-icons/md';
+  MdSearch,
+  MdPlayArrow,
+  MdAccountBalance,
+} from "react-icons/md";
 import {
   FaKeyboard,
   FaInternetExplorer,
@@ -14,8 +15,8 @@ import {
   FaFilePowerpoint,
   FaPython,
   FaJava,
-  FaDatabase
-} from 'react-icons/fa';
+  FaDatabase,
+} from "react-icons/fa";
 import {
   SiHtml5,
   SiCss3,
@@ -23,160 +24,187 @@ import {
   SiJavascript,
   SiReact,
   SiNodedotjs,
-  SiCplusplus
-} from 'react-icons/si';
-import './Learn.css';
+  SiCplusplus,
+} from "react-icons/si";
 
-const coursesData = [
-  { id: 'fundamentals', name: 'Computer Fundamentals', cat: 'Basics', lvl: 'Beginner', col: '#22c55e', icon: <MdComputer /> },
-  { id: 'typing', name: 'Typing Skills', cat: 'Basics', lvl: 'Beginner', col: '#84cc16', icon: <FaKeyboard /> },
-  { id: 'internet', name: 'Internet Basics', cat: 'Basics', lvl: 'Beginner', col: '#38bdf8', icon: <FaInternetExplorer /> },
-  { id: 'msword', name: 'MS Word', cat: 'Office', lvl: 'Beginner', col: '#2563eb', icon: <FaFileWord /> },
-  { id: 'excel', name: 'MS Excel', cat: 'Office', lvl: 'Beginner', col: '#15803d', icon: <FaFileExcel /> },
-  { id: 'powerpoint', name: 'PowerPoint', cat: 'Office', lvl: 'Beginner', col: '#ea580c', icon: <FaFilePowerpoint /> },
-  { id: 'html', name: 'HTML', cat: 'Web', lvl: 'Beginner', col: '#f97316', icon: <SiHtml5 /> },
-  { id: 'css', name: 'CSS', cat: 'Web', lvl: 'Beginner', col: '#0ea5e9', icon: <SiCss3 /> },
-  { id: 'c', name: 'C Programming', cat: 'Programming', lvl: 'Beginner', col: '#3b82f6', icon: <SiC /> },
-  { id: 'cpp', name: 'C++ Programming', cat: 'Programming', lvl: 'Intermediate', col: '#00599C', icon: <SiCplusplus /> },
-  { id: 'python', name: 'Python', cat: 'Programming', lvl: 'Beginner', col: '#10b981', icon: <FaPython /> },
-  { id: 'java', name: 'Java', cat: 'Programming', lvl: 'Intermediate', col: '#dc2626', icon: <FaJava /> },
-  { id: 'js', name: 'JavaScript', cat: 'Web', lvl: 'Intermediate', col: '#f59e0b', icon: <SiJavascript /> },
-  { id: 'react', name: 'React', cat: 'Web', lvl: 'Intermediate', col: '#06b6d4', icon: <SiReact /> },
-  { id: 'node', name: 'Node.js', cat: 'Backend', lvl: 'Advanced', col: '#8b5cf6', icon: <SiNodedotjs /> },
-  { id: 'sql', name: 'MySQL', cat: 'Database', lvl: 'Beginner', col: '#ef4444', icon: <FaDatabase /> },
-  { id: 'dsa', name: 'DSA', cat: 'CS', lvl: 'Advanced', col: '#7c3aed', icon: <MdOutlineAccountTree /> },
+import "./Learn.css";
+
+/* ---------------- ICON MAP ---------------- */
+const ICONS = {
+  fundamentals: MdComputer,
+  typing: FaKeyboard,
+  internet: FaInternetExplorer,
+  msword: FaFileWord,
+  excel: FaFileExcel,
+  powerpoint: FaFilePowerpoint,
+  tally: MdAccountBalance,
+  html: SiHtml5,
+  css: SiCss3,
+  c: SiC,
+  cpp: SiCplusplus,
+  python: FaPython,
+  java: FaJava,
+  js: SiJavascript,
+  react: SiReact,
+  node: SiNodedotjs,
+  sql: FaDatabase,
+  dsa: MdOutlineAccountTree,
+};
+
+/* ---------------- DATA ---------------- */
+const COURSES = [
+  { id: "fundamentals", name: "Computer Fundamentals", cat: "Basics", col: "#32d74b", progress: 0.3 },
+  { id: "typing", name: "Typing Skills", cat: "Basics", col: "#64d2ff", progress: 0.8 },
+  { id: "internet", name: "Internet Basics", cat: "Basics", col: "#5e5ce6", progress: 0.5 },
+
+  { id: "msword", name: "MS Word", cat: "Office", col: "#30d158", progress: 0.4 },
+  { id: "excel", name: "MS Excel", cat: "Office", col: "#ff9f0a", progress: 0.6 },
+  { id: "powerpoint", name: "PowerPoint", cat: "Office", col: "#ff453a", progress: 0.2 },
+  { id: "tally", name: "Tally Prime", cat: "Office", col: "#bf5af2", progress: 0.9 },
+
+  { id: "html", name: "HTML", cat: "Web", col: "#ff375f", progress: 1 },
+  { id: "css", name: "CSS", cat: "Web", col: "#0a84ff", progress: 0.7 },
+  { id: "js", name: "JavaScript", cat: "Web", col: "#ffd60a", progress: 0.5 },
+  { id: "react", name: "React", cat: "Web", col: "#64d2ff", progress: 0.3 },
+
+  { id: "c", name: "C Programming", cat: "Programming", col: "#5e5ce6", progress: 0.8 },
+  { id: "cpp", name: "C++ Programming", cat: "Programming", col: "#30d158", progress: 0.6 },
+  { id: "python", name: "Python", cat: "Programming", col: "#32d74b", progress: 0.4 },
+  { id: "java", name: "Java", cat: "Programming", col: "#ff9f0a", progress: 0.5 },
+
+  { id: "node", name: "Node.js", cat: "Backend", col: "#30d158", progress: 0.2 },
+  { id: "sql", name: "MySQL", cat: "Database", col: "#ff375f", progress: 0.7 },
+  { id: "dsa", name: "DSA", cat: "CS", col: "#bf5af2", progress: 0.4 },
 ];
 
-const cats = ['All', 'Basics', 'Office', 'Programming', 'Web', 'Database', 'CS', 'Backend'];
-const lvls = ['All', 'Beginner', 'Intermediate', 'Advanced'];
+const CATEGORIES = ["All", "Basics", "Office", "Web", "Programming", "Backend", "Database", "CS"];
 
-export default function LearnPage() {
-  const navigate = useNavigate();
-  const [search, setSearch] = useState('');
-  const [cat, setCat] = useState('All');
-  const [lvl, setLvl] = useState('All');
-
-  const filtered = coursesData.filter(course =>
-    course.name.toLowerCase().includes(search.toLowerCase()) &&
-    (cat === 'All' || course.cat === cat) &&
-    (lvl === 'All' || course.lvl === lvl)
-  );
+/* ---------------- CARD ---------------- */
+const CourseCard = ({ course, index, onClick }) => {
+  const Icon = ICONS[course.id];
 
   return (
-    <div className="learn-page container-fluid py-4">
-      {/* Header Card */}
-      <div className="card learn-header-card mb-4 border-0 shadow-sm">
-        <div className="card-body text-center p-4 p-md-5">
-          <h1 className="display-6 fw-bold mb-3 text-primary">Learn & Grow</h1>
-          <p className="lead text-muted mb-0">Start from basics and grow step by step 🚀</p>
-        </div>
-      </div>
-
-      {/* Filters */}
-      <div className="row g-3 mb-4">
-        <div className="col-12 col-md-6">
-          <div className="input-group">
-            <span className="input-group-text bg-light border-end-0">
-              <MdSearch className="text-muted" />
-            </span>
-            <input
-              type="text"
-              className="form-control border-start-0"
-              placeholder="Search courses..."
-              value={search}
-              onChange={(e) => setSearch(e.target.value)}
-            />
+    <div
+      className="course-card"
+      style={{
+        "--delay": index,
+        "--accent": course.col,
+        "--progress": course.progress
+      }}
+      onClick={onClick}
+    >
+      <div className="card-content">
+        <div className="card-icon-wrapper">
+          <div className="card-icon">
+            <Icon />
           </div>
         </div>
-        
-        <div className="col-6 col-md-3">
-          <select 
-            className="form-select" 
-            value={cat} 
-            onChange={(e) => setCat(e.target.value)}
-          >
-            {cats.map(c => (
-              <option key={c} value={c}>{c}</option>
-            ))}
-          </select>
-        </div>
-        
-        <div className="col-6 col-md-3">
-          <select 
-            className="form-select" 
-            value={lvl} 
-            onChange={(e) => setLvl(e.target.value)}
-          >
-            {lvls.map(l => (
-              <option key={l} value={l}>{l}</option>
-            ))}
-          </select>
+
+        <div className="course-info">
+          <h4 className="course-title">{course.name}</h4>
+          <span className="course-category">{course.cat}</span>
         </div>
       </div>
 
-      {/* Courses Count */}
-      <div className="mb-3">
-        <span className="badge bg-primary bg-opacity-10 text-primary px-3 py-2">
-          {filtered.length} {filtered.length === 1 ? 'course' : 'courses'} found
-        </span>
+      <div className="card-footer">
+        <div className="progress-container text-muted">
+          <span>Progress  <i className="bi bi-arrow-right"></i> </span>
+        </div>
+
+        <button className="start-btn" onClick={(e) => {
+          e.stopPropagation();
+          onClick();
+        }}>
+          <MdPlayArrow />
+          {course.progress === 0 ? "Start" : "Continue"}
+        </button>
+      </div>
+    </div>
+  );
+};
+
+/* ---------------- PAGE ---------------- */
+export default function LearnPage() {
+  const navigate = useNavigate();
+  const [search, setSearch] = useState("");
+  const [selectedCategory, setSelectedCategory] = useState("All");
+
+  const courses = useMemo(() => {
+    let filtered = COURSES;
+
+    if (search) {
+      const q = search.toLowerCase();
+      filtered = filtered.filter(c =>
+        c.name.toLowerCase().includes(q) ||
+        c.cat.toLowerCase().includes(q)
+      );
+    }
+
+    if (selectedCategory !== "All") {
+      filtered = filtered.filter(c => c.cat === selectedCategory);
+    }
+
+    return filtered;
+  }, [search, selectedCategory]);
+
+  return (
+    <div className="learn-app">
+      <header className="app-header">
+        <h1 className="app-title">Learn Skills</h1>
+        <p className="app-subtitle">Upgrade yourself step by step</p>
+      </header>
+
+      <div className="search-container">
+        <div className="search-bar">
+          <MdSearch />
+          <input
+            placeholder="Search courses..."
+            value={search}
+            onChange={e => setSearch(e.target.value)}
+          />
+          {search && (
+            <button onClick={() => setSearch("")}>×</button>
+          )}
+        </div>
       </div>
 
-      {/* Courses Grid */}
-      {filtered.length > 0 ? (
-        <div className="row row-cols-1 row-cols-md-2 row-cols-lg-3 row-cols-xl-4 g-4">
-          {filtered.map(course => (
-            <div key={course.id} className="col">
-              <div 
-                className="card h-100 border-0 shadow-sm course-card"
-                onClick={() => navigate(`/learn/${course.id}`)}
-                style={{ cursor: 'pointer' }}
-              >
-                <div className="card-body p-3">
-                  <div className="d-flex justify-content-between align-items-start mb-3">
-                    <div className="d-flex flex-column gap-1">
-                      <span className="badge bg-primary bg-opacity-10 text-primary px-2 py-1" style={{ fontSize: '0.7rem' }}>
-                        {course.cat}
-                      </span>
-                      <span className="badge bg-success bg-opacity-10 text-success px-2 py-1" style={{ fontSize: '0.7rem' }}>
-                        {course.lvl}
-                      </span>
-                    </div>
-                    <div 
-                      className="course-icon d-flex align-items-center justify-content-center rounded-3"
-                      style={{ 
-                        backgroundColor: course.col,
-                        width: '45px',
-                        height: '45px'
-                      }}
-                    >
-                      <div className="text-white fs-5">
-                        {course.icon}
-                      </div>
-                    </div>
-                  </div>
-                  <h6 className="card-title mb-0 fw-semibold">{course.name}</h6>
-                </div>
-              </div>
-            </div>
-          ))}
-        </div>
-      ) : (
-        /* Empty State */
-        <div className="text-center py-5">
-          <div className="mb-4">
-            <div className="display-1 text-muted opacity-25">📚</div>
-          </div>
-          <h5 className="mb-3">No courses found</h5>
-          <p className="text-muted mb-4">Try changing your search or filters</p>
-          <button 
-            className="btn btn-primary"
-            onClick={() => {
-              setSearch('');
-              setCat('All');
-              setLvl('All');
-            }}
+      <div className="category-badges justify-content-between d-flex flex-wrap">
+        {CATEGORIES.map(category => (
+          <button
+            key={category}
+            className={`category-badge ${selectedCategory === category ? 'active' : ''}`}
+            onClick={() => setSelectedCategory(category)}
           >
-            Reset Filters
+            {category}
+          </button>
+        ))}
+      </div>
+
+      <div className="courses-count">
+        <b>{courses.length}</b> Courses Found
+      </div>
+
+      <div className="courses-grid">
+        {courses.map((c, i) => (
+          <CourseCard
+            key={c.id}
+            course={c}
+            index={i}
+            onClick={() => navigate(`/learn/${c.id}`)}
+          />
+        ))}
+      </div>
+
+      {!courses.length && (
+        <div className="empty-state">
+          <div className="empty-icon">📚</div>
+          <h3>No Courses Found</h3>
+          <p>Try a different search or category</p>
+          <button onClick={() => {
+            setSearch("");
+            setSelectedCategory("All");
+          }}>
+            View All Courses
           </button>
         </div>
       )}

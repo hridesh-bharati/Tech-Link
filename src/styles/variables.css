@@ -1,7 +1,7 @@
 /* CSS Variables - Light & Dark Themes */
 :root {
   /* Colors - Blue theme kept, WhatsApp green added */
-  --primary: #00a884; /* WhatsApp green as primary */
+  --primary: #00a884; 
   --primary-dark: #008e72;
   --primary-light: rgba(0, 168, 132, 0.1);
   --primary-blue: #2563eb; /* Original blue kept as separate */

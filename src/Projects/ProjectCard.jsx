@@ -1,22 +1,25 @@
 import { useRef, useState } from "react";
-import { Heart, Eye, Github, ExternalLink } from "lucide-react";
+import {
+  Heart,
+  Eye,
+  Github,
+  ExternalLink,
+  Star,
+  Calendar,
+  Code
+} from "lucide-react";
 
 const USERNAME = "hridesh-bharati";
 
 export default function ProjectCard({ project }) {
   const [liked, setLiked] = useState(false);
   const [likes, setLikes] = useState(project.likes || 0);
-  const [imgSrc, setImgSrc] = useState(
-    project.live
-      ? `https://api.microlink.io/?url=${project.live}&screenshot=true&embed=screenshot.url&meta=false`
-      : `https://opengraph.githubassets.com/1/${USERNAME}/${project.name}`
-  );
-  const [fallback, setFallback] = useState(false);
   const lastTap = useRef(0);
 
-  const githubOG = `https://opengraph.githubassets.com/1/${USERNAME}/${project.name}`;
+  const imgSrc = project.live
+    ? `https://api.microlink.io/?url=${project.live}&screenshot=true&embed=screenshot.url&meta=false`
+    : `https://opengraph.githubassets.com/1/${USERNAME}/${project.name}`;
 
-  /* LIKE (safe) */
   const like = () => {
     setLiked(prev => {
       setLikes(l => (prev ? l - 1 : l + 1));
@@ -24,7 +27,6 @@ export default function ProjectCard({ project }) {
     });
   };
 
-  /* DOUBLE TAP */
   const doubleTap = () => {
     const now = Date.now();
     if (now - lastTap.current < 300 && !liked) like();
@@ -33,22 +35,32 @@ export default function ProjectCard({ project }) {
 
   return (
     <article className="project-card" onClick={doubleTap}>
-      {!fallback ? (
+      {/* COVER */}
+      <div className="project-cover-container">
         <img
           src={imgSrc}
           alt={project.title}
           className="project-cover"
-          onError={() => {
-            if (imgSrc !== githubOG) setImgSrc(githubOG);
-            else setFallback(true);
-          }}
         />
-      ) : (
-        <div className="project-cover placeholder">
-          {project.title.toUpperCase()}
-        </div>
-      )}
 
+        <div className="cover-overlay">
+          <div className="project-badges">
+            {project.live && (
+              <span className="badge primary">🚀 Live</span>
+            )}
+            <span className="badge">
+              <Star size={12} /> {project.stars || "100"}+
+            </span>
+            {project.tech && (
+              <span className="badge">
+                <Code size={12} /> {project.tech}
+              </span>
+            )}
+          </div>
+        </div>
+      </div>
+
+      {/* HEADER */}
       <header className="project-header">
         <div className="user">
           <img
@@ -56,42 +68,66 @@ export default function ProjectCard({ project }) {
             className="avatar"
             alt="Hridesh Bharati"
           />
-          <div>
+          <div className="user-info">
             <h4>Hridesh Bharati</h4>
-            <span>{new Date(project.updated).toDateString()}</span>
+            <span>
+              <Calendar size={12} />
+              {new Date(project.updated).toLocaleDateString("en-IN", {
+                day: "numeric",
+                month: "short",
+                year: "numeric"
+              })}
+            </span>
           </div>
         </div>
 
         <div className="views">
-          <Eye size={16} /> {project.views}
+          <Eye size={14} />
+          {project.views || "1.2k"}
         </div>
       </header>
 
+      {/* CONTENT */}
       <h3 className="project-title">{project.title}</h3>
-      <p className="project-desc">{project.description}</p>
+      <p className="project-desc">
+        {project.description || "A modern project built with clean architecture."}
+      </p>
 
-      <div className="like-bar">
-        <button
-          className={liked ? "liked" : ""}
-          onClick={e => {
-            e.stopPropagation();
-            like();
-          }}
-        >
-          <Heart />
-        </button>
-        <span>{likes}</span>
-      </div>
+      {/* INTERACTION */}
+      <div className="interaction-bar">
+        <div className="like-section">
+          <button
+            className={`like-button ${liked ? "liked" : ""}`}
+            onClick={e => {
+              e.stopPropagation();
+              like();
+            }}
+          >
+            <Heart size={18} />
+          </button>
+          <span className="like-count">{likes}</span>
+        </div>
 
-      <div className="actions">
-        {project.live && (
-          <a href={project.live} target="_blank" rel="noreferrer">
-            <ExternalLink size={16} /> Live
+        <div className="action-buttons">
+          {project.live && (
+            <a
+              href={project.live}
+              target="_blank"
+              rel="noreferrer"
+              className="action-button primary"
+            >
+              <ExternalLink size={16} /> Demo
+            </a>
+          )}
+          <a
+            href={project.github}
+            target="_blank"
+            rel="noreferrer"
+            className="action-button"
+          >
+            <Github size={16} /> Code
           </a>
-        )}
-        <a href={project.github} target="_blank" rel="noreferrer">
-          <Github size={16} /> Code
-        </a>
+        </div>
       </div>
     </article>
   );

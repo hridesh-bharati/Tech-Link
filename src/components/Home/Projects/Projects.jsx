@@ -80,7 +80,7 @@ const ProjectCard = ({ project, index }) => (
 ================================ */
 const Projects = () => {
   return (
-    <section className="projects section" id="projects">
+    <section className="projects section pt-5" id="projects">
       <div className="container">
         <div className="section-title">
           <h2>

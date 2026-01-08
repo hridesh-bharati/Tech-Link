@@ -53,7 +53,7 @@ const Hero = () => {
     // Clear existing particles
     particlesContainer.innerHTML = '';
 
-    const particleCount = Math.min(30, Math.floor(window.innerWidth / 30)); // Responsive particle count
+    const particleCount = Math.min(30, Math.floor(window.innerWidth / 30)); 
     const colors = [
       'radial-gradient(circle, rgba(37,99,235,0.4) 0%, rgba(37,99,235,0) 70%)',
       'radial-gradient(circle, rgba(124,58,237,0.4) 0%, rgba(124,58,237,0) 70%)',

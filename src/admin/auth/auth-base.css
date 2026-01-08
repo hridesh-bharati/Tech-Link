@@ -1,0 +1,198 @@
+/* ===== MOBILE APP BASE ===== */
+.android-app {
+  min-height: 100vh;
+  background: var(--gradient-dark);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: var(--space-5);
+  font-family: var(--font-sans);
+  color: var(--text-primary);
+  position: relative;
+  overflow: hidden;
+}
+
+/* TOP GLOW */
+.android-app::before {
+  content: "";
+  position: absolute;
+  top: -120px;
+  left: -80px;
+  width: 420px;
+  height: 420px;
+  background: radial-gradient(circle, var(--primary-blue), transparent);
+  border-radius: 50%;
+  opacity: 0.35;
+  pointer-events: none;
+}
+
+/* BOTTOM GLOW */
+.android-app::after {
+  content: "";
+  position: absolute;
+  bottom: -140px;
+  right: -100px;
+  width: 460px;
+  height: 460px;
+  background: radial-gradient(circle, var(--secondary), transparent);
+  border-radius: 50%;
+  opacity: 0.25;
+  pointer-events: none;
+}
+
+/* ===== BACK BUTTON ===== */
+.btn-back {
+  position: absolute;
+  top: 22px;
+  left: 18px;
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  border: none;
+  background: rgba(255, 255, 255, 0.85);
+  backdrop-filter: blur(8px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  box-shadow: 0 6px 16px rgba(0,0,0,.2);
+  z-index: 10;
+  transition: transform 0.2s ease, background 0.2s ease;
+}
+.btn-back svg { color: #0072ff; }
+.btn-back:active { transform: scale(0.92); }
+.btn-back:hover { background: #fff; }
+
+/* ===== CARDS ===== */
+.card-signup, .card-login {
+  width: 100%;
+  max-width: 360px;
+  background: var(--bg-card);
+  border-radius: var(--border-radius-2xl);
+  padding: var(--space-6);
+  box-shadow: var(--shadow-2xl);
+  animation: slideUp var(--transition-base);
+  z-index: 9999;
+  margin-top: 0;
+}
+.card-signup { margin-top: 60px; }
+.card-login::before {
+  content: "Welcome Back";
+  display: block;
+  font-size: var(--text-xl);
+  font-weight: 700;
+  margin-bottom: var(--space-1);
+  color: var(--text-primary);
+}
+.card-login::after {
+  content: "Login to your account";
+  display: block;
+  font-size: var(--text-xs);
+  color: var(--text-muted);
+  margin-bottom: var(--space-5);
+}
+
+/* Slide-up animation */
+@keyframes slideUp {
+  from { opacity: 0; transform: translateY(40px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* ===== INPUT GROUPS ===== */
+.input-group-custom {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  background: var(--bg-secondary);
+  padding: var(--space-4);
+  border-radius: var(--border-radius-lg);
+  margin-bottom: var(--space-4);
+  border: 1px solid var(--border-color);
+}
+.input-group-custom svg { color: var(--primary-blue); }
+.input-group-custom input {
+  border: none;
+  outline: none;
+  background: transparent;
+  flex: 1;
+  font-size: var(--text-sm);
+  color: var(--text-primary);
+}
+.input-group-custom span { cursor: pointer; color: var(--text-muted); }
+.input-group-custom span:hover svg { color: var(--primary); }
+
+/* ===== BUTTONS ===== */
+.btn-primary {
+  width: 100%;
+  margin-top: var(--space-3);
+  padding: var(--space-4);
+  border-radius: var(--border-radius-xl);
+  border: none;
+  background: linear-gradient(135deg, #0072ff, #00c6ff);
+  color: #fff;
+  font-size: var(--text-base);
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  box-shadow: 0 6px 20px rgba(0,0,0,.25);
+}
+.btn-primary:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+.btn-primary:active { transform: scale(0.97); }
+
+/* ===== AVATAR UPLOAD ===== */
+.floating-avatar-custom {
+  width: 96px;
+  height: 96px;
+  border-radius: 50%;
+  background: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: -48px;
+  z-index: 2;
+  box-shadow: 0 10px 25px rgba(0,0,0,.3);
+  position: relative;
+  overflow: hidden;
+}
+.floating-avatar-custom img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.camera-overlay-custom {
+  position: absolute;
+  bottom: -4px;
+  right: -4px;
+  background: linear-gradient(135deg, #00c6ff, #0072ff);
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  box-shadow: 0 4px 10px rgba(0,0,0,.3);
+}
+.camera-overlay-custom svg { color: #fff; font-size: 16px; }
+
+/* ===== LINKS ===== */
+p-custom {
+  margin-top: var(--space-4);
+  color: var(--text-inverse);
+  font-size: var(--text-sm);
+}
+p-custom a {
+  display: inline-block;
+  padding: 4px 6px;
+  position: relative;
+  z-index: 10000;
+}
+
+/* ===== MOBILE ===== */
+@media (max-width: 480px) {
+  .card-login, .card-signup { border-radius: var(--border-radius-2xl); }
+}

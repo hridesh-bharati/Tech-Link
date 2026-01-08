@@ -146,8 +146,8 @@ const personalInfo = {
   nationality: "Indian",
 
   experience: {
-    professional: "1+ Year Professional",
-    total: "3+ Years Coding",
+    professional: "3+ Year Professional",
+    total: "4+ Years Coding",
     description: "Specialized in building responsive web applications with modern frameworks"
   },
 
@@ -342,7 +342,7 @@ const CodingJourneyCard = ({ item, index }) => (
       whileHover={{ scale: 1.02 }}
       transition={{ type: "spring", stiffness: 300 }}
     >
-      <div className="timeline-header">
+      <div className="timeline-header ">
         <span className="timeline-year" style={{ background: item.color }}>
           {item.year}
         </span>

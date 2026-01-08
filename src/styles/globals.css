@@ -317,7 +317,6 @@ svg {
   color: white;
 }
 
-/* Custom Classes (Bootstrap में नहीं हैं) */
 .lead-text {
   font-size: var(--text-lg);
   color: var(--text-primary);

@@ -5,15 +5,19 @@
   background: var(--gradient-light);
   position: relative;
   overflow: hidden;
+  transition: all var(--transition-base);
 }
 
-/* Force dark mode text colors */
+[data-theme="dark"] .about-section {
+  background: var(--gradient-whatsapp);
+}
+
+/* Force proper text colors in both themes */
 .about-section,
-.about-section * {
+.about-section *:not(.btn) {
   color: var(--text-primary);
 }
 
-/* Custom text classes using CSS variables */
 .about-text-muted {
   color: var(--text-secondary) !important;
 }
@@ -26,7 +30,7 @@
    PROFILE CARD
 ============================= */
 .profile-card {
-  background: var(--bg-primary);
+  background: var(--bg-card);
   border-radius: var(--border-radius-2xl);
   overflow: hidden;
   box-shadow: var(--shadow-xl);
@@ -79,7 +83,7 @@
    STATS CARDS
 ============================= */
 .stats-card {
-  background: var(--bg-primary);
+  background: var(--bg-card);
   border-radius: var(--border-radius-xl);
   padding: var(--space-6);
   text-align: center;
@@ -103,7 +107,7 @@
   background: linear-gradient(
     120deg,
     transparent,
-    rgba(255, 255, 255, 0.15),
+    rgba(255, 255, 255, 0.1),
     transparent
   );
   opacity: 0;
@@ -148,6 +152,16 @@
   margin: 0 auto;
   color: var(--text-inverse);
   font-weight: bold;
+  position: relative;
+  overflow: hidden;
+}
+
+.tech-icon::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: inherit;
+  opacity: 0.9;
 }
 
 .tech-icon:hover {
@@ -167,7 +181,7 @@
 }
 
 [data-theme="dark"] .skill-progress {
-  background: var(--gray-700);
+  background: var(--gray-800);
 }
 
 .skill-bar {
@@ -200,31 +214,6 @@
   100% {
     transform: translateX(100%);
   }
-}
-
-/* =============================
-   SERVICE CARDS
-============================= */
-.service-card {
-  background: var(--bg-primary);
-  border-radius: var(--border-radius-xl);
-  padding: var(--space-6);
-  text-align: center;
-  transition: all var(--transition-base);
-  border: 1px solid var(--border-color);
-  box-shadow: var(--shadow-md);
-}
-
-.service-card:hover {
-  transform: translateY(-5px);
-  border-color: var(--primary);
-  box-shadow: var(--shadow-xl);
-}
-
-.service-icon {
-  font-size: var(--text-5xl);
-  margin-bottom: var(--space-4);
-  display: inline-block;
 }
 
 /* =============================
@@ -305,6 +294,7 @@
   font-size: var(--text-xl);
   font-weight: bold;
   z-index: var(--z-fixed);
+  color: var(--text-primary);
 }
 
 .dot-pulse {
@@ -365,7 +355,7 @@
 }
 
 .timeline-year-badge {
-  background: var(--bg-primary);
+  background: var(--bg-card);
   color: var(--text-primary);
   padding: var(--space-1) var(--space-3);
   border-radius: var(--border-radius-xl);
@@ -377,7 +367,7 @@
 
 /* EXPERIENCE CARDS FOR TIMELINE */
 .experience-card-timeline {
-  background: var(--bg-primary);
+  background: var(--bg-card);
   border-radius: var(--border-radius-xl);
   padding: var(--space-6);
   width: 100%;
@@ -427,6 +417,50 @@
 
 .card-body-timeline {
   padding-left: var(--space-2);
+}
+
+/* Badges */
+.about-badge-primary {
+  background: var(--primary) !important;
+  color: var(--text-inverse) !important;
+}
+
+.about-badge-gradient {
+  background: var(--gradient-primary) !important;
+  color: var(--text-inverse) !important;
+}
+
+/* Section Headings */
+.about-section h1,
+.about-section h2,
+.about-section h3,
+.about-section h4,
+.about-section h5,
+.about-section h6 {
+  color: var(--text-primary);
+}
+
+/* Buttons - Ensure they're visible in dark mode */
+.about-section .btn-primary {
+  background: var(--primary);
+  border-color: var(--primary);
+  color: var(--text-inverse);
+}
+
+.about-section .btn-primary:hover {
+  background: var(--primary-dark);
+  border-color: var(--primary-dark);
+}
+
+.about-section .btn-outline-primary {
+  border-color: var(--primary);
+  color: var(--primary);
+}
+
+.about-section .btn-outline-primary:hover {
+  background: var(--primary);
+  border-color: var(--primary);
+  color: var(--text-inverse);
 }
 
 /* =============================
@@ -507,30 +541,7 @@
   }
 }
 
-/* Badges */
-.about-badge-primary {
-  background: var(--primary) !important;
-  color: var(--text-inverse) !important;
-}
-
-.about-badge-gradient {
-  background: var(--gradient-primary) !important;
-  color: var(--text-inverse) !important;
-}
-
-/* Section Headings */
-.about-section h1,
-.about-section h2,
-.about-section h3,
-.about-section h4,
-.about-section h5,
-.about-section h6 {
-  color: var(--text-primary);
-}
-
-/* =============================
-   RESPONSIVE
-============================= */
+/* General responsive */
 @media (max-width: 768px) {
   .profile-img-container {
     height: 200px;

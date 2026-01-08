@@ -1,0 +1,213 @@
+/* =========================
+   TALLY TUTORIAL BASE
+========================= */
+.tally-tutorial {
+  min-height: 100vh;
+  background: var(--bg-primary);
+  color: var(--text-primary);
+  font-family: var(--font-sans);
+}
+
+/* =========================
+   TOP HAMBURGER BAR
+========================= */
+.hamburger-container {
+  height: var(--header-height);
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  padding: 0 var(--space-4);
+  background: var(--header-bg);
+  border-bottom: 1px solid var(--header-border);
+  box-shadow: var(--header-shadow);
+  position: sticky;
+  top: 0;
+  z-index: var(--z-fixed);
+}
+
+.hamburger-title {
+  font-size: var(--text-lg);
+  font-weight: 600;
+}
+
+/* =========================
+   HAMBURGER ICON
+========================= */
+.hamburger-btn {
+  width: 36px;
+  height: 28px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  background: none;
+  border: none;
+  cursor: pointer;
+}
+
+.hamburger-line {
+  height: 3px;
+  background: var(--text-primary);
+  border-radius: var(--border-radius-full);
+  transition: var(--transition-base);
+}
+
+.hamburger-line.open:nth-child(1) {
+  transform: rotate(45deg) translate(6px, 6px);
+}
+
+.hamburger-line.open:nth-child(2) {
+  opacity: 0;
+}
+
+.hamburger-line.open:nth-child(3) {
+  transform: rotate(-45deg) translate(6px, -6px);
+}
+
+/* =========================
+   DRAWER OVERLAY
+========================= */
+.drawer-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.45);
+  opacity: 0;
+  visibility: hidden;
+  transition: var(--transition-base);
+  z-index: var(--z-overlay);
+}
+
+.drawer-overlay.open {
+  opacity: 1;
+  visibility: visible;
+}
+
+/* =========================
+   DRAWER PANEL
+========================= */
+.drawer {
+  position: fixed;
+  top: 0;
+  left: calc(var(--sidebar-width) * -1);
+  width: var(--sidebar-width);
+  height: 100vh;
+  background: var(--sidebar-bg);
+  color: var(--sidebar-text);
+  box-shadow: var(--sidebar-shadow);
+  transition: var(--transition-slow);
+  z-index: var(--z-modal);
+  display: flex;
+  flex-direction: column;
+}
+
+.drawer.open {
+  left: 0;
+}
+
+/* =========================
+   DRAWER HEADER
+========================= */
+.drawer-header {
+  padding: var(--space-4);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1px solid var(--sidebar-border);
+}
+
+.drawer-header h5 {
+  font-size: var(--text-lg);
+  font-weight: 700;
+}
+
+.close-btn {
+  font-size: var(--text-2xl);
+  background: none;
+  border: none;
+  color: var(--text-muted);
+  cursor: pointer;
+}
+
+/* =========================
+   CATEGORY FILTERS
+========================= */
+.category-filters {
+  padding: var(--space-3);
+  border-bottom: 1px solid var(--sidebar-border);
+}
+
+.category-btn {
+  padding: 6px 14px;
+  border-radius: var(--border-radius-full);
+  border: 1px solid var(--border-color);
+  background: var(--bg-card);
+  color: var(--text-secondary);
+  font-size: var(--text-xs);
+  cursor: pointer;
+  transition: var(--transition-fast);
+}
+
+.category-btn:hover {
+  background: var(--primary-light);
+  color: var(--primary);
+}
+
+.category-btn.active {
+  background: var(--primary);
+  color: var(--text-inverse);
+  border-color: var(--primary);
+  box-shadow: var(--nav-active-shadow);
+}
+
+/* =========================
+   CHAPTER LIST
+========================= */
+.drawer-chapters {
+  flex: 1;
+  overflow-y: auto;
+  padding: var(--space-2);
+}
+
+.chapter-link {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  padding: var(--space-3);
+  border-radius: var(--sidebar-item-radius);
+  cursor: pointer;
+  transition: var(--transition-fast);
+  font-size: var(--text-sm);
+}
+
+.chapter-link:hover {
+  background: var(--sidebar-item-hover);
+}
+
+.chapter-link.active {
+  background: var(--primary);
+  color: var(--sidebar-active-text);
+  font-weight: 600;
+}
+
+.chapter-icon {
+  font-size: var(--text-lg);
+}
+
+/* =========================
+   DRAWER FOOTER
+========================= */
+.drawer-footer {
+  padding: var(--space-3);
+  border-top: 1px solid var(--sidebar-border);
+  font-size: var(--text-xs);
+  color: var(--text-muted);
+  text-align: center;
+}
+
+/* =========================
+   MAIN CONTENT
+========================= */
+.main-content {
+  padding: var(--space-4);
+  background: var(--bg-secondary);
+  min-height: calc(100vh - var(--header-height));
+}

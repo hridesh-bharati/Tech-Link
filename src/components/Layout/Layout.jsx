@@ -6,7 +6,7 @@ import Footer from "./Footer.jsx";
 import "./Layout.css";
 
 /* Main routes (order matters for swipe) */
-const MAIN_ROUTES = ["/", "/about", "/learn", "/projects", "/contact"];
+const MAIN_ROUTES = ["/", "/about", "/contact", "/learn", "/projects"];
 
 /* Swipe config */
 const SWIPE_THRESHOLD = 70;
@@ -202,7 +202,7 @@ const Layout = () => {
         </div>
       )}
 
-      <main className="main-content" style={style}>
+      <main className="main-content p-0" style={style}>
         <Outlet />
       </main>
 

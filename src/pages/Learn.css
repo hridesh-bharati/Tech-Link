@@ -1,175 +1,350 @@
-/* Learn.css - Fixed Dark Mode */
+/* ===================================================== */
+/* GLOBAL THEME VARIABLES (LIGHT DEFAULT) */
+/* ===================================================== */
 
-/* Global Learn Page */
-.learn-page {
-  min-height: calc(100vh - 70px);
+:root {
+  /* Core Brand Colors */
+  --primary: #00a884;
+  --primary-dark: #008e72;
+  --primary-light: rgba(0, 168, 132, 0.1);
+  --primary-blue: #2563eb;
+  --secondary: #7c3aed;
+  --accent: var(--primary-blue);
+
+  /* Gradients */
+  --gradient-blue: linear-gradient(135deg, #007aff, #5856d6);
+  --gradient-whatsapp: linear-gradient(135deg, #00a884, #008e72);
+
+  /* Backgrounds */
+  --bg-primary: #ffffff;
+  --bg-secondary: #f2f2f7;
+  --bg-card: #ffffff;
+
+  /* Text */
+  --text-primary: #1c1c1e;
+  --text-secondary: #6b7280;
+  --text-muted: #8e8e93;
+
+  /* Borders & Shadow */
+  --border-light: rgba(0, 0, 0, 0.05);
+  --border-color: #c7c7cc;
+  --shadow-sm: 0 2px 6px rgba(0, 0, 0, 0.06);
+  --shadow-lg: 0 4px 12px rgba(0, 0, 0, 0.08);
+
+  /* Radius */
+  --radius-lg: 20px;
+  --radius-md: 14px;
+  --radius-sm: 10px;
+
+  /* Learn App Mapped */
+  --grad: var(--gradient-blue);
+  --bg: var(--bg-secondary);
+  --card-bg: var(--bg-card);
+  --text: var(--text-primary);
+  --muted: var(--text-muted);
+  --border: var(--border-light);
+  --shadow: var(--shadow-lg);
+}
+
+/* ===================================================== */
+/* DARK MODE – WhatsApp Inspired */
+/* ===================================================== */
+
+[data-theme="dark"] {
+  --accent: var(--primary);
+  --grad: var(--gradient-whatsapp);
+
+  --bg-primary: #111b21;
+  --bg-secondary: #202c33;
+  --bg-card: #202c33;
+
+  --text-primary: #e9edef;
+  --text-secondary: #8696a0;
+  --text-muted: #8696a0;
+
+  --border-color: #2a3942;
+  --border-light: rgba(255, 255, 255, 0.08);
+
+  --shadow: 0 10px 30px rgba(0, 0, 0, 0.45);
+
+  --bg: var(--bg-primary);
+  --card-bg: var(--bg-card);
+  --text: var(--text-primary);
+  --muted: var(--text-secondary);
+}
+
+/* ===================================================== */
+/* BASE */
+/* ===================================================== */
+
+body {
+  margin: 0;
   background: var(--bg-primary);
-  color: var(--text-primary);
+  color: var(--text);
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  transition: background 0.3s ease, color 0.3s ease;
 }
 
-/* Header Card */
-.learn-header-card {
-  background: linear-gradient(135deg, rgba(0, 168, 132, 0.05) 0%, rgba(6, 182, 212, 0.05) 100%);
-  border-left: 4px solid var(--primary) !important;
-  transition: all 0.3s ease;
-  background-color: var(--bg-card, #ffffff) !important;
+* {
+  box-sizing: border-box;
+  transition: background-color 0.25s ease,
+              color 0.25s ease,
+              border-color 0.25s ease,
+              box-shadow 0.25s ease;
 }
 
-.learn-header-card:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 8px 25px rgba(0, 168, 132, 0.1) !important;
+/* ===================================================== */
+/* LEARN APP */
+/* ===================================================== */
+
+.learn-app {
+  max-width: 1200px;
+  margin: auto;
+  background: var(--bg);
+  min-height: 100vh;
 }
 
-.learn-header-card .text-primary {
-  color: var(--primary) !important;
+/* ================= HEADER ================= */
+
+.app-header {
+  background: var(--grad);
+  color: #fff;
+  padding: 32px 24px;
+  border-radius: 0 0 32px 32px;
+  position: relative;
+  overflow: hidden;
 }
 
-.learn-header-card .text-muted {
-  color: var(--text-secondary) !important;
+.app-header::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    135deg,
+    rgba(255,255,255,0.12),
+    transparent 55%
+  );
 }
 
-/* Course Cards */
+.app-title {
+  font-size: 34px;
+  font-weight: 800;
+  margin-bottom: 6px;
+  position: relative;
+  z-index: 1;
+}
+
+.app-subtitle {
+  opacity: 0.9;
+  font-size: 17px;
+  position: relative;
+  z-index: 1;
+}
+
+/* ================= SEARCH ================= */
+
+.search-container {
+  padding: 20px 24px;
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  backdrop-filter: blur(20px);
+  background: rgba(242, 242, 247, 0.8);
+}
+
+[data-theme="dark"] .search-container {
+  background: rgba(17, 27, 33, 0.85);
+}
+
+.search-bar {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  background: var(--card-bg);
+  border-radius: var(--radius-md);
+  padding: 14px 20px;
+  box-shadow: var(--shadow);
+  border: 1px solid var(--border);
+}
+
+.search-bar input {
+  flex: 1;
+  border: none;
+  outline: none;
+  background: transparent;
+  font-size: 16px;
+  color: var(--text);
+}
+
+.search-bar input::placeholder {
+  color: var(--muted);
+}
+
+/* ================= GRID ================= */
+
+.courses-grid {
+  padding: 0 24px 32px;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 16px;
+}
+
+/* ================= CARD ================= */
+
 .course-card {
-  transition: all 0.3s ease;
-  background: var(--bg-card, #ffffff) !important;
-  border: 1px solid var(--border-color, #e9ecef) !important;
+  background: var(--card-bg);
+  border-radius: var(--radius-lg);
+  padding: 20px;
+  height: 140px;
+  box-shadow: var(--shadow);
+  border: 1px solid var(--border);
+  display: flex;
+  flex-direction: column;
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+  opacity: 0;
+  animation: fadeUp 0.4s ease forwards;
+}
+
+.course-card::before {
+  content: "";
+  height: 4px;
+  background: var(--accent);
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
 }
 
 .course-card:hover {
-  transform: translateY(-6px);
-  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1) !important;
-  border-color: var(--primary) !important;
+  transform: translateY(-3px);
 }
 
-.course-card .card-title {
-  color: var(--text-primary) !important;
+/* ================= CARD CONTENT ================= */
+
+.card-content {
+  display: flex;
+  gap: 16px;
 }
 
-.course-icon {
-  transition: transform 0.3s ease;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+.card-icon {
+  width: 56px;
+  height: 56px;
+  border-radius: var(--radius-md);
+  background: color-mix(in srgb, var(--accent) 15%, transparent);
+  color: var(--accent);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 24px;
 }
 
-.course-card:hover .course-icon {
-  transform: scale(1.1) rotate(5deg);
+.course-title {
+  font-size: 17px;
+  font-weight: 600;
+  margin-bottom: 6px;
+  color: var(--text);
 }
 
-/* Form elements - FIXED for Dark Mode */
-.form-control, .form-select {
-  background-color: var(--bg-primary) !important;
-  color: var(--text-primary) !important;
-  border-color: var(--border-color) !important;
-  transition: all 0.3s ease;
+.course-category {
+  font-size: 13px;
+  color: var(--muted);
+  background: var(--bg);
+  padding: 4px 10px;
+  border-radius: 6px;
+  display: inline-block;
 }
 
-.form-control:focus, .form-select:focus {
-  background-color: var(--bg-primary) !important;
-  color: var(--text-primary) !important;
-  border-color: var(--primary) !important;
-  box-shadow: 0 0 0 0.25rem rgba(0, 168, 132, 0.25) !important;
+/* ================= FOOTER ================= */
+
+.card-footer {
+  margin-top: auto;
+  padding-top: 12px;
+  border-top: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
 }
 
-.form-control::placeholder {
-  color: var(--text-muted) !important;
-  opacity: 0.7;
+.progress-bar {
+  height: 4px;
+  background: var(--bg);
+  border-radius: 2px;
+  overflow: hidden;
 }
 
-/* Input Group */
-.input-group-text {
-  background-color: var(--bg-secondary) !important;
-  border-color: var(--border-color) !important;
-  color: var(--text-muted) !important;
+.progress-fill {
+  height: 100%;
+  background: var(--accent);
+  animation: progressFill 1s ease forwards;
 }
 
-/* Badges */
-.badge.bg-primary.bg-opacity-10 {
-  background-color: rgba(0, 168, 132, 0.1) !important;
-  color: var(--primary) !important;
+.start-btn {
+  border: none;
+  background: linear-gradient(
+    135deg,
+    var(--accent),
+    color-mix(in srgb, var(--accent) 70%, black)
+  );
+  color: #fff;
+  padding: 8px 16px;
+  border-radius: var(--radius-sm);
+  font-weight: 600;
+  cursor: pointer;
 }
 
-.badge.bg-success.bg-opacity-10 {
-  background-color: rgba(16, 185, 129, 0.1) !important;
-  color: var(--success) !important;
+/* ================= CATEGORY ================= */
+
+.category-badges {
+  padding: 0 24px 16px;
+  display: flex;
+  gap: 8px;
+  overflow-x: auto;
 }
 
-/* Button */
-.btn-primary {
-  background-color: var(--primary) !important;
-  border-color: var(--primary) !important;
-  color: white !important;
+.category-badge {
+  padding: 8px 16px;
+  background: var(--card-bg);
+  border-radius: var(--radius-md);
+  font-size: 14px;
+  color: var(--muted);
+  border: 1px solid var(--border);
 }
 
-.btn-primary:hover {
-  background-color: var(--primary-dark) !important;
-  border-color: var(--primary-dark) !important;
+.category-badge.active {
+  background: var(--grad);
+  color: white;
+  border-color: transparent;
 }
 
-/* Empty State */
-.text-muted {
-  color: var(--text-secondary) !important;
-}
+/* ================= RESPONSIVE ================= */
 
-/* DARK MODE SPECIFIC FIXES */
-[data-theme="dark"] .learn-page {
-  background: var(--bg-primary);
-}
-
-[data-theme="dark"] .learn-header-card {
-  background: linear-gradient(135deg, rgba(0, 168, 132, 0.1) 0%, rgba(6, 182, 212, 0.1) 100%) !important;
-  background-color: var(--bg-surface) !important;
-}
-
-[data-theme="dark"] .course-card {
-  background: var(--bg-surface) !important;
-  border-color: var(--border-color) !important;
-}
-
-[data-theme="dark"] .course-card:hover {
-  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3) !important;
-}
-
-[data-theme="dark"] .form-control,
-[data-theme="dark"] .form-select {
-  background-color: var(--bg-surface) !important;
-  border-color: var(--border-color) !important;
-}
-
-[data-theme="dark"] .input-group-text {
-  background-color: var(--bg-secondary) !important;
-  border-color: var(--border-color) !important;
-}
-
-[data-theme="dark"] .badge.bg-primary.bg-opacity-10 {
-  background-color: rgba(0, 168, 132, 0.2) !important;
-  color: #00a884 !important;
-}
-
-[data-theme="dark"] .badge.bg-success.bg-opacity-10 {
-  background-color: rgba(52, 211, 153, 0.2) !important;
-  color: #34d399 !important;
-}
-
-/* Bootstrap Overrides for Dark Mode */
-[data-theme="dark"] .bg-light {
-  background-color: var(--bg-secondary) !important;
-}
-
-[data-theme="dark"] .shadow-sm {
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3) !important;
-}
-
-/* Responsive */
-@media (max-width: 768px) {
-  .learn-page {
-    padding-left: var(--space-3) !important;
-    padding-right: var(--space-3) !important;
+@media (max-width: 640px) {
+  .courses-grid {
+    grid-template-columns: 1fr;
+    padding: 0 20px 24px;
   }
-  
-  .learn-header-card .card-body {
-    padding: var(--space-4) !important;
-  }
-  
   .course-card {
-    margin-bottom: var(--space-3);
+    height: 130px;
+    padding: 16px;
   }
+}
+
+/* ================= ANIMATIONS ================= */
+
+@keyframes fadeUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@keyframes progressFill {
+  from { width: 0; }
+  to { width: calc(var(--progress) * 100%); }
 }

@@ -1328,6 +1328,9 @@
     flex-direction: row !important;
     gap: var(--space-4);
   }
+.timeline-year {
+  margin-left: 20px !important;
+}
 
   .timeline-connector {
     width: 48px;

@@ -1,0 +1,89 @@
+/* Sidebar widths */
+.ms-250 {
+  margin-left: 250px !important;
+}
+.ms-70 {
+  margin-left: 70px !important;
+}
+
+/* Sidebar */
+.sidebar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 100vh;
+  width: 250px;
+  background-color: #fff;
+  transition: width 0.3s ease;
+  box-shadow: 2px 0 8px rgba(0, 0, 0, 0.1);
+  z-index: 1050;
+}
+
+.sidebar.collapsed {
+  width: 70px;
+}
+
+/* Overlay for mobile */
+.sidebar-overlay {
+  background: rgba(0, 0, 0, 0.5);
+  z-index: 1040;
+}
+
+/* Header padding adjustment */
+.transition-all {
+  transition: all 0.3s ease;
+}
+
+/* Active Nav link */
+.nav-link.active {
+  background-color: #00a884 !important;
+  color: #fff !important;
+}
+
+/* Hover card */
+.card-hover:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 .5rem 1rem rgba(0, 0, 0, .15);
+  transition: all 0.3s ease;
+}
+
+/* Avatar circle */
+.avatar {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #00a884, #008c6d);
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 600;
+  font-size: 14px;
+}
+
+/* Scrollbar (optional) */
+::-webkit-scrollbar {
+  width: 6px;
+}
+::-webkit-scrollbar-thumb {
+  background: #c1c1c1;
+  border-radius: 3px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #a1a1a1;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .sidebar {
+    transform: translateX(-100%);
+  }
+
+  .sidebar.open {
+    transform: translateX(0);
+  }
+
+  .ms-250, .ms-70 {
+    margin-left: 0 !important;
+  }
+}
