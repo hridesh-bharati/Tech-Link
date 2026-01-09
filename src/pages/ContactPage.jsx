@@ -62,38 +62,39 @@ const ContactPage = () => {
   };
 
   /* ================= REAL SUBMIT ================= */
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    setServerError("");
+const handleSubmit = async (e) => {
+  e.preventDefault();
+  setServerError("");
 
-    if (!validateForm()) return;
+  if (!validateForm()) return;
 
-    setIsSubmitting(true);
+  setIsSubmitting(true);
 
-    try {
-      const res = await fetch("http://localhost:5000/api/contact", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(formData),
-      });
+  try {
+    const res = await fetch(`${API_URL}/api/contact`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(formData),
+    });
 
-      const data = await res.json();
+    const data = await res.json();
 
-      if (!res.ok) {
-        throw new Error(data.message || "Failed to send message");
-      }
-
-      setSent(true);
-      setFormData({ name: "", email: "", subject: "", message: "" });
-
-      setTimeout(() => setSent(false), 4000);
-    } catch (err) {
-      console.error("CONTACT ERROR:", err);
-      setServerError("❌ Server error. Please try again later.");
-    } finally {
-      setIsSubmitting(false);
+    if (!res.ok) {
+      throw new Error(data.message || "Failed to send message");
     }
-  };
+
+    setSent(true);
+    setFormData({ name: "", email: "", subject: "", message: "" });
+
+    setTimeout(() => setSent(false), 4000);
+  } catch (err) {
+    console.error("CONTACT ERROR:", err);
+    setServerError("❌ Server error. Please try again later.");
+  } finally {
+    setIsSubmitting(false);
+  }
+};
+
 
   /* ================= STATIC DATA ================= */
   const contactDetails = [
