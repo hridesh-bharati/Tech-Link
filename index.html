@@ -68,24 +68,17 @@
   <script type="module" src="/src/main.jsx"></script>
   
   <!-- Performance Monitoring -->
-  <script>
-    if ('serviceWorker' in navigator) {
-      window.addEventListener('load', () => {
-        navigator.serviceWorker.register('/sw.js').catch(err => console.log('ServiceWorker registration failed: ', err));
-      });
-    }
-    
-    // Performance tracking
+<script>
+  if ('serviceWorker' in navigator) {
     window.addEventListener('load', () => {
-      if ('performance' in window) {
-        const perfEntries = performance.getEntriesByType('navigation');
-        if (perfEntries.length > 0) {
-          const navTiming = perfEntries[0];
-          console.log('Page load time:', navTiming.loadEventEnd - navTiming.startTime);
-        }
-      }
+      navigator.serviceWorker
+        .register('/sw.js')
+        .then((reg) => console.log('Service Worker registered:', reg))
+        .catch((err) => console.error('SW registration failed:', err));
     });
-  </script>
+  }
+</script>
+
 </body>
 
 </html>

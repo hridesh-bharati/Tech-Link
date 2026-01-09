@@ -1,56 +1,69 @@
-/* sw.js */
-
-const CACHE_NAME = "hridesh-portfolio-v1";
-const OFFLINE_URL = "/offline.html";
-
-// Files to precache
-const PRECACHE_ASSETS = [
+// public/sw.js
+const CACHE_NAME = "hb-portfolio-cache-v1";
+const urlsToCache = [
   "/",
   "/index.html",
-  OFFLINE_URL,
+  "/logo.png",
+  "/favicon.ico",
+  "/og-image.png",
+  "/twitter-image.png",
+  // Add other static assets or CSS/JS bundles if needed
 ];
 
-// Install
-self.addEventListener("install", event => {
+// Install event - caching app shell
+self.addEventListener("install", (event) => {
   event.waitUntil(
-    caches.open(CACHE_NAME).then(cache => {
-      return cache.addAll(PRECACHE_ASSETS);
+    caches.open(CACHE_NAME).then((cache) => {
+      console.log("Service Worker: Caching app shell");
+      return cache.addAll(urlsToCache);
     })
   );
   self.skipWaiting();
 });
 
-// Activate
-self.addEventListener("activate", event => {
+// Activate event - cleanup old caches
+self.addEventListener("activate", (event) => {
   event.waitUntil(
-    caches.keys().then(keys =>
-      Promise.all(
-        keys.map(key => {
+    caches.keys().then((keys) => {
+      return Promise.all(
+        keys.map((key) => {
           if (key !== CACHE_NAME) {
+            console.log("Service Worker: Removing old cache", key);
             return caches.delete(key);
           }
         })
-      )
-    )
+      );
+    })
   );
   self.clients.claim();
 });
 
-// Fetch strategy: Network First (SPA friendly)
-self.addEventListener("fetch", event => {
-  if (event.request.method !== "GET") return;
-
+// Fetch event - serve from cache first, fallback to network
+self.addEventListener("fetch", (event) => {
   event.respondWith(
-    fetch(event.request)
-      .then(response => {
-        const cloned = response.clone();
-        caches.open(CACHE_NAME).then(cache => {
-          cache.put(event.request, cloned);
+    caches.match(event.request).then((cached) => {
+      if (cached) {
+        return cached;
+      }
+      return fetch(event.request)
+        .then((response) => {
+          // Cache the new response dynamically
+          return caches.open(CACHE_NAME).then((cache) => {
+            if (
+              event.request.url.startsWith(self.location.origin) &&
+              event.request.method === "GET"
+            ) {
+              cache.put(event.request, response.clone());
+            }
+            return response;
+          });
+        })
+        .catch(() => {
+          // Fallback page if offline
+          if (event.request.mode === "navigate") {
+            return caches.match("/index.html");
+          }
         });
-        return response;
-      })
-      .catch(() =>
-        caches.match(event.request).then(res => res || caches.match(OFFLINE_URL))
-      )
+    })
   );
 });
