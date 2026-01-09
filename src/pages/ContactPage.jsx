@@ -12,6 +12,7 @@ import {
   Twitter,
 } from "lucide-react";
 import AnimatedSection from "../components/Shared/AnimatedSection";
+import API from "../utils/api.js"; 
 import "./ContactPage.css";
 
 const ContactPage = () => {
@@ -62,39 +63,36 @@ const ContactPage = () => {
   };
 
   /* ================= REAL SUBMIT ================= */
-const handleSubmit = async (e) => {
-  e.preventDefault();
-  setServerError("");
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setServerError("");
 
-  if (!validateForm()) return;
+    if (!validateForm()) return;
 
-  setIsSubmitting(true);
+    setIsSubmitting(true);
 
-  try {
-    const res = await fetch(`${API_URL}/api/contact`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(formData),
-    });
+    try {
+      const res = await API.post("/contact", formData);
 
-    const data = await res.json();
+      setSent(true);
+      setFormData({
+        name: "",
+        email: "",
+        subject: "",
+        message: "",
+      });
 
-    if (!res.ok) {
-      throw new Error(data.message || "Failed to send message");
+      setTimeout(() => setSent(false), 4000);
+    } catch (err) {
+      console.error("CONTACT ERROR:", err.response?.data || err.message);
+      setServerError(
+        err.response?.data?.message ||
+          "❌ Server error. Please try again later."
+      );
+    } finally {
+      setIsSubmitting(false);
     }
-
-    setSent(true);
-    setFormData({ name: "", email: "", subject: "", message: "" });
-
-    setTimeout(() => setSent(false), 4000);
-  } catch (err) {
-    console.error("CONTACT ERROR:", err);
-    setServerError("❌ Server error. Please try again later.");
-  } finally {
-    setIsSubmitting(false);
-  }
-};
-
+  };
 
   /* ================= STATIC DATA ================= */
   const contactDetails = [
@@ -223,7 +221,7 @@ const handleSubmit = async (e) => {
             <div className="contact-form-container">
               <div className="form-header">
                 <h2>Send me a message</h2>
-                <p>Fill the form and I’ll get back to you.</p>
+                <p>Fill the form and I'll get back to you.</p>
               </div>
 
               <form className="contact-form" onSubmit={handleSubmit}>
@@ -308,7 +306,7 @@ const handleSubmit = async (e) => {
                       <CheckCircle size={20} />
                       <div>
                         <strong>Message sent successfully!</strong>
-                        <p>I’ll reply within 24 hours.</p>
+                        <p>I'll reply within 24 hours.</p>
                       </div>
                     </div>
                   )}
