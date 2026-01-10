@@ -12,7 +12,7 @@ import {
   Twitter,
 } from "lucide-react";
 import AnimatedSection from "../components/Shared/AnimatedSection";
-import API from "../utils/api.js"; 
+import API from "../utils/api.js";
 import "./ContactPage.css";
 
 const ContactPage = () => {
@@ -74,6 +74,11 @@ const ContactPage = () => {
     try {
       const res = await API.post("/contact", formData);
 
+      // 🔥 BROWSER CONSOLE LOGS
+      console.log("✅ CONTACT API RESPONSE:", res.data);
+      console.log("📧 MAIL STATUS:", res.data.debug);
+      console.log("🕒 TIME:", res.data.debug?.time);
+
       setSent(true);
       setFormData({
         name: "",
@@ -84,15 +89,17 @@ const ContactPage = () => {
 
       setTimeout(() => setSent(false), 4000);
     } catch (err) {
-      console.error("CONTACT ERROR:", err.response?.data || err.message);
+      console.error("❌ CONTACT ERROR:", err.response?.data || err.message);
+
       setServerError(
         err.response?.data?.message ||
-          "❌ Server error. Please try again later."
+        "❌ Server error. Please try again later."
       );
     } finally {
       setIsSubmitting(false);
     }
   };
+
 
   /* ================= STATIC DATA ================= */
   const contactDetails = [
