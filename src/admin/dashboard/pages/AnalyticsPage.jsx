@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import axios from "axios";
+import API from "../../api/api"; 
 import "./AnalyticsPage.css";
 
 export default function AnalyticsPage() {
@@ -7,10 +7,12 @@ export default function AnalyticsPage() {
   const [error, setError] = useState("");
 
   useEffect(() => {
-    axios
-      .get("/api/analytics/%2F") // Fetch analytics for home page
+    API.get("/analytics/%2F") 
       .then((res) => setData(res.data))
-      .catch(() => setError("Failed to load analytics"));
+      .catch((err) => {
+        console.error("Analytics fetch error:", err);
+        setError("Failed to load analytics");
+      });
   }, []);
 
   if (error) {
@@ -30,22 +32,16 @@ export default function AnalyticsPage() {
     );
   }
 
-  /* 
-    Assuming your API returns an array of sessions like:
-    data.sessions = [{ session: "2026-01-01", views: 5 }, ...]
-  */
   const sessions = data.sessions || [];
-  const maxViews = Math.max(...sessions.map((s) => s.views), 1); // prevent divide by zero
+  const maxViews = Math.max(...sessions.map((s) => s.views), 1);
 
   return (
     <div className="analytics-app">
-      {/* Header */}
       <header className="analytics-header">
         <h2>📊 Analytics</h2>
         <span className="sub">Home Page (/)</span>
       </header>
 
-      {/* COLUMN CHART */}
       <div className="chart-card">
         <p className="chart-title">Views per Session</p>
         <div className="bar-chart">
@@ -62,7 +58,6 @@ export default function AnalyticsPage() {
         </div>
       </div>
 
-      {/* STATS */}
       <div className="analytics-cards">
         <div className="card">
           <div className="icon view">👁</div>
