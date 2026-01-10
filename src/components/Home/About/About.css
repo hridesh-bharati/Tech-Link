@@ -161,7 +161,7 @@
   position: absolute;
   inset: 0;
   background: inherit;
-  opacity: 0.9;
+  opacity: 0;
 }
 
 .tech-icon:hover {

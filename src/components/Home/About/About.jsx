@@ -345,7 +345,7 @@ const About = () => {
                       >
                         {tech.icon}
                       </div>
-                      <div className="small fw-semibold">{tech.name}</div>
+                      <div className="small fw-semibold zIndex-1">{tech.name}</div>
                     </div>
                   </motion.div>
                 ))}
