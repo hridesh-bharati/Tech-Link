@@ -87,7 +87,13 @@ const ContactPage = () => {
         message: "",
       });
 
-      setTimeout(() => setSent(false), 4000);
+      setTimeout(() => {
+        if (isSubmitting) {
+          setServerError("⏳ Email service is slow. Please try again.");
+          setIsSubmitting(false);
+        }
+      }, 15000);
+
     } catch (err) {
       console.error("❌ CONTACT ERROR:", err.response?.data || err.message);
 
