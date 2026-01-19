@@ -236,21 +236,24 @@ const About = () => {
             </div>
 
             {/* STATS CARDS */}
-            <div className="row g-3">
+            <div className="row g-3 app-stats-grid">
               {stats.map((stat, index) => (
                 <motion.div
                   key={index}
                   className="col-6"
-                  initial={{ opacity: 0, y: 20 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  whileHover={{ y: -6, scale: 1.02 }}
-                  viewport={{ once: true }}
-                  transition={{ delay: index * 0.1, duration: 0.4 }}
+                  whileHover={{ scale: 1.03 }}
+                  whileTap={{ scale: 0.97 }}
+                  transition={{ type: "spring", stiffness: 300 }}
                 >
-                  <div className="stats-card h-100">
-                    <div className="stat-icon">{stat.icon}</div>
-                    <div className="stat-number">{stat.number}</div>
-                    <div className="stat-label">{stat.label}</div>
+                  <div className="app-stat-card">
+                    <div className="app-stat-icon">{stat.icon}</div>
+
+                    <div className="app-stat-content">
+                      <div className="app-stat-number">{stat.number}</div>
+                      <div className="app-stat-label">{stat.label}</div>
+                    </div>
+
+                    <div className="app-stat-glow"></div>
                   </div>
                 </motion.div>
               ))}

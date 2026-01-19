@@ -1,0 +1,11 @@
+.chapter-header {
+  background: linear-gradient(135deg, #003c80, #00479e);
+}
+
+.section-number {
+  background: linear-gradient(135deg, #00479e, #2f80ed);
+}
+
+.note-primary {
+  border-color: #00479e;
+}

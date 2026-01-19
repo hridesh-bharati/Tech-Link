@@ -1,7 +1,7 @@
 // src/components/Dictionary/CLanguage/Chapter1.jsx
 import React from "react";
 import CodeBox from "../CodeBox/CodeBox";
-import './Chapter1.css'; // optional custom CSS for extra styles
+import './Chapter1.css'; 
 
 export default function Chapter1() {
   return (

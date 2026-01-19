@@ -1,164 +1,71 @@
-/* Root layout */
 .layout {
   display: flex;
   flex-direction: column;
   min-height: 100vh;
   overflow-x: hidden;
-  position: relative;
-  background: var(--c-background);
-  color: var(--c-text);
+  background-color: var(--c-background);
+  transition: background 0.3s ease;
 }
 
-/* Header */
-.header {
-  position: sticky;
-  top: 0;
-  z-index: 1000;
-  background: var(--c-background);
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
-}
-
-/* Main content */
-.main-content {
+.main-viewport {
   flex: 1;
   width: 100%;
-  position: relative;
   will-change: transform;
-  transition: transform 0.25s ease;
-  /* margin-top: 2rem; */
+  /* Fixed width to prevent layout shift during swipe */
+  min-width: 100vw;
+  padding: 0 !important;
 }
 
-/* Swipe indicator (mobile only) */
-.swipe-indicator {
+/* Material Design 3 Hint Pill */
+.swipe-hint {
   position: fixed;
-  bottom: 70px;
+  bottom: 100px;
   left: 50%;
-  transform: translateX(-50%);
-  background: var(--c-primary);
-  color: #fff;
-  padding: 6px 14px;
-  border-radius: 18px;
-  font-size: 12px;
-  font-weight: 600;
+  transform: translate(-50%, 20px);
   opacity: 0;
+  transition: all 0.4s cubic-bezier(0.2, 0, 0, 1);
+  z-index: 2000;
   pointer-events: none;
-  z-index: 999;
-  transition: opacity 0.3s ease;
 }
 
-.swipe-indicator.show {
-  opacity: 0.9;
+.swipe-hint.active {
+  opacity: 1;
+  transform: translate(-50%, 0);
 }
 
-/* Accessibility */
-:focus-visible {
-  outline: 2px solid var(--c-primary);
-  outline-offset: 2px;
-  border-radius: 4px;
+.hint-pill {
+  background: var(--c-primary);
+  color: white;
+  padding: 8px 20px;
+  border-radius: 50px;
+  font-size: 13px;
+  font-weight: 600;
+  box-shadow: 0 4px 15px rgba(0, 168, 132, 0.3);
 }
 
-/* Prevent text selection while swiping */
-.layout * {
-  -webkit-tap-highlight-color: transparent;
-}
-
-/* Mobile optimizations */
-@media (max-width: 768px) {
-  .main-content {
-    touch-action: pan-y pinch-zoom;
-    -webkit-overflow-scrolling: touch;
-  }
-}
-
-/* Desktop */
-@media (min-width: 769px) {
-  .swipe-indicator {
-    display: none;
-  }
-}
-
-/* Reduced motion */
-@media (prefers-reduced-motion: reduce) {
-  * {
-    animation: none !important;
-    transition: none !important;
-  }
-}
-
-/* Dark mode */
-@media (prefers-color-scheme: dark) {
-  .header {
-    background: #1a1a1a;
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
-  }
-}
-
-/* CSS Variables */
-:root {
-  --c-primary: #00a884;
-  --c-background: #ffffff;
-  --c-text: #333333;
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --c-background: #121212;
-    --c-text: #f0f0f0;
-  }
-}
-
-
-/* Add to Header.css or create AppSidebar.css */
-
-/* Auth Status Banner */
+/* User Card Styles for Android Feel */
 .pf-auth-status {
-  background: rgba(16, 185, 129, 0.1);
-  border: 1px solid rgba(16, 185, 129, 0.2);
-  border-radius: 8px;
-  padding: 8px 12px;
+  background: var(--bg-secondary);
+  border-radius: 12px;
+  padding: 12px;
   margin: 0 16px 16px;
   display: flex;
   align-items: center;
-  font-size: 0.875rem;
-  color: #10b981;
+  gap: 12px;
+  border: 1px solid var(--border-light);
 }
 
-/* Primary button style in sidebar */
-.pf-setting-item.primary {
-  color: #2563eb;
-  background: rgba(37, 99, 235, 0.1);
-}
-
-.pf-setting-item.primary:hover {
-  background: rgba(37, 99, 235, 0.2);
-}
-
-/* Avatar styles for logged-in state */
-.pf-avatar.logged-in {
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  color: white;
-}
-
-/* Profile email */
-.pf-profile-email {
-  margin-top: 4px;
-  font-size: 0.75rem;
-  color: #64748b;
-}
-
-/* Appearance options animation */
-.pf-appearance-options {
-  animation: slideDown 0.3s ease;
-  overflow: hidden;
-}
-
-@keyframes slideDown {
-  from {
-    opacity: 0;
-    max-height: 0;
+/* Smooth Touch Transitions */
+@media (max-width: 768px) {
+  .main-viewport {
+    touch-action: pan-y; /* Vertical scroll natural, horizontal handled by JS */
   }
-  to {
-    opacity: 1;
-    max-height: 200px;
+}
+
+/* Desktop optimization */
+@media (min-width: 769px) {
+  .main-viewport {
+    transform: none !important;
+    transition: none !important;
   }
 }

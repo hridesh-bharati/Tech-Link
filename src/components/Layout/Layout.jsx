@@ -1,208 +1,99 @@
-import React, { useRef, useState, useEffect, useCallback } from "react";
+import React, { useRef, useState, useEffect, useCallback, useMemo } from "react";
 import { Outlet, useLocation, useNavigate } from "react-router-dom";
 import { Helmet } from "react-helmet-async";
 import Header from "./Header.jsx";
 import Footer from "./Footer.jsx";
 import "./Layout.css";
 
-/* Main routes (order matters for swipe) */
-const MAIN_ROUTES = ["/", "/about", "/contact", "/learn", "/projects"];
-
-/* Swipe config */
-const SWIPE_THRESHOLD = 70;
-const DIRECTION_LOCK = 15;
-const MAX_SWIPE = 120;
-const SWIPE_DEBOUNCE = 150;
+const MAIN_ROUTES = ["/", "/about", "/learn", "/projects", "/contact"];
+const CONFIG = { threshold: 70, lock: 15, max: 120, debounce: 150 };
 
 const Layout = () => {
   const navigate = useNavigate();
   const { pathname } = useLocation();
-
-  const [isMobile, setIsMobile] = useState(
-    typeof window !== "undefined" ? window.innerWidth <= 768 : false
-  );
+  const [isMobile, setIsMobile] = useState(window.innerWidth <= 768);
   const [showSwipeHint, setShowSwipeHint] = useState(false);
-  const [swipeDirection, setSwipeDirection] = useState(null);
-  const [style, setStyle] = useState({});
+  const [swipeOffset, setSwipeOffset] = useState(0);
 
   const start = useRef({ x: 0, y: 0 });
-  const isHorizontal = useRef(false);
-  const isVertical = useRef(false);
-  const swipeTimer = useRef(null);
-  const hintTimer = useRef(null);
+  const isScrolling = useRef(null); // 'h' for horizontal, 'v' for vertical
 
-  /* Resize → mobile detect */
+  const currentIndex = useMemo(() => MAIN_ROUTES.indexOf(pathname), [pathname]);
+  const isMainRoute = currentIndex !== -1;
+
   useEffect(() => {
-    const onResize = () => {
-      const mobile = window.innerWidth <= 768;
-      setIsMobile(mobile);
+    const handleResize = () => setIsMobile(window.innerWidth <= 768);
+    window.addEventListener("resize", handleResize);
 
-      if (mobile && !localStorage.getItem("swipeHintShown")) {
-        setShowSwipeHint(true);
-        hintTimer.current = setTimeout(() => {
-          setShowSwipeHint(false);
-          localStorage.setItem("swipeHintShown", "true");
-        }, 2500);
-      }
-    };
+    if (isMobile && !localStorage.getItem("swipeHintShown")) {
+      setShowSwipeHint(true);
+      setTimeout(() => {
+        setShowSwipeHint(false);
+        localStorage.setItem("swipeHintShown", "true");
+      }, 3000);
+    }
+    return () => window.removeEventListener("resize", handleResize);
+  }, [isMobile]);
 
-    onResize();
-    window.addEventListener("resize", onResize);
+  const handleNavigation = (direction) => {
+    if (direction === "left" && currentIndex < MAIN_ROUTES.length - 1) navigate(MAIN_ROUTES[currentIndex + 1]);
+    if (direction === "right" && currentIndex > 0) navigate(MAIN_ROUTES[currentIndex - 1]);
+  };
 
-    return () => {
-      window.removeEventListener("resize", onResize);
-      if (hintTimer.current) clearTimeout(hintTimer.current);
-    };
-  }, []);
+  const onTouchStart = (e) => {
+    if (!isMobile || !isMainRoute) return;
+    start.current = { x: e.touches[0].clientX, y: e.touches[0].clientY };
+    isScrolling.current = null;
+  };
 
-  /* Helpers */
-  const isExactMainRoute = useCallback(
-    () => MAIN_ROUTES.includes(pathname),
-    [pathname]
-  );
+  const onTouchMove = (e) => {
+    if (!isMobile || !isMainRoute || isScrolling.current === 'v') return;
 
-  const getCurrentIndex = useCallback(
-    () => MAIN_ROUTES.indexOf(pathname),
-    [pathname]
-  );
+    const dx = e.touches[0].clientX - start.current.x;
+    const dy = e.touches[0].clientY - start.current.y;
 
-  /* Swipe navigation */
-  const handleSwipeNavigation = useCallback(
-    direction => {
-      const index = getCurrentIndex();
+    if (!isScrolling.current) {
+      if (Math.abs(dx) > CONFIG.lock) isScrolling.current = 'h';
+      else if (Math.abs(dy) > CONFIG.lock) isScrolling.current = 'v';
+    }
 
-      if (direction === "left" && index < MAIN_ROUTES.length - 1) {
-        navigate(MAIN_ROUTES[index + 1]);
-      }
-      if (direction === "right" && index > 0) {
-        navigate(MAIN_ROUTES[index - 1]);
-      }
+    if (isScrolling.current === 'h') {
+      if (e.cancelable) e.preventDefault();
+      // Apply resistance at edges (Android style)
+      const edgeResistance = (dx > 0 && currentIndex === 0) || (dx < 0 && currentIndex === MAIN_ROUTES.length - 1) ? 0.3 : 1;
+      setSwipeOffset(Math.max(-CONFIG.max, Math.min(CONFIG.max, dx * edgeResistance)));
+    }
+  };
 
-      setSwipeDirection(null);
-    },
-    [getCurrentIndex, navigate]
-  );
-
-  /* Touch handlers */
-  const onTouchStart = useCallback(
-    e => {
-      if (!isMobile || !isExactMainRoute()) return;
-
-      const t = e.touches[0];
-      start.current = { x: t.clientX, y: t.clientY };
-      isHorizontal.current = false;
-      isVertical.current = false;
-    },
-    [isMobile, isExactMainRoute]
-  );
-
-  const onTouchMove = useCallback(
-    e => {
-      if (!isMobile || !isExactMainRoute()) return;
-
-      const t = e.touches[0];
-      const dx = t.clientX - start.current.x;
-      const dy = t.clientY - start.current.y;
-
-      if (!isHorizontal.current && !isVertical.current) {
-        if (Math.abs(dx) > DIRECTION_LOCK) {
-          isHorizontal.current = true;
-          setSwipeDirection(dx > 0 ? "right" : "left");
-        } else if (Math.abs(dy) > DIRECTION_LOCK) {
-          isVertical.current = true;
-        }
-      }
-
-      if (isHorizontal.current) {
-        e.preventDefault();
-        const limitedDx = Math.max(-MAX_SWIPE, Math.min(MAX_SWIPE, dx));
-        setStyle({
-          transform: `translateX(${limitedDx}px)`,
-          transition: "none",
-        });
-      }
-    },
-    [isMobile, isExactMainRoute]
-  );
-
-  const onTouchEnd = useCallback(
-    e => {
-      if (!isMobile || !isHorizontal.current || !isExactMainRoute()) {
-        setStyle({});
-        setSwipeDirection(null);
-        return;
-      }
-
-      const dx = e.changedTouches[0].clientX - start.current.x;
-
-      setStyle({
-        transform: "translateX(0)",
-        transition: "transform 0.25s ease",
-      });
-
-      if (Math.abs(dx) < SWIPE_THRESHOLD) {
-        setSwipeDirection(null);
-        return;
-      }
-
-      if (swipeTimer.current) clearTimeout(swipeTimer.current);
-
-      swipeTimer.current = setTimeout(() => {
-        handleSwipeNavigation(dx < 0 ? "left" : "right");
-      }, SWIPE_DEBOUNCE);
-    },
-    [isMobile, isExactMainRoute, handleSwipeNavigation]
-  );
-
-  /* Keyboard navigation */
-  useEffect(() => {
-    const onKey = e => {
-      if (!isExactMainRoute()) return;
-
-      const index = getCurrentIndex();
-
-      if (e.key === "ArrowLeft" && index > 0) {
-        navigate(MAIN_ROUTES[index - 1]);
-      }
-      if (e.key === "ArrowRight" && index < MAIN_ROUTES.length - 1) {
-        navigate(MAIN_ROUTES[index + 1]);
-      }
-    };
-
-    window.addEventListener("keydown", onKey);
-    return () => window.removeEventListener("keydown", onKey);
-  }, [isExactMainRoute, getCurrentIndex, navigate]);
-
-  /* Cleanup */
-  useEffect(() => {
-    return () => {
-      if (swipeTimer.current) clearTimeout(swipeTimer.current);
-      if (hintTimer.current) clearTimeout(hintTimer.current);
-    };
-  }, []);
+  const onTouchEnd = () => {
+    if (Math.abs(swipeOffset) > CONFIG.threshold) {
+      handleNavigation(swipeOffset < 0 ? "left" : "right");
+    }
+    setSwipeOffset(0);
+    isScrolling.current = null;
+  };
 
   return (
-    <div
-      className="layout"
-      onTouchStart={onTouchStart}
-      onTouchMove={onTouchMove}
-      onTouchEnd={onTouchEnd}
-      data-swipe={swipeDirection}
-    >
+    <div className="layout" onTouchStart={onTouchStart} onTouchMove={onTouchMove} onTouchEnd={onTouchEnd}>
       <Helmet>
         <meta name="theme-color" content="#00a884" />
         <meta name="apple-mobile-web-app-capable" content="yes" />
+        <meta name="apple-mobile-web-app-status-bar-style" content="default" />
       </Helmet>
 
       <Header />
 
-      {isMobile && isExactMainRoute() && (
-        <div className={`swipe-indicator ${showSwipeHint ? "show" : ""}`}>
-          Swipe to navigate
-        </div>
-      )}
+      <div className={`swipe-hint ${showSwipeHint ? "active" : ""}`}>
+        <div className="hint-pill">↔ Swipe to explore</div>
+      </div>
 
-      <main className="main-content p-0" style={style}>
+      <main 
+        className="main-viewport" 
+        style={{ 
+          transform: `translateX(${swipeOffset}px)`,
+          transition: swipeOffset === 0 ? 'transform 0.3s cubic-bezier(0.4, 0, 0.2, 1)' : 'none'
+        }}
+      >
         <Outlet />
       </main>
 

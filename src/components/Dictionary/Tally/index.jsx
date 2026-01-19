@@ -1,132 +1,149 @@
-// src/components/Dictionary/Tally/index.jsx
-import React, { useState, useEffect, useRef } from "react";
-import Chapter1 from "./Chapter1";
+// hb\src\components\Dictionary\Tally\index.jsx
+import React, { useState, useEffect } from "react";
+import "bootstrap/dist/css/bootstrap.min.css";
+import "bootstrap-icons/font/bootstrap-icons.css";
 import "./index.css";
 
+// Import chapter components
+import Intro from "./Chapters/Intro.jsx";
+import Company from "./Chapters/Company.jsx";
+import Accounts from "./Chapters/Accounts.jsx";
+import Ledger from "./Chapters/Ledger.jsx";
+import Groups from "./Chapters/Groups.jsx";
+import Vouchers from "./Chapters/Vouchers.jsx";
+import Payment from "./Chapters/Payment.jsx";
+import Receipt from "./Chapters/Receipt.jsx";
+import Contra from "./Chapters/Contra.jsx";
+import Journal from "./Chapters/Journal.jsx";
+import SalesPurchase from "./Chapters/SalesPurchase.jsx";  
+
+/* ===== Chapter Data ===== */
 const chapters = [
-  { id: 1, title: 'Tally Introduction', completed: true, category: 'Fundamentals', icon: '📊' },
-  { id: 2, title: 'Company Creation', completed: true, category: 'Fundamentals', icon: '🏢' },
-  { id: 3, title: 'Ledger Creation', completed: true, category: 'Fundamentals', icon: '📒' },
-  { id: 4, title: 'Accounting Vouchers', completed: true, category: 'Accounting', icon: '🧾' },
-  { id: 5, title: 'Payment Entry', completed: true, category: 'Accounting', icon: '💳' },
-  { id: 6, title: 'Receipt Entry', completed: true, category: 'Accounting', icon: '💰' },
-  { id: 7, title: 'Contra Entry', completed: true, category: 'Accounting', icon: '🔄' },
-  { id: 8, title: 'Journal Entry', completed: true, category: 'Accounting', icon: '📝' },
-  { id: 9, title: 'Sales & Purchase', completed: true, category: 'Accounting', icon: '🛒' },
-  { id: 10, title: 'GST Setup', completed: true, category: 'GST', icon: '🏛️' },
-  { id: 11, title: 'GST Invoices', completed: true, category: 'GST', icon: '🧾' },
-  { id: 12, title: 'GST Returns', completed: true, category: 'GST', icon: '📄' },
-  { id: 13, title: 'GST Reports', completed: true, category: 'GST', icon: '📊' },
-  { id: 14, title: 'Inventory Management', completed: true, category: 'Advanced', icon: '📦' },
-  { id: 15, title: 'Payroll Management', completed: true, category: 'Advanced', icon: '👥' },
-  { id: 16, title: 'TDS Management', completed: true, category: 'Advanced', icon: '💸' },
-  { id: 17, title: 'Tally Reports', completed: true, category: 'Advanced', icon: '📈' },
-  { id: 18, title: 'Backup & Restore', completed: true, category: 'Advanced', icon: '💾' },
-  { id: 19, title: 'Multi-Company', completed: true, category: 'Advanced', icon: '🏢' },
-  { id: 20, title: 'Tally Shortcuts', completed: true, category: 'Advanced', icon: '⚡' },
+  {
+    id: 1,
+    title: "Introduction",
+    icon: "📘",
+    subChapters: [
+      { id: 101, title: "Intro", component: <Intro /> }
+    ]
+  },
+  {
+    id: 2,
+    title: "Company",
+    icon: "🏢",
+    subChapters: [
+      { id: 201, title: "Company", component: <Company /> }
+    ]
+  },
+  {
+    id: 3,
+    title: "Accounts & Groups",
+    icon: "📊",
+    subChapters: [
+      { id: 301, title: "Accounts", component: <Accounts /> },
+      { id: 302, title: "Ledger", component: <Ledger /> },
+      { id: 303, title: "Groups", component: <Groups /> }
+    ]
+  },
+  {
+    id: 4,
+    title: "Vouchers",
+    icon: "🧾",
+    subChapters: [
+      { id: 401, title: "Vouchers", component: <Vouchers /> },
+      { id: 402, title: "Payment", component: <Payment /> },
+      { id: 403, title: "Receipt", component: <Receipt /> },
+      { id: 404, title: "Contra", component: <Contra /> },
+      { id: 405, title: "Journal", component: <Journal /> },
+      { id: 406, title: "Sales/Purchase", component: <SalesPurchase /> }
+    ]
+  }
 ];
 
-const categories = ["All", "Fundamentals", "Accounting", "GST", "Advanced"];
-
+/* ===== MAIN COMPONENT ===== */
 export default function Tally() {
-  const [selectedChapter, setSelectedChapter] = useState(1);
-  const [drawerOpen, setDrawerOpen] = useState(false);
-  const [selectedCategory, setSelectedCategory] = useState("All");
-  const [filteredChapters, setFilteredChapters] = useState(chapters);
-  const drawerRef = useRef(null);
-  const hamburgerRef = useRef(null);
+  const [sidebarOpen, setSidebarOpen] = useState(true);
+  const [activeChapter, setActiveChapter] = useState(1);
+  const [activeSub, setActiveSub] = useState(null);
+  const [openDropdown, setOpenDropdown] = useState(1);
+  const [isDesktop, setIsDesktop] = useState(window.innerWidth >= 992);
 
-  // Filter chapters by category
   useEffect(() => {
-    if (selectedCategory === "All") setFilteredChapters(chapters);
-    else setFilteredChapters(chapters.filter(ch => ch.category === selectedCategory));
-  }, [selectedCategory]);
+    const resize = () => setIsDesktop(window.innerWidth >= 992);
+    window.addEventListener("resize", resize);
+    return () => window.removeEventListener("resize", resize);
+  }, []);
 
-  // Close drawer when clicking outside
-  useEffect(() => {
-    const handleClickOutside = (e) => {
-      if (drawerOpen && drawerRef.current && !drawerRef.current.contains(e.target)
-        && hamburgerRef.current && !hamburgerRef.current.contains(e.target)) {
-        setDrawerOpen(false);
-      }
-    };
-    document.addEventListener('mousedown', handleClickOutside);
-    document.addEventListener('touchstart', handleClickOutside);
-    return () => {
-      document.removeEventListener('mousedown', handleClickOutside);
-      document.removeEventListener('touchstart', handleClickOutside);
-    };
-  }, [drawerOpen]);
-
-  const renderChapter = () => {
-    switch(selectedChapter){
-      case 1: return <Chapter1 />;
-      default: return <Chapter1 />;
-    }
-  }
-
-  const completedChapters = chapters.filter(ch => ch.completed).length;
-  const totalChapters = chapters.length;
+  const chapter = chapters.find(c => c.id === activeChapter);
 
   return (
-    <div className="tally-tutorial">
-      {/* Hamburger */}
-      <div className="hamburger-container">
-        <button ref={hamburgerRef} className="hamburger-btn" onClick={() => setDrawerOpen(!drawerOpen)}>
-          <span className={`hamburger-line ${drawerOpen ? 'open' : ''}`}></span>
-          <span className={`hamburger-line ${drawerOpen ? 'open' : ''}`}></span>
-          <span className={`hamburger-line ${drawerOpen ? 'open' : ''}`}></span>
+    <div className="tally-wrapper">
+      {/* ===== TOP BAR ===== */}
+      <div className="topbar d-flex align-items-center px-2">
+        <button
+          className="btn btn-light btn-sm me-2"
+          onClick={() => setSidebarOpen(!sidebarOpen)}
+          title={sidebarOpen ? "Hide Sidebar" : "Show Sidebar"}
+        >
+          <i className={`bi ${sidebarOpen ? "bi-layout-sidebar-inset" : "bi-list"} fs-5`}></i>
         </button>
-        <span className="hamburger-title">Tally Chapters</span>
+        <h6 className="mb-0 fw-bold flex-grow-1 text-center">
+          📚 Tally Prime Tutorial
+        </h6>
       </div>
 
-      {/* Drawer Overlay */}
-      <div className={`drawer-overlay ${drawerOpen ? 'open' : ''}`} onClick={() => setDrawerOpen(false)} />
+      <div className="d-flex">
+        {/* ===== SIDEBAR ===== */}
+        <aside className={`sidebar ${sidebarOpen ? "" : "closed"}`}>
+          <div className="sidebar-title">Chapters</div>
 
-      {/* Drawer */}
-      <div ref={drawerRef} className={`drawer ${drawerOpen ? 'open' : ''}`}>
-        <div className="drawer-header">
-          <h5>Tally ERP 9</h5>
-          <button className="close-btn" onClick={() => setDrawerOpen(false)}>&times;</button>
-        </div>
-
-        {/* Category Filters */}
-        <div className="category-filters p-3 border-bottom">
-          <small className="text-muted d-block mb-2">Filter by Category:</small>
-          <div className="d-flex flex-wrap gap-2">
-            {categories.map(cat => (
+          {chapters.map(ch => (
+            <div key={ch.id}>
               <button
-                key={cat}
-                className={`category-btn ${selectedCategory === cat ? 'active' : ''}`}
-                onClick={() => setSelectedCategory(cat)}
+                className={`chapter-btn ${activeChapter === ch.id ? "active" : ""}`}
+                onClick={() => {
+                  setActiveChapter(ch.id);
+                  setActiveSub(null);
+                  setOpenDropdown(openDropdown === ch.id ? null : ch.id);
+                }}
               >
-                {cat}
+                <span>{ch.icon} {ch.title}</span>
+                <i className={`bi ${openDropdown === ch.id ? "bi-chevron-up" : "bi-chevron-down"}`} />
               </button>
-            ))}
-          </div>
-        </div>
 
-        {/* Chapter Links */}
-        <div className="drawer-chapters">
-          {filteredChapters.map(ch => (
-            <div key={ch.id} className={`chapter-link ${selectedChapter === ch.id ? 'active' : ''}`}
-              onClick={() => { setSelectedChapter(ch.id); setDrawerOpen(false); }}>
-              <span className="chapter-icon">{ch.icon}</span>
-              <span className="chapter-text">{ch.title}</span>
+              {openDropdown === ch.id && (
+                <div className="subchapter-list">
+                  {ch.subChapters.map(sub => (
+                    <div
+                      key={sub.id}
+                      className={`subchapter ${activeSub?.id === sub.id ? "active" : ""}`}
+                      onClick={() => {
+                        setActiveChapter(ch.id);
+                        setActiveSub(sub);
+                        if (!isDesktop) setSidebarOpen(false);
+                      }}
+                    >
+                      • {sub.title}
+                    </div>
+                  ))}
+                </div>
+              )}
             </div>
           ))}
-        </div>
+        </aside>
 
-        {/* Footer */}
-        <div className="drawer-footer">
-          <span>{completedChapters}/{totalChapters} completed</span>
-        </div>
-      </div>
-
-      {/* Main Content */}
-      <div className="main-content">
-        {renderChapter()}
+        {/* ===== CONTENT ===== */}
+        <main className="content-area">
+          {!activeSub ? (
+            <div className="card p-3">
+              <h4>{chapter.icon} {chapter.title}</h4>
+              <p className="text-muted">Sidebar se koi sub-topic select karo 👈</p>
+            </div>
+          ) : (
+            <div className="card p-3">{activeSub.component}</div>
+          )}
+        </main>
       </div>
     </div>
-  )
+  );
 }

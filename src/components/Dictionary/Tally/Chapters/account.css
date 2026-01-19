@@ -1,0 +1,167 @@
+/* ====== BASE ====== */
+.chapter-content {
+  padding: 16px;
+  max-width: 900px;
+  margin: auto;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+}
+
+/* ===== HEADER ===== */
+.chapter-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  background: linear-gradient(135deg, #4f46e5, #6366f1);
+  color: #fff;
+  padding: 18px;
+  border-radius: 16px;
+  margin-bottom: 16px;
+}
+
+.chapter-icon-box {
+  width: 48px;
+  height: 48px;
+  background: rgba(255,255,255,0.2);
+  border-radius: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 22px;
+}
+
+/* ===== BREADCRUMB ===== */
+.breadcrumb-custom {
+  font-size: 14px;
+  margin: 12px 0;
+  color: #64748b;
+}
+
+/* ===== DEFINITION CARD ===== */
+.definition-box {
+  background: #ffffff;
+  border-radius: 16px;
+  padding: 16px;
+  margin-bottom: 16px;
+  box-shadow: 0 6px 18px rgba(0,0,0,0.06);
+}
+
+/* ===== SECTION HEADER ===== */
+.section-header {
+  margin: 24px 0 12px;
+}
+
+.section-title {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.section-number {
+  width: 36px;
+  height: 36px;
+  background: #4f46e5;
+  color: #fff;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
+}
+
+.section-divider {
+  height: 3px;
+  width: 50px;
+  background: #e5e7eb;
+  border-radius: 10px;
+  margin-top: 6px;
+}
+
+/* ===== CARD STYLE ===== */
+.specifier-card {
+  background: #fff;
+  border-radius: 18px;
+  padding: 16px;
+  margin: 16px 0;
+  box-shadow: 0 10px 25px rgba(0,0,0,0.08);
+  transition: transform 0.2s ease;
+}
+
+.specifier-card:hover {
+  transform: translateY(-3px);
+}
+
+.specifier-header {
+  font-weight: 700;
+  font-size: 18px;
+  margin-bottom: 10px;
+}
+
+/* CARD COLORS */
+.specifier-primary { border-left: 6px solid #3b82f6; }
+.specifier-success { border-left: 6px solid #22c55e; }
+.specifier-warning { border-left: 6px solid #f59e0b; }
+.specifier-danger  { border-left: 6px solid #ef4444; }
+
+/* ===== NOTE BOX ===== */
+.note-box {
+  display: flex;
+  gap: 12px;
+  padding: 14px;
+  border-radius: 14px;
+  margin: 14px 0;
+  background: #f8fafc;
+  box-shadow: 0 6px 16px rgba(0,0,0,0.05);
+}
+
+.note-icon {
+  font-size: 22px;
+}
+
+.note-primary { border-left: 5px solid #3b82f6; }
+.note-success { border-left: 5px solid #22c55e; }
+.note-warning { border-left: 5px solid #f59e0b; }
+
+/* ===== IMAGE CARD ===== */
+.image-box {
+  background: #fff;
+  border-radius: 18px;
+  padding: 14px;
+  margin: 18px 0;
+  box-shadow: 0 10px 25px rgba(0,0,0,0.08);
+  text-align: center;
+}
+
+.image-box img {
+  width: 100%;
+  border-radius: 14px;
+}
+
+.image-caption {
+  margin-top: 10px;
+  font-weight: 600;
+  color: #475569;
+}
+
+/* ===== EXERCISE CARD ===== */
+.exercise-box {
+  background: linear-gradient(135deg, #ecfeff, #f0fdfa);
+  border-radius: 18px;
+  padding: 16px;
+  margin: 24px 0;
+  box-shadow: 0 10px 25px rgba(0,0,0,0.08);
+}
+
+.exercise-header h4 {
+  margin-bottom: 8px;
+  color: #0f766e;
+}
+
+/* ===== MOBILE FEEL ===== */
+ul {
+  padding-left: 18px;
+}
+
+li {
+  margin-bottom: 6px;
+  line-height: 1.6;
+}
