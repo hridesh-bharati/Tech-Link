@@ -8,7 +8,7 @@
   <meta name="robots" content="index, follow" />
   <meta name="theme-color" content="#0d6efd" />
 
-  <!-- ✅ GOOGLE SEARCH CONSOLE VERIFICATION -->
+  <!-- Google Search Console -->
   <meta name="google-site-verification"
     content="gma_OXLu0vgVhM9yr9T2fn7qO1yM2nzeiQpDAIahuBs" />
 
@@ -21,7 +21,7 @@
     content="HB Tech Link, Full Stack Developer, React Developer, Node.js Developer, MERN Stack, Web Developer India" />
   <meta name="author" content="Hridesh Bharati" />
 
-  <!-- Canonical (IMPORTANT) -->
+  <!-- Canonical -->
   <link rel="canonical" href="https://hbtechlink.vercel.app/" />
 
   <!-- Favicon -->
@@ -62,16 +62,16 @@
 
   <!-- Performance -->
   <link rel="preconnect" href="https://cdn.jsdelivr.net" />
-  <link rel="preload"
+  <link
+    rel="preload"
     href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css"
-    as="style" />
+    as="style"
+  />
 
   <!-- Styles -->
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
   <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
 
-<<<<<<< HEAD
-=======
   <!-- Critical CSS -->
   <style>
     body {
@@ -83,7 +83,6 @@
       min-height: 100vh;
     }
   </style>
->>>>>>> d579de105a61a5ed7c08b29e405573c19cf1d6e6
 </head>
 
 <body>
@@ -96,9 +95,7 @@
   <script>
     if ("serviceWorker" in navigator) {
       window.addEventListener("load", () => {
-        navigator.serviceWorker
-          .register("/sw.js")
-          .catch(() => {});
+        navigator.serviceWorker.register("/sw.js").catch(() => {});
       });
     }
   </script>
