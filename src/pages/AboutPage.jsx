@@ -633,33 +633,26 @@ const HeroSection = () => (
       </div>
 
       <div className="hero-content">
-        <motion.div
-          className="hero-text"
-          initial="hidden"
-          animate="visible"
-          variants={staggerContainer}
-        >
-          <motion.span className="badge" variants={slideInFromLeft}>
+        <div className="hero-text">
+          <span className="badge">
             <Sparkles size={16} />
             {personalInfo.title}
-          </motion.span>
+          </span>
 
-          <motion.h1 variants={slideInFromLeft} transition={{ delay: 0.1 }}>
+          <h1>
             Hi, I'm <GradientText>{personalInfo.name}</GradientText>
-          </motion.h1>
+          </h1>
 
-          <motion.p className="lead" variants={slideInFromLeft} transition={{ delay: 0.2 }}>
+          <p className="lead">
             Building digital experiences with <span className="highlight">code</span>,{" "}
             <span className="highlight">creativity</span>, and{" "}
             <span className="highlight">passion</span>
-          </motion.p>
+          </p>
 
-          <motion.p className="bio" variants={slideInFromLeft} transition={{ delay: 0.3 }}>
-            {personalInfo.bio}
-          </motion.p>
+          <p className="bio">{personalInfo.bio}</p>
 
           {/* Personal Details Grid */}
-          <motion.div className="details-grid" variants={fadeInUp}>
+          <div className="details-grid">
             <div className="detail-card">
               <MapPin size={18} />
               <div>
@@ -688,27 +681,21 @@ const HeroSection = () => (
                 <span className="detail-value">{personalInfo.email}</span>
               </div>
             </div>
-          </motion.div>
+          </div>
 
-          <motion.div className="hero-actions" variants={staggerContainer}>
-            <motion.a href="/contact" className="btn-primary btn-lg" variants={fadeInUp}>
+          <div className="hero-actions">
+            <a href="/contact" className="btn-primary btn-lg">
               <Mail size={18} />
               Get In Touch
-            </motion.a>
-            <motion.a href="/resume.pdf" className="btn-outline btn-lg" variants={fadeInUp}>
+            </a>
+            <a href="/resume.pdf" className="btn-outline btn-lg">
               <Download size={18} />
               Download CV
-            </motion.a>
-          </motion.div>
-        </motion.div>
+            </a>
+          </div>
+        </div>
 
-        <motion.div
-          className="hero-profile"
-          initial="hidden"
-          animate="visible"
-          variants={scaleIn}
-          whileHover={{ y: -15 }}
-        >
+        <div className="hero-profile">
           <div className="profile-card">
             <div className="profile-image">
               <img src="/img/pic4.png" alt="Hridesh Bharati" className="profile-photo" />
@@ -737,8 +724,9 @@ const HeroSection = () => (
               <p>{personalInfo.philosophy}</p>
             </div>
           </div>
-        </motion.div>
+        </div>
       </div>
+
     </div>
   </section>
 );

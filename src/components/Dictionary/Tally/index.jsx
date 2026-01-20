@@ -1,10 +1,8 @@
-// hb\src\components\Dictionary\Tally\index.jsx
+// src\components\Dictionary\Tally\index.jsx
 import React, { useState, useEffect } from "react";
-import "bootstrap/dist/css/bootstrap.min.css";
-import "bootstrap-icons/font/bootstrap-icons.css";
-import "./index.css";
+import { useNavigate } from "react-router-dom";
+import { FaSignOutAlt, FaHome, FaChevronDown, FaChevronUp } from "react-icons/fa";
 
-// Import chapter components
 import Intro from "./Chapters/Intro.jsx";
 import Company from "./Chapters/Company.jsx";
 import Accounts from "./Chapters/Accounts.jsx";
@@ -17,32 +15,27 @@ import Contra from "./Chapters/Contra.jsx";
 import Journal from "./Chapters/Journal.jsx";
 import SalesPurchase from "./Chapters/SalesPurchase.jsx";  
 
-/* ===== Chapter Data ===== */
 const chapters = [
   {
     id: 1,
     title: "Introduction",
     icon: "📘",
-    subChapters: [
-      { id: 101, title: "Intro", component: <Intro /> }
-    ]
+    subChapters: [{ id: 101, title: "Tally Intro", component: <Intro /> }]
   },
   {
     id: 2,
     title: "Company",
     icon: "🏢",
-    subChapters: [
-      { id: 201, title: "Company", component: <Company /> }
-    ]
+    subChapters: [{ id: 201, title: "Company Creation", component: <Company /> }]
   },
   {
     id: 3,
     title: "Accounts & Groups",
     icon: "📊",
     subChapters: [
-      { id: 301, title: "Accounts", component: <Accounts /> },
-      { id: 302, title: "Ledger", component: <Ledger /> },
-      { id: 303, title: "Groups", component: <Groups /> }
+      { id: 301, title: "Accounts Info", component: <Accounts /> },
+      { id: 302, title: "Ledger Creation", component: <Ledger /> },
+      { id: 303, title: "Groups Management", component: <Groups /> }
     ]
   },
   {
@@ -50,77 +43,83 @@ const chapters = [
     title: "Vouchers",
     icon: "🧾",
     subChapters: [
-      { id: 401, title: "Vouchers", component: <Vouchers /> },
-      { id: 402, title: "Payment", component: <Payment /> },
-      { id: 403, title: "Receipt", component: <Receipt /> },
-      { id: 404, title: "Contra", component: <Contra /> },
-      { id: 405, title: "Journal", component: <Journal /> },
+      { id: 401, title: "Voucher Types", component: <Vouchers /> },
+      { id: 402, title: "Payment Entry", component: <Payment /> },
+      { id: 403, title: "Receipt Entry", component: <Receipt /> },
+      { id: 404, title: "Contra Entry", component: <Contra /> },
+      { id: 405, title: "Journal Entry", component: <Journal /> },
       { id: 406, title: "Sales/Purchase", component: <SalesPurchase /> }
     ]
   }
 ];
 
-/* ===== MAIN COMPONENT ===== */
 export default function Tally() {
-  const [sidebarOpen, setSidebarOpen] = useState(true);
-  const [activeChapter, setActiveChapter] = useState(1);
-  const [activeSub, setActiveSub] = useState(null);
+  const [drawer, setDrawer] = useState(false);
+  const [activeSub, setActiveSub] = useState(chapters[0].subChapters[0]);
   const [openDropdown, setOpenDropdown] = useState(1);
-  const [isDesktop, setIsDesktop] = useState(window.innerWidth >= 992);
+  const [desktop, setDesktop] = useState(window.innerWidth >= 992);
+  const navigate = useNavigate();
 
   useEffect(() => {
-    const resize = () => setIsDesktop(window.innerWidth >= 992);
-    window.addEventListener("resize", resize);
-    return () => window.removeEventListener("resize", resize);
+    const check = () => setDesktop(window.innerWidth >= 992);
+    window.addEventListener("resize", check);
+    return () => window.removeEventListener("resize", check);
   }, []);
 
-  const chapter = chapters.find(c => c.id === activeChapter);
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [activeSub]);
 
   return (
-    <div className="tally-wrapper">
-      {/* ===== TOP BAR ===== */}
-      <div className="topbar d-flex align-items-center px-2">
-        <button
-          className="btn btn-light btn-sm me-2"
-          onClick={() => setSidebarOpen(!sidebarOpen)}
-          title={sidebarOpen ? "Hide Sidebar" : "Show Sidebar"}
-        >
-          <i className={`bi ${sidebarOpen ? "bi-layout-sidebar-inset" : "bi-list"} fs-5`}></i>
+    <div className="android-app tally-theme">
+      {/* 🔹 TOP BAR */}
+      <header className="app-bar">
+        <div className="app-bar-left">
+          <button className="icon-btn ripple" onClick={() => setDrawer(true)}>☰</button>
+          <div className="app-bar-title">
+            <span>{activeSub.title}</span>
+            <small>Tally Prime Tutorial</small>
+          </div>
+        </div>
+        <button className="exit-top-btn" onClick={() => navigate("/learn")}>
+          <FaHome />
         </button>
-        <h6 className="mb-0 fw-bold flex-grow-1 text-center">
-          📚 Tally Prime Tutorial
-        </h6>
-      </div>
+      </header>
 
-      <div className="d-flex">
-        {/* ===== SIDEBAR ===== */}
-        <aside className={`sidebar ${sidebarOpen ? "" : "closed"}`}>
-          <div className="sidebar-title">Chapters</div>
+      {/* 🔹 DRAWER OVERLAY */}
+      <div className={`drawer-overlay ${drawer ? "visible" : ""}`} onClick={() => setDrawer(false)} />
 
+      {/* 🔹 ANDROID SIDEBAR (DRAWER) */}
+      <aside className={`drawer ${drawer ? "open" : ""}`}>
+        <div className="drawer-header tally-bg">
+          <div className="drawer-logo">TP</div>
+          <div className="drawer-header-text">
+             <h4>Tally Prime</h4>
+             <p>Accounting Masterclass</p>
+          </div>
+        </div>
+
+        <div className="drawer-list">
           {chapters.map(ch => (
-            <div key={ch.id}>
-              <button
-                className={`chapter-btn ${activeChapter === ch.id ? "active" : ""}`}
-                onClick={() => {
-                  setActiveChapter(ch.id);
-                  setActiveSub(null);
-                  setOpenDropdown(openDropdown === ch.id ? null : ch.id);
-                }}
+            <div key={ch.id} className="accordion-item">
+              <button 
+                className={`drawer-item ripple ${activeSub.id.toString().startsWith(ch.id) ? "active-parent" : ""}`}
+                onClick={() => setOpenDropdown(openDropdown === ch.id ? null : ch.id)}
               >
-                <span>{ch.icon} {ch.title}</span>
-                <i className={`bi ${openDropdown === ch.id ? "bi-chevron-up" : "bi-chevron-down"}`} />
+                <span className="ch-icon">{ch.icon}</span>
+                <span className="flex-grow-1">{ch.title}</span>
+                {openDropdown === ch.id ? <FaChevronUp size={12}/> : <FaChevronDown size={12}/>}
               </button>
 
               {openDropdown === ch.id && (
-                <div className="subchapter-list">
+                <div className="sub-list">
                   {ch.subChapters.map(sub => (
                     <div
                       key={sub.id}
-                      className={`subchapter ${activeSub?.id === sub.id ? "active" : ""}`}
+                      className={`sub-item ripple ${activeSub.id === sub.id ? "active" : ""}`}
                       onClick={() => {
-                        setActiveChapter(ch.id);
                         setActiveSub(sub);
-                        if (!isDesktop) setSidebarOpen(false);
+                        setDrawer(false);
                       }}
                     >
                       • {sub.title}
@@ -130,20 +129,15 @@ export default function Tally() {
               )}
             </div>
           ))}
-        </aside>
+        </div>
+      </aside>
 
-        {/* ===== CONTENT ===== */}
-        <main className="content-area">
-          {!activeSub ? (
-            <div className="card p-3">
-              <h4>{chapter.icon} {chapter.title}</h4>
-              <p className="text-muted">Sidebar se koi sub-topic select karo 👈</p>
-            </div>
-          ) : (
-            <div className="card p-3">{activeSub.component}</div>
-          )}
-        </main>
-      </div>
+      {/* 🔹 CONTENT AREA */}
+      <main className="content-area">
+        <div className="content-card ripple-entry">
+          {activeSub.component}
+        </div>
+      </main>
     </div>
   );
 }

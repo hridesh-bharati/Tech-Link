@@ -1,198 +1,176 @@
-/* ===== MOBILE APP BASE ===== */
-.android-app {
+/* Unique Container for Auth Screens */
+.auth-container {
   min-height: 100vh;
-  background: var(--gradient-dark);
+  background: #0f172a;
+  /* Dark background */
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  padding: var(--space-5);
-  font-family: var(--font-sans);
-  color: var(--text-primary);
+  padding: 20px;
   position: relative;
   overflow: hidden;
 }
 
-/* TOP GLOW */
-.android-app::before {
+/* Background Glow Effects */
+.auth-container::before {
   content: "";
   position: absolute;
-  top: -120px;
-  left: -80px;
-  width: 420px;
-  height: 420px;
-  background: radial-gradient(circle, var(--primary-blue), transparent);
+  top: -100px;
+  left: -100px;
+  width: 400px;
+  height: 400px;
+  background: radial-gradient(circle, #3b82f633, transparent);
   border-radius: 50%;
-  opacity: 0.35;
-  pointer-events: none;
 }
 
-/* BOTTOM GLOW */
-.android-app::after {
-  content: "";
-  position: absolute;
-  bottom: -140px;
-  right: -100px;
-  width: 460px;
-  height: 460px;
-  background: radial-gradient(circle, var(--secondary), transparent);
-  border-radius: 50%;
-  opacity: 0.25;
-  pointer-events: none;
-}
-
-/* ===== BACK BUTTON ===== */
-.btn-back {
-  position: absolute;
-  top: 22px;
-  left: 18px;
-  width: 42px;
-  height: 42px;
-  border-radius: 50%;
-  border: none;
-  background: rgba(255, 255, 255, 0.85);
-  backdrop-filter: blur(8px);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
-  box-shadow: 0 6px 16px rgba(0,0,0,.2);
-  z-index: 10;
-  transition: transform 0.2s ease, background 0.2s ease;
-}
-.btn-back svg { color: #0072ff; }
-.btn-back:active { transform: scale(0.92); }
-.btn-back:hover { background: #fff; }
-
-/* ===== CARDS ===== */
-.card-signup, .card-login {
+/* Main Auth Card */
+.auth-card {
   width: 100%;
-  max-width: 360px;
-  background: var(--bg-card);
-  border-radius: var(--border-radius-2xl);
-  padding: var(--space-6);
-  box-shadow: var(--shadow-2xl);
-  animation: slideUp var(--transition-base);
-  z-index: 9999;
-  margin-top: 0;
+  max-width: 380px;
+  background: rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 24px;
+  padding: 32px;
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+  z-index: 5;
 }
-.card-signup { margin-top: 60px; }
-.card-login::before {
+
+/* Login Text logic */
+.login-layout::before {
   content: "Welcome Back";
   display: block;
-  font-size: var(--text-xl);
+  font-size: 24px;
   font-weight: 700;
-  margin-bottom: var(--space-1);
-  color: var(--text-primary);
+  color: #fff;
+  margin-bottom: 4px;
 }
-.card-login::after {
-  content: "Login to your account";
+
+.login-layout::after {
+  content: "Sign in to continue";
   display: block;
-  font-size: var(--text-xs);
-  color: var(--text-muted);
-  margin-bottom: var(--space-5);
+  font-size: 14px;
+  color: #94a3b8;
+  margin-bottom: 24px;
 }
 
-/* Slide-up animation */
-@keyframes slideUp {
-  from { opacity: 0; transform: translateY(40px); }
-  to { opacity: 1; transform: translateY(0); }
+/* Signup specific margin for avatar */
+.signup-layout {
+  margin-top: 50px;
 }
 
-/* ===== INPUT GROUPS ===== */
-.input-group-custom {
+/* Standard Auth Input Groups */
+.auth-input-group {
   display: flex;
   align-items: center;
-  gap: var(--space-3);
-  background: var(--bg-secondary);
-  padding: var(--space-4);
-  border-radius: var(--border-radius-lg);
-  margin-bottom: var(--space-4);
-  border: 1px solid var(--border-color);
+  gap: 12px;
+  background: rgba(0, 0, 0, 0.2);
+  padding: 14px 18px;
+  border-radius: 14px;
+  margin-bottom: 16px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
 }
-.input-group-custom svg { color: var(--primary-blue); }
-.input-group-custom input {
+
+.auth-input-group svg {
+  color: #3b82f6;
+}
+
+.auth-input-group input {
+  background: transparent;
   border: none;
   outline: none;
-  background: transparent;
-  flex: 1;
-  font-size: var(--text-sm);
-  color: var(--text-primary);
-}
-.input-group-custom span { cursor: pointer; color: var(--text-muted); }
-.input-group-custom span:hover svg { color: var(--primary); }
-
-/* ===== BUTTONS ===== */
-.btn-primary {
-  width: 100%;
-  margin-top: var(--space-3);
-  padding: var(--space-4);
-  border-radius: var(--border-radius-xl);
-  border: none;
-  background: linear-gradient(135deg, #0072ff, #00c6ff);
   color: #fff;
-  font-size: var(--text-base);
-  font-weight: 600;
-  cursor: pointer;
-  transition: all 0.2s ease;
-  box-shadow: 0 6px 20px rgba(0,0,0,.25);
+  font-size: 15px;
+  flex: 1;
 }
-.btn-primary:disabled {
-  opacity: 0.6;
-  cursor: not-allowed;
-}
-.btn-primary:active { transform: scale(0.97); }
 
-/* ===== AVATAR UPLOAD ===== */
-.floating-avatar-custom {
-  width: 96px;
-  height: 96px;
+/* Auth Submit Button */
+.btn-auth-submit {
+  width: 100%;
+  padding: 16px;
+  border-radius: 14px;
+  border: none;
+  background: linear-gradient(135deg, #2563eb, #3b82f6);
+  color: white;
+  font-weight: 600;
+  font-size: 16px;
+  cursor: pointer;
+  transition: 0.2s;
+  box-shadow: 0 10px 15px -3px rgba(59, 130, 246, 0.3);
+}
+
+.btn-auth-submit:active {
+  transform: scale(0.96);
+}
+
+/* Avatar Section for Signup */
+.auth-avatar-wrapper {
+  position: relative;
+  margin-bottom: -45px;
+  z-index: 10;
+}
+
+.avatar-preview {
+  width: 90px;
+  height: 90px;
+  background: #1e293b;
   border-radius: 50%;
-  background: #fff;
   display: flex;
   align-items: center;
   justify-content: center;
-  margin-bottom: -48px;
-  z-index: 2;
-  box-shadow: 0 10px 25px rgba(0,0,0,.3);
-  position: relative;
+  border: 4px solid #0f172a;
   overflow: hidden;
+  color: #3b82f6;
 }
-.floating-avatar-custom img {
+
+.avatar-preview img {
   width: 100%;
   height: 100%;
   object-fit: cover;
 }
-.camera-overlay-custom {
+
+.avatar-upload-icon {
   position: absolute;
-  bottom: -4px;
-  right: -4px;
-  background: linear-gradient(135deg, #00c6ff, #0072ff);
-  width: 34px;
-  height: 34px;
+  bottom: 0;
+  right: 0;
+  background: #3b82f6;
+  width: 32px;
+  height: 32px;
   border-radius: 50%;
   display: flex;
   align-items: center;
   justify-content: center;
   cursor: pointer;
-  box-shadow: 0 4px 10px rgba(0,0,0,.3);
-}
-.camera-overlay-custom svg { color: #fff; font-size: 16px; }
-
-/* ===== LINKS ===== */
-p-custom {
-  margin-top: var(--space-4);
-  color: var(--text-inverse);
-  font-size: var(--text-sm);
-}
-p-custom a {
-  display: inline-block;
-  padding: 4px 6px;
-  position: relative;
-  z-index: 10000;
+  border: 3px solid #0f172a;
+  color: white;
 }
 
-/* ===== MOBILE ===== */
-@media (max-width: 480px) {
-  .card-login, .card-signup { border-radius: var(--border-radius-2xl); }
+/* Back Button & Footer */
+.btn-back-circle {
+  position: absolute;
+  top: 20px;
+  left: 20px;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.1);
+  border: none;
+  color: white;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.auth-footer-text {
+  margin-top: 24px;
+  color: #94a3b8;
+  font-size: 14px;
+}
+
+.auth-footer-text a {
+  color: #3b82f6;
+  text-decoration: none;
+  font-weight: 600;
 }

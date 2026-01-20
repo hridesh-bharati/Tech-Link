@@ -1,9 +1,8 @@
 import React, { useState, useEffect } from "react";
-import "bootstrap/dist/css/bootstrap.min.css";
-import "bootstrap-icons/font/bootstrap-icons.css";
-import "./index.css";
+import { useNavigate } from "react-router-dom";
+import { FaSignOutAlt, FaHome, FaChevronDown, FaChevronUp } from "react-icons/fa";
 
-// Chapters
+// Chapters Imports
 import Intro from "./Chapters/Intro.jsx";
 import KeyboardBasics from "./Chapters/KeyboardBasics.jsx";
 import HomeRow from "./Chapters/HomeRow.jsx";
@@ -15,10 +14,9 @@ import Accuracy from "./Chapters/Accuracy.jsx";
 import Practice from "./Chapters/Practice.jsx";
 import Test from "./Chapters/Test.jsx";
 
-/* ===== Chapter Data ===== */
 const chapters = [
     {
-        id: 1,
+        id: 0,
         title: "Introduction",
         icon: "⌨️",
         subChapters: [
@@ -27,7 +25,7 @@ const chapters = [
         ]
     },
     {
-        id: 2,
+        id: 1,
         title: "Finger Placement",
         icon: "🖐️",
         subChapters: [
@@ -37,7 +35,7 @@ const chapters = [
         ]
     },
     {
-        id: 3,
+        id: 2,
         title: "Advanced Keys",
         icon: "🔢",
         subChapters: [
@@ -45,7 +43,7 @@ const chapters = [
         ]
     },
     {
-        id: 4,
+        id: 3,
         title: "Performance",
         icon: "⚡",
         subChapters: [
@@ -54,7 +52,7 @@ const chapters = [
         ]
     },
     {
-        id: 5,
+        id: 4,
         title: "Practice & Test",
         icon: "🎯",
         subChapters: [
@@ -64,65 +62,75 @@ const chapters = [
     }
 ];
 
-/* ===== MAIN COMPONENT ===== */
 export default function TypingMaster() {
-    const [sidebarOpen, setSidebarOpen] = useState(true);
-    const [activeChapter, setActiveChapter] = useState(1);
-    const [activeSub, setActiveSub] = useState(null);
-    const [openDropdown, setOpenDropdown] = useState(1);
-    const [isDesktop, setIsDesktop] = useState(window.innerWidth >= 992);
+    const [selected, setSelected] = useState(0); // Active Parent Chapter
+    const [activeSub, setActiveSub] = useState(chapters[0].subChapters[0]); // Default first lesson
+    const [drawer, setDrawer] = useState(false);
+    const [openDropdown, setOpenDropdown] = useState(0);
+    const [desktop, setDesktop] = useState(window.innerWidth >= 992);
+    const navigate = useNavigate();
 
     useEffect(() => {
-        const resize = () => setIsDesktop(window.innerWidth >= 992);
-        window.addEventListener("resize", resize);
-        return () => window.removeEventListener("resize", resize);
+        const check = () => setDesktop(window.innerWidth >= 992);
+        window.addEventListener("resize", check);
+        return () => window.removeEventListener("resize", check);
     }, []);
 
-    const chapter = chapters.find(c => c.id === activeChapter);
+    useEffect(() => {
+        window.scrollTo(0, 0);
+    }, [activeSub]);
 
     return (
-        <div className="typing-wrapper">
-            {/* ===== TOP BAR ===== */}
-            <div className="topbar d-flex align-items-center px-2">
-                <button
-                    className="btn btn-light btn-sm me-2"
-                    onClick={() => setSidebarOpen(!sidebarOpen)}
-                >
-                    <i className={`bi ${sidebarOpen ? "bi-layout-sidebar-inset" : "bi-list"} fs-5`} />
+        <div className="android-app typing-theme">
+            {/* 🔹 TOP BAR */}
+            <header className="app-bar">
+                <div className="app-bar-left">
+                    <button className="icon-btn ripple" onClick={() => setDrawer(true)}>☰</button>
+                    <div className="app-bar-title">
+                        <span>{activeSub.title}</span>
+                        <small>Typing Master Guide</small>
+                    </div>
+                </div>
+                <button className="exit-top-btn" onClick={() => navigate("/learn")}>
+                    <FaHome />
                 </button>
-                <h6 className="mb-0 fw-bold flex-grow-1 text-center">
-                    ⌨️ Typing Master Tutorial
-                </h6>
-            </div>
+            </header>
 
-            <div className="d-flex">
-                {/* ===== SIDEBAR ===== */}
-                <aside className={`sidebar ${sidebarOpen ? "" : "closed"}`}>
-                    <div className="sidebar-title">Lessons</div>
+            {/* 🔹 OVERLAY */}
+            <div className={`drawer-overlay ${!desktop && drawer ? "visible" : ""}`} onClick={() => setDrawer(false)} />
 
-                    {chapters.map(ch => (
-                        <div key={ch.id}>
-                            <button
-                                className={`chapter-btn ${activeChapter === ch.id ? "active" : ""}`}
-                                onClick={() => {
-                                    setActiveChapter(ch.id);
-                                    setActiveSub(null);
-                                    setOpenDropdown(openDropdown === ch.id ? null : ch.id);
-                                }}
+            {/* 🔹 SIDEBAR (DRAWER) */}
+            <aside className={`drawer ${drawer ? "open" : ""}`}>
+                <div className="drawer-header">
+                    <div className="drawer-logo">TM</div>
+                    <div className="drawer-header-text">
+                        <h4>Typing Master</h4>
+                        <p>Master the Keyboard</p>
+                    </div>
+                </div>
+
+                <div className="drawer-list">
+                    {chapters.map((ch) => (
+                        <div key={ch.id} className="dropdown-section">
+                            <button 
+                                className={`drawer-item ripple ${selected === ch.id ? "active-parent" : ""}`}
+                                onClick={() => setOpenDropdown(openDropdown === ch.id ? null : ch.id)}
                             >
-                                <span>{ch.icon} {ch.title}</span>
-                                <i className={`bi ${openDropdown === ch.id ? "bi-chevron-up" : "bi-chevron-down"}`} />
+                                <span className="ch-icon">{ch.icon}</span>
+                                <span className="flex-grow-1">{ch.title}</span>
+                                {openDropdown === ch.id ? <FaChevronUp size={12}/> : <FaChevronDown size={12}/>}
                             </button>
 
                             {openDropdown === ch.id && (
-                                <div className="subchapter-list">
+                                <div className="sub-list">
                                     {ch.subChapters.map(sub => (
                                         <div
                                             key={sub.id}
-                                            className={`subchapter ${activeSub?.id === sub.id ? "active" : ""}`}
+                                            className={`sub-item ${activeSub.id === sub.id ? "active-sub" : ""}`}
                                             onClick={() => {
+                                                setSelected(ch.id);
                                                 setActiveSub(sub);
-                                                if (!isDesktop) setSidebarOpen(false);
+                                                setDrawer(false);
                                             }}
                                         >
                                             • {sub.title}
@@ -132,20 +140,15 @@ export default function TypingMaster() {
                             )}
                         </div>
                     ))}
-                </aside>
+                </div>
+            </aside>
 
-                {/* ===== CONTENT ===== */}
-                <main className="content-area">
-                    {!activeSub ? (
-                        <div className="card p-3">
-                            <h4>{chapter.icon} {chapter.title}</h4>
-                            <p className="text-muted">Kisi lesson ko sidebar se select karo 👈</p>
-                        </div>
-                    ) : (
-                        <div className="card p-3">{activeSub.component}</div>
-                    )}
-                </main>
-            </div>
+            {/* 🔹 MAIN CONTENT */}
+            <main className="content-area">
+                <div className="content-card">
+                    {activeSub.component}
+                </div>
+            </main>
         </div>
     );
 }

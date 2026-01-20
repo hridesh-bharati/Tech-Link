@@ -188,6 +188,7 @@ const About = () => {
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
+          
         >
           <span className="about-badge-gradient badge mb-3 px-3 py-2">About Me</span>
           <h2 className="display-5 fw-bold mb-3">Crafting Digital Excellence</h2>

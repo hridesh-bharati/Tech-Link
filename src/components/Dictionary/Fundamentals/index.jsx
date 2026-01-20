@@ -1,4 +1,7 @@
+// src\components\Dictionary\Fundamentals\index.jsx
 import React, { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
+import { FaSignOutAlt, FaHome } from "react-icons/fa";
 
 import Overview from "./Overview.jsx";
 import Chapter1 from "./Chapter1";
@@ -9,8 +12,6 @@ import Chapter5 from "./Chapter5";
 import Chapter6 from "./Chapter6";
 import Chapter7 from "./Chapter7";
 import Chapter8 from "./Chapter8";
-
-import "./index.css";
 
 const chapters = [
   { id: 0, title: "Overview" },
@@ -28,6 +29,7 @@ export default function Fundamentals() {
   const [selected, setSelected] = useState(0);
   const [drawer, setDrawer] = useState(false);
   const [desktop, setDesktop] = useState(false);
+  const navigate = useNavigate();
 
   const total = chapters.length;
   const current = chapters[selected];
@@ -40,16 +42,19 @@ export default function Fundamentals() {
   }, []);
 
   useEffect(() => {
-    document.body.style.overflow =
-      !desktop && drawer ? "hidden" : "auto";
+    document.body.style.overflow = !desktop && drawer ? "hidden" : "auto";
   }, [drawer, desktop]);
+
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [selected]);
 
   const next = () => selected < total - 1 && setSelected(p => p + 1);
   const prev = () => selected > 0 && setSelected(p => p - 1);
 
   const renderChapter = () => {
     switch (selected) {
-      case 0: return <Overview />;
+      case 0: return <Overview setChapter={setSelected} />;
       case 1: return <Chapter1 />;
       case 2: return <Chapter2 />;
       case 3: return <Chapter3 />;
@@ -64,30 +69,34 @@ export default function Fundamentals() {
 
   return (
     <div className="android-app">
-
-      {/* 🔹 APP BAR */}
+      {/* 🔹 TOP APP BAR */}
       <header className="app-bar">
-        <button className="icon-btn ripple" onClick={() => setDrawer(true)}>☰</button>
-
-        <div className="app-bar-title">
-          <span>{current.title}</span>
-          <small>Chapter {selected + 1} / {total}</small>
+        <div className="app-bar-left">
+           <button className="icon-btn ripple" onClick={() => setDrawer(true)}>☰</button>
+           <div className="app-bar-title">
+             <span>{current.title}</span>
+             <small>Chapter {selected + 1} / {total}</small>
+           </div>
         </div>
-
-        <div className="nav-actions">
-          <button className="icon-btn ripple" onClick={prev} disabled={selected === 0}>◀</button>
-          <button className="icon-btn ripple" onClick={next} disabled={selected === total - 1}>▶</button>
-        </div>
+        
+        {/* Quick Exit Button in Top Bar */}
+        <button className="exit-top-btn" onClick={() => navigate("/learn")} title="Back to Courses">
+          <FaHome />
+        </button>
       </header>
 
       {/* 🔹 OVERLAY */}
-      {!desktop && drawer && (
-        <div className="drawer-overlay" onClick={() => setDrawer(false)} />
-      )}
+      <div className={`drawer-overlay ${!desktop && drawer ? "visible" : ""}`} onClick={() => setDrawer(false)} />
 
-      {/* 🔹 DRAWER */}
+      {/* 🔹 PROPER SIDEBAR (DRAWER) */}
       <aside className={`drawer ${drawer ? "open" : ""}`}>
-        <h5 className="drawer-title">📘 Fundamentals</h5>
+        <div className="drawer-header">
+          <div className="drawer-logo">BC</div>
+          <div className="drawer-header-text">
+             <h4>Fundamentals</h4>
+             <p>Computer Course 2026</p>
+          </div>
+        </div>
 
         <div className="drawer-list">
           {chapters.map(ch => (
@@ -99,23 +108,17 @@ export default function Fundamentals() {
                 setDrawer(false);
               }}
             >
+              <span className="ch-num">{ch.id + 1}</span>
               {ch.title}
             </div>
           ))}
         </div>
       </aside>
 
-      {/* 🔹 CONTENT */}
+      {/* 🔹 MAIN CONTENT */}
       <main className="content-area">
         {renderChapter()}
       </main>
-
-      {/* 🔹 BOTTOM NAV (MOBILE) */}
-      <nav className="bottom-nav d-lg-none">
-        <button onClick={prev} disabled={selected === 0}>◀</button>
-        <button onClick={() => setDrawer(true)}>☰</button>
-        <button onClick={next} disabled={selected === total - 1}>▶</button>
-      </nav>
 
     </div>
   );

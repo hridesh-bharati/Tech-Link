@@ -2,11 +2,10 @@ import React from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Link } from "react-router-dom";
 import GradientText from "../../Shared/GradientText";
-import AnimatedSection from "../../Shared/AnimatedSection";
 import "./Projects.css";
 
 /* ================================
-   ✅ ONLY LIVE PROJECT URLS
+    ✅ ONLY LIVE PROJECT URLS
 ================================ */
 const LIVE_PROJECTS = [
   {
@@ -24,13 +23,13 @@ const LIVE_PROJECTS = [
 ];
 
 /* ================================
-   Screenshot helper
+    Screenshot helper
 ================================ */
 const getScreenshot = (url) =>
   `https://image.thum.io/get/width/800/${url}`;
 
 /* ================================
-   Project Card
+    Project Card
 ================================ */
 const ProjectCard = ({ project, index }) => (
   <motion.div
@@ -40,7 +39,6 @@ const ProjectCard = ({ project, index }) => (
     transition={{ delay: index * 0.15 }}
     whileHover={{ y: -8 }}
   >
-    {/* 🔥 LIVE WEBSITE PREVIEW */}
     <div className="project-image">
       <img
         src={getScreenshot(project.live)}
@@ -76,7 +74,7 @@ const ProjectCard = ({ project, index }) => (
 );
 
 /* ================================
-   Projects Section
+    Projects Section
 ================================ */
 const Projects = () => {
   return (
@@ -91,29 +89,27 @@ const Projects = () => {
           </p>
         </div>
 
-        <AnimatedSection>
-          <AnimatePresence>
-            <motion.div className="projects-grid">
-              {LIVE_PROJECTS.map((project, i) => (
-                <ProjectCard
-                  key={project.id}
-                  project={project}
-                  index={i}
-                />
-              ))}
-            </motion.div>
-          </AnimatePresence>
-
-          {/* 🔥 VIEW ALL */}
-          <div style={{ textAlign: "center", marginTop: "2rem" }}>
-            <Link
-              to="/projects"
-              className="btn btn-outline btn-lg"
-            >
-              View All Projects →
-            </Link>
+        {/* Removed AnimatedSection Wrapper */}
+        <AnimatePresence>
+          <div className="projects-grid">
+            {LIVE_PROJECTS.map((project, i) => (
+              <ProjectCard
+                key={project.id}
+                project={project}
+                index={i}
+              />
+            ))}
           </div>
-        </AnimatedSection>
+        </AnimatePresence>
+
+        <div style={{ textAlign: "center", marginTop: "2rem" }}>
+          <Link
+            to="/projects"
+            className="btn btn-outline btn-lg"
+          >
+            View All Projects →
+          </Link>
+        </div>
       </div>
     </section>
   );

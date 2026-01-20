@@ -1,102 +1,152 @@
-import React, { useRef, useState, useEffect, useCallback, useMemo } from "react";
-import { Outlet, useLocation, useNavigate } from "react-router-dom";
-import { Helmet } from "react-helmet-async";
-import Header from "./Header.jsx";
-import Footer from "./Footer.jsx";
+import React, { useRef, useMemo, Suspense, lazy } from "react";
+import { useLocation, useNavigate } from "react-router-dom";
+import Header from "./Header";
+import Footer from "./Footer";
 import "./Layout.css";
 
-const MAIN_ROUTES = ["/", "/about", "/learn", "/projects", "/contact"];
-const CONFIG = { threshold: 70, lock: 15, max: 120, debounce: 150 };
+// Lazy-loaded pages
+const Welcome = lazy(() => import("./Welcome"));
+const Home = lazy(() => import("../../pages/HomePage"));
+const About = lazy(() => import("../../pages/AboutPage"));
+const Learn = lazy(() => import("../../pages/Learn"));
+const Projects = lazy(() => import("../../Projects/Projects"));
+const Contact = lazy(() => import("../../pages/ContactPage"));
+
+// Loader for Suspense
+const SlideLoader = () => (
+  <div className="slide-loader">
+    <div className="spinner-border spinner-border-sm text-secondary"></div>
+  </div>
+);
+
+// Map of routes for slider
+const ROUTE_MAP = {
+  "/welcome": <Welcome />,
+  "/": <Home />,
+  "/about": <About />,
+  "/contact": <Contact />,
+  "/learn": <Learn />,
+  "/projects": <Projects />,
+};
+
+const MAIN_ROUTES = Object.keys(ROUTE_MAP);
 
 const Layout = () => {
   const navigate = useNavigate();
-  const { pathname } = useLocation();
-  const [isMobile, setIsMobile] = useState(window.innerWidth <= 768);
-  const [showSwipeHint, setShowSwipeHint] = useState(false);
-  const [swipeOffset, setSwipeOffset] = useState(0);
+  const location = useLocation();
+  const trackRef = useRef(null);
 
-  const start = useRef({ x: 0, y: 0 });
-  const isScrolling = useRef(null); // 'h' for horizontal, 'v' for vertical
+  const startX = useRef(0);
+  const startY = useRef(0);
+  const currentTranslate = useRef(0);
+  const isDragging = useRef(false);
 
-  const currentIndex = useMemo(() => MAIN_ROUTES.indexOf(pathname), [pathname]);
-  const isMainRoute = currentIndex !== -1;
+  const currentIndex = useMemo(() => {
+    const i = MAIN_ROUTES.indexOf(location.pathname);
+    return i === -1 ? 1 : i;
+  }, [location.pathname]);
 
-  useEffect(() => {
-    const handleResize = () => setIsMobile(window.innerWidth <= 768);
-    window.addEventListener("resize", handleResize);
+  const prevRoute = MAIN_ROUTES[currentIndex - 1];
+  const nextRoute = MAIN_ROUTES[currentIndex + 1];
 
-    if (isMobile && !localStorage.getItem("swipeHintShown")) {
-      setShowSwipeHint(true);
-      setTimeout(() => {
-        setShowSwipeHint(false);
-        localStorage.setItem("swipeHintShown", "true");
-      }, 3000);
-    }
-    return () => window.removeEventListener("resize", handleResize);
-  }, [isMobile]);
-
-  const handleNavigation = (direction) => {
-    if (direction === "left" && currentIndex < MAIN_ROUTES.length - 1) navigate(MAIN_ROUTES[currentIndex + 1]);
-    if (direction === "right" && currentIndex > 0) navigate(MAIN_ROUTES[currentIndex - 1]);
-  };
-
+  // ------------------------
+  // Touch Handlers
+  // ------------------------
   const onTouchStart = (e) => {
-    if (!isMobile || !isMainRoute) return;
-    start.current = { x: e.touches[0].clientX, y: e.touches[0].clientY };
-    isScrolling.current = null;
+    isDragging.current = true;
+    startX.current = e.touches[0].clientX;
+    startY.current = e.touches[0].clientY;
+    if (trackRef.current) trackRef.current.style.transition = "none";
   };
 
   const onTouchMove = (e) => {
-    if (!isMobile || !isMainRoute || isScrolling.current === 'v') return;
+    if (!isDragging.current) return;
 
-    const dx = e.touches[0].clientX - start.current.x;
-    const dy = e.touches[0].clientY - start.current.y;
+    const dx = e.touches[0].clientX - startX.current;
+    const dy = e.touches[0].clientY - startY.current;
 
-    if (!isScrolling.current) {
-      if (Math.abs(dx) > CONFIG.lock) isScrolling.current = 'h';
-      else if (Math.abs(dy) > CONFIG.lock) isScrolling.current = 'v';
-    }
+    // Ignore mostly vertical swipes
+    if (Math.abs(dx) < Math.abs(dy)) return;
 
-    if (isScrolling.current === 'h') {
-      if (e.cancelable) e.preventDefault();
-      // Apply resistance at edges (Android style)
-      const edgeResistance = (dx > 0 && currentIndex === 0) || (dx < 0 && currentIndex === MAIN_ROUTES.length - 1) ? 0.3 : 1;
-      setSwipeOffset(Math.max(-CONFIG.max, Math.min(CONFIG.max, dx * edgeResistance)));
+    // Resistance at edges
+    const resistance =
+      (!prevRoute && dx > 0) || (!nextRoute && dx < 0) ? 0.3 : 1;
+
+    currentTranslate.current = dx * resistance;
+
+    if (trackRef.current) {
+      trackRef.current.style.transform = `translateX(calc(-100vw + ${currentTranslate.current}px))`;
     }
   };
 
   const onTouchEnd = () => {
-    if (Math.abs(swipeOffset) > CONFIG.threshold) {
-      handleNavigation(swipeOffset < 0 ? "left" : "right");
+    if (!isDragging.current) return;
+    isDragging.current = false;
+
+    const threshold = window.innerWidth * 0.25; // must swipe 25% of width
+
+    if (trackRef.current) {
+      trackRef.current.style.transition =
+        "transform 0.4s cubic-bezier(0.16, 1, 0.3, 1)";
+
+      if (currentTranslate.current < -threshold && nextRoute) {
+        trackRef.current.style.transform = "translateX(-200vw)";
+        setTimeout(() => {
+          navigate(nextRoute);
+          resetTrack();
+        }, 400);
+      } else if (currentTranslate.current > threshold && prevRoute) {
+        trackRef.current.style.transform = "translateX(0vw)";
+        setTimeout(() => {
+          navigate(prevRoute);
+          resetTrack();
+        }, 400);
+      } else {
+        trackRef.current.style.transform = "translateX(-100vw)";
+      }
     }
-    setSwipeOffset(0);
-    isScrolling.current = null;
+  };
+
+  const resetTrack = () => {
+    if (trackRef.current) {
+      trackRef.current.style.transition = "none";
+      trackRef.current.style.transform = "translateX(-100vw)";
+      currentTranslate.current = 0;
+    }
   };
 
   return (
-    <div className="layout" onTouchStart={onTouchStart} onTouchMove={onTouchMove} onTouchEnd={onTouchEnd}>
-      <Helmet>
-        <meta name="theme-color" content="#00a884" />
-        <meta name="apple-mobile-web-app-capable" content="yes" />
-        <meta name="apple-mobile-web-app-status-bar-style" content="default" />
-      </Helmet>
-
+    <div
+      className="layout"
+      onTouchStart={onTouchStart}
+      onTouchMove={onTouchMove}
+      onTouchEnd={onTouchEnd}
+    >
       <Header />
+      <main className="slider-viewport">
+        <div className="slider-track" ref={trackRef}>
+          {/* Previous Slide */}
+          <div className="slide">
+            <Suspense fallback={<SlideLoader />}>
+              {prevRoute ? ROUTE_MAP[prevRoute] : <div className="edge" />}
+            </Suspense>
+          </div>
 
-      <div className={`swipe-hint ${showSwipeHint ? "active" : ""}`}>
-        <div className="hint-pill">↔ Swipe to explore</div>
-      </div>
+          {/* Current Slide */}
+          <div className="slide active">
+            <Suspense fallback={<SlideLoader />}>
+              {ROUTE_MAP[location.pathname]}
+            </Suspense>
+          </div>
 
-      <main 
-        className="main-viewport" 
-        style={{ 
-          transform: `translateX(${swipeOffset}px)`,
-          transition: swipeOffset === 0 ? 'transform 0.3s cubic-bezier(0.4, 0, 0.2, 1)' : 'none'
-        }}
-      >
-        <Outlet />
+          {/* Next Slide */}
+          <div className="slide">
+            <Suspense fallback={<SlideLoader />}>
+              {nextRoute ? ROUTE_MAP[nextRoute] : <div className="edge" />}
+            </Suspense>
+          </div>
+        </div>
       </main>
-
       <Footer />
     </div>
   );

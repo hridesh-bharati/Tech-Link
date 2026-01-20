@@ -1,5 +1,8 @@
-// src/components/Dictionary/CPlusPlus/index.jsx
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { useNavigate } from "react-router-dom";
+import { FaSignOutAlt, FaHome } from "react-icons/fa";
+
+// Chapters Import
 import Chapter1 from './Chapter1.jsx';
 import Chapter2 from './Chapter2.jsx';
 import Chapter3 from './Chapter3.jsx';
@@ -12,103 +15,117 @@ import Chapter9 from './Chapter9.jsx';
 import Chapter10 from './Chapter10.jsx';
 import Chapter11 from './Chapter11.jsx';
 
-import "./index.css"  
-
 const chapters = [
-  { id: 1, title: 'Introduction' },
-  { id: 2, title: 'Get Started' },
-  { id: 3, title: 'Syntax' },
-  { id: 4, title: 'Output' },
-  { id: 5, title: 'Comments' },
-  { id: 6, title: 'Variables' },
-  { id: 7, title: 'Data Types' },
-  { id: 8, title: 'Type Conversion' },
-  { id: 9, title: 'Constants' },
-  { id: 10, title: 'Operators' },
-  { id: 11, title: 'Strings' },
+  { id: 0, title: 'Introduction' },
+  { id: 1, title: 'Get Started' },
+  { id: 2, title: 'Syntax' },
+  { id: 3, title: 'Output' },
+  { id: 4, title: 'Comments' },
+  { id: 5, title: 'Variables' },
+  { id: 6, title: 'Data Types' },
+  { id: 7, title: 'Type Conversion' },
+  { id: 8, title: 'Constants' },
+  { id: 9, title: 'Operators' },
+  { id: 10, title: 'Strings' },
 ];
 
 export default function CPlusPlus() {
-  const [selectedChapter, setSelectedChapter] = useState(1);
-  const [drawerOpen, setDrawerOpen] = useState(false);
+  const [selected, setSelected] = useState(0); // 0-based like others
+  const [drawer, setDrawer] = useState(false);
+  const [desktop, setDesktop] = useState(window.innerWidth >= 992);
+  const navigate = useNavigate();
 
   const total = chapters.length;
+  const current = chapters[selected];
 
-  const handleNext = () => setSelectedChapter(prev => Math.min(prev + 1, total));
-  const handlePrev = () => setSelectedChapter(prev => Math.max(prev - 1, 1));
+  useEffect(() => {
+    const check = () => setDesktop(window.innerWidth >= 992);
+    window.addEventListener("resize", check);
+    return () => window.removeEventListener("resize", check);
+  }, []);
 
-  const ActiveChapterView = () => {
-    const map = {
-      1: Chapter1, 2: Chapter2, 3: Chapter3, 4: Chapter4, 5: Chapter5,
-      6: Chapter6, 7: Chapter7, 8: Chapter8, 9: Chapter9, 10: Chapter10, 11: Chapter11
-    };
-    const Component = map[selectedChapter] || Chapter1;
-    return <Component />;
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [selected]);
+
+  const next = () => selected < total - 1 && setSelected(p => p + 1);
+  const prev = () => selected > 0 && setSelected(p => p - 1);
+
+  const renderChapter = () => {
+    switch (selected) {
+      case 0: return <Chapter1 />;
+      case 1: return <Chapter2 />;
+      case 2: return <Chapter3 />;
+      case 3: return <Chapter4 />;
+      case 4: return <Chapter5 />;
+      case 5: return <Chapter6 />;
+      case 6: return <Chapter7 />;
+      case 7: return <Chapter8 />;
+      case 8: return <Chapter9 />;
+      case 9: return <Chapter10 />;
+      case 10: return <Chapter11 />;
+      default: return <Chapter1 />;
+    }
   };
 
   return (
-    <div className="android-shell">
-      {/* Material 3 Top App Bar */}
-      <header className="top-app-bar">
-        <button className="icon-btn" onClick={() => setDrawerOpen(true)}>
-          <i className="bi bi-list"></i>
+    <div className="android-app">
+      {/* 🔹 TOP BAR */}
+      <header className="app-bar">
+        <div className="app-bar-left">
+          <button className="icon-btn ripple" onClick={() => setDrawer(true)}>☰</button>
+          <div className="app-bar-title">
+            <span>{current.title}</span>
+            <small>C++ Chapter {selected + 1} / {total}</small>
+          </div>
+        </div>
+        <button className="exit-top-btn" onClick={() => navigate("/learn")}>
+          <FaHome />
         </button>
-        
-        <div className="app-bar-title">
-          <h1>C++ Dictionary</h1>
-          <span>{selectedChapter} / {total} • {chapters[selectedChapter-1].title}</span>
-        </div>
-
-        <div className="app-bar-actions">
-          <button 
-            className="icon-btn" 
-            onClick={handlePrev} 
-            disabled={selectedChapter === 1}
-          >
-            <i className="bi bi-chevron-left"></i>
-          </button>
-          <button 
-            className="icon-btn" 
-            onClick={handleNext} 
-            disabled={selectedChapter === total}
-          >
-            <i className="bi bi-chevron-right"></i>
-          </button>
-        </div>
       </header>
 
-      {/* Content Area */}
-      <main className="main-viewport">
-        <div className="content-card">
-          <ActiveChapterView />
+      {/* 🔹 OVERLAY */}
+      <div className={`drawer-overlay ${!desktop && drawer ? "visible" : ""}`} onClick={() => setDrawer(false)} />
+
+      {/* 🔹 SIDEBAR (DRAWER) */}
+      <aside className={`drawer ${drawer ? "open" : ""}`}>
+        <div className="drawer-header">
+          <div className="drawer-logo">C++</div>
+          <div className="drawer-header-text">
+            <h4>C++ Course</h4>
+            <p>Object Oriented Programming</p>
+          </div>
         </div>
-      </main>
 
-      {/* Floating Action Button */}
-      {selectedChapter < total && (
-        <button className="fab-extended" onClick={handleNext}>
-          <span>Next</span>
-          <i className="bi bi-arrow-right-short"></i>
-        </button>
-      )}
-
-      {/* Drawer Menu */}
-      <div className={`scrim ${drawerOpen ? 'active' : ''}`} onClick={() => setDrawerOpen(false)} />
-      <aside className={`nav-drawer ${drawerOpen ? 'open' : ''}`}>
-        <div className="drawer-headline">Chapters</div>
-        <nav className="drawer-items">
-          {chapters.map(ch => (
-            <div 
-              key={ch.id} 
-              className={`drawer-pill ${selectedChapter === ch.id ? 'active' : ''}`}
-              onClick={() => { setSelectedChapter(ch.id); setDrawerOpen(false); }}
+        <div className="drawer-list">
+          {chapters.map((ch) => (
+            <div
+              key={ch.id}
+              className={`drawer-item ripple ${selected === ch.id ? "active" : ""}`}
+              onClick={() => {
+                setSelected(ch.id);
+                setDrawer(false);
+              }}
             >
-              <span className="pill-index">{ch.id}</span>
-              <span className="pill-label">{ch.title}</span>
+              <span className="ch-num">{ch.id + 1}</span>
+              {ch.title}
             </div>
           ))}
-        </nav>
+        </div>
+
+        <div className="drawer-footer">
+          <button className="exit-drawer-btn" onClick={() => navigate("/learn")}>
+            <FaSignOutAlt /> Back to All Courses
+          </button>
+        </div>
       </aside>
+
+      {/* 🔹 MAIN CONTENT */}
+      <main className="content-area">
+        <div className="content-card">
+          {renderChapter()}
+        </div>
+      </main>
     </div>
   );
 }

@@ -7,7 +7,7 @@ export default function CppChapter2() {
     <div className="chapter-content container-fluid px-1 pb-5">
 
       {/* Header */}
-      <div className="chapter-header mb-4 text-center">
+      <div className="chapter-header py-3 text-white mb-4 text-center">
         <h1 className="h2 fw-bold">
           📘 Chapter 2: C++ Get Started
         </h1>

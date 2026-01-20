@@ -4,14 +4,9 @@ import { ToastContainer } from "react-toastify";
 import { ThemeProvider } from './contexts/ThemeContext';
 import "react-toastify/dist/ReactToastify.css";
 
-/* Layout & Public Pages */
+/* Layout & Pages */
 import Layout from "./components/Layout/Layout";
-import HomePage from "./pages/HomePage";
-import AboutPage from "./pages/AboutPage";
-import ProjectsPage from "./Projects/Projects";
-import Learn from "./pages/Learn";
 import CourseDetail from "./pages/CourseDetail";
-import ContactPage from "./pages/ContactPage";
 import NotFoundPage from "./components/PageNotFound/NotFoundPage";
 
 /* Auth Pages */
@@ -34,74 +29,21 @@ function App() {
       <HelmetProvider>
         <BrowserRouter>
           <RouteAnalytics />
-          {/* Toast Notifications */}
-          <ToastContainer
-            position="top-right"
-            autoClose={3000}
-            newestOnTop
-            closeOnClick
-            pauseOnHover
-            draggable
-            theme="light"
-          />
+          <ToastContainer position="top-right" autoClose={3000} theme="light" />
 
           <Routes>
-            {/* ================= PUBLIC AUTH ROUTES ================= */}
-            <Route
-              path="/login"
-              element={
-                <PublicRoute>
-                  <Login />
-                </PublicRoute>
-              }
-            />
+            {/* Public Auth */}
+            <Route path="/login" element={<PublicRoute><Login /></PublicRoute>} />
+            <Route path="/signup" element={<PublicRoute><Signup /></PublicRoute>} />
+            <Route path="/forgot-password" element={<PublicRoute><ForgotPassword /></PublicRoute>} />
 
-            <Route
-              path="/signup"
-              element={
-                <PublicRoute>
-                  <Signup />
-                </PublicRoute>
-              }
-            />
+            {/* Protected Dashboard */}
+            <Route path="/dashboard/*" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
+            <Route path="/dashboard/profile" element={<ProtectedRoute><Profile /></ProtectedRoute>} />
 
-            <Route
-              path="/forgot-password"
-              element={
-                <PublicRoute>
-                  <ForgotPassword />
-                </PublicRoute>
-              }
-            />
-
-            {/* ================= PROTECTED DASHBOARD ROUTES ================= */}
-            <Route
-              path="/dashboard/*"
-              element={
-                <ProtectedRoute>
-                  <Dashboard />
-                </ProtectedRoute>
-              }
-            />
-
-
-            <Route
-              path="/dashboard/profile"
-              element={
-                <ProtectedRoute>
-                  <Profile />
-                </ProtectedRoute>
-              }
-            />
-
-            {/* ================= PUBLIC WEBSITE ROUTES ================= */}
-            <Route path="/" element={<Layout />}>
-              <Route index element={<HomePage />} />
-              <Route path="about" element={<AboutPage />} />
-              <Route path="projects" element={<ProjectsPage />} />
-              <Route path="learn" element={<Learn />} />
+            {/* Public Website */}
+            <Route path="/*" element={<Layout />}>
               <Route path="learn/:courseId" element={<CourseDetail />} />
-              <Route path="contact" element={<ContactPage />} />
               <Route path="*" element={<NotFoundPage />} />
             </Route>
           </Routes>

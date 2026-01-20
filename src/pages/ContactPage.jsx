@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import { motion } from "framer-motion";
 import {
   Mail,
   Phone,
@@ -11,7 +10,6 @@ import {
   Github,
   Twitter,
 } from "lucide-react";
-import AnimatedSection from "../components/Shared/AnimatedSection";
 import API from "../utils/api.js";
 import "./ContactPage.css";
 
@@ -74,7 +72,6 @@ const ContactPage = () => {
     try {
       const res = await API.post("/contact", formData);
 
-      // 🔥 BROWSER CONSOLE LOGS
       console.log("✅ CONTACT API RESPONSE:", res.data);
       console.log("📧 MAIL STATUS:", res.data.debug);
       console.log("🕒 TIME:", res.data.debug?.time);
@@ -93,13 +90,12 @@ const ContactPage = () => {
 
       setServerError(
         err.response?.data?.message ||
-        "❌ Server error. Please try again later."
+          "❌ Server error. Please try again later."
       );
     } finally {
       setIsSubmitting(false);
     }
   };
-
 
   /* ================= STATIC DATA ================= */
   const contactDetails = [
@@ -152,13 +148,13 @@ const ContactPage = () => {
       {/* HEADER */}
       <section className="contact-header pb-4">
         <div className="container">
-          <AnimatedSection>
+          <div>
             <h1>Let's Connect & Create</h1>
             <p className="subtitle">
               Have a project in mind? Let's discuss how we can work together to
               bring your ideas to life.
             </p>
-          </AnimatedSection>
+          </div>
         </div>
       </section>
 
@@ -166,161 +162,157 @@ const ContactPage = () => {
       <section className="contact-content mt-2">
         <div className="container contact-grid">
           {/* LEFT INFO */}
-          <AnimatedSection>
-            <div className="contact-info">
-              <div className="info-header">
-                <h2>Contact Information</h2>
-                <p>
-                  I'm always open to discussing freelance work, full-time roles,
-                  or collaboration.
-                </p>
-              </div>
+          <div className="contact-info">
+            <div className="info-header">
+              <h2>Contact Information</h2>
+              <p>
+                I'm always open to discussing freelance work, full-time roles,
+                or collaboration.
+              </p>
+            </div>
 
-              <div className="contact-details">
-                {contactDetails.map((item, i) => (
-                  <div className="detail-item" key={i}>
-                    <div
-                      className="detail-icon"
-                      style={{ background: item.color }}
-                    >
-                      {item.icon}
-                    </div>
-                    <div className="detail-content">
-                      <span className="detail-label">{item.label}</span>
-                      {item.link ? (
-                        <a href={item.link} className="detail-value my-2">
-                          {item.value}
-                        </a>
-                      ) : (
-                        <span className="detail-value">{item.value}</span>
-                      )}
-                    </div>
+            <div className="contact-details">
+              {contactDetails.map((item, i) => (
+                <div className="detail-item" key={i}>
+                  <div
+                    className="detail-icon"
+                    style={{ background: item.color }}
+                  >
+                    {item.icon}
                   </div>
+                  <div className="detail-content">
+                    <span className="detail-label">{item.label}</span>
+                    {item.link ? (
+                      <a href={item.link} className="detail-value my-2">
+                        {item.value}
+                      </a>
+                    ) : (
+                      <span className="detail-value">{item.value}</span>
+                    )}
+                  </div>
+                </div>
+              ))}
+            </div>
+
+            <div className="social-links">
+              <h3>Follow & Connect</h3>
+              <div className="social-icons">
+                {socialLinks.map((s, i) => (
+                  <a
+                    key={i}
+                    href={s.url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="social-icon"
+                  >
+                    {s.icon}
+                  </a>
                 ))}
               </div>
-
-              <div className="social-links">
-                <h3>Follow & Connect</h3>
-                <div className="social-icons">
-                  {socialLinks.map((s, i) => (
-                    <a
-                      key={i}
-                      href={s.url}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="social-icon"
-                    >
-                      {s.icon}
-                    </a>
-                  ))}
-                </div>
-              </div>
-
-              <div className="response-time">
-                <Clock size={18} />
-                <span>Typically respond within 24 hours</span>
-              </div>
             </div>
-          </AnimatedSection>
+
+            <div className="response-time">
+              <Clock size={18} />
+              <span>Typically respond within 24 hours</span>
+            </div>
+          </div>
 
           {/* RIGHT FORM */}
-          <AnimatedSection delay={0.2}>
-            <div className="contact-form-container">
-              <div className="form-header">
-                <h2>Send me a message</h2>
-                <p>Fill the form and I'll get back to you.</p>
+          <div className="contact-form-container">
+            <div className="form-header">
+              <h2>Send me a message</h2>
+              <p>Fill the form and I'll get back to you.</p>
+            </div>
+
+            <form className="contact-form" onSubmit={handleSubmit}>
+              <div className="form-row">
+                <div className="form-group">
+                  <label>Full Name *</label>
+                  <input
+                    name="name"
+                    value={formData.name}
+                    onChange={handleChange}
+                    className={errors.name ? "error" : ""}
+                  />
+                  {errors.name && (
+                    <span className="error-message">{errors.name}</span>
+                  )}
+                </div>
+
+                <div className="form-group">
+                  <label>Email *</label>
+                  <input
+                    name="email"
+                    value={formData.email}
+                    onChange={handleChange}
+                    className={errors.email ? "error" : ""}
+                  />
+                  {errors.email && (
+                    <span className="error-message">{errors.email}</span>
+                  )}
+                </div>
               </div>
 
-              <form className="contact-form" onSubmit={handleSubmit}>
-                <div className="form-row">
-                  <div className="form-group">
-                    <label>Full Name *</label>
-                    <input
-                      name="name"
-                      value={formData.name}
-                      onChange={handleChange}
-                      className={errors.name ? "error" : ""}
-                    />
-                    {errors.name && (
-                      <span className="error-message">{errors.name}</span>
-                    )}
-                  </div>
-
-                  <div className="form-group">
-                    <label>Email *</label>
-                    <input
-                      name="email"
-                      value={formData.email}
-                      onChange={handleChange}
-                      className={errors.email ? "error" : ""}
-                    />
-                    {errors.email && (
-                      <span className="error-message">{errors.email}</span>
-                    )}
-                  </div>
-                </div>
-
-                <div className="form-group">
-                  <label>Subject *</label>
-                  <input
-                    name="subject"
-                    value={formData.subject}
-                    onChange={handleChange}
-                    className={errors.subject ? "error" : ""}
-                  />
-                  {errors.subject && (
-                    <span className="error-message">{errors.subject}</span>
-                  )}
-                </div>
-
-                <div className="form-group">
-                  <label>Message *</label>
-                  <textarea
-                    name="message"
-                    rows="6"
-                    value={formData.message}
-                    onChange={handleChange}
-                    className={errors.message ? "error" : ""}
-                  />
-                  {errors.message && (
-                    <span className="error-message">{errors.message}</span>
-                  )}
-                </div>
-
-                {serverError && (
-                  <div className="error-message">{serverError}</div>
+              <div className="form-group">
+                <label>Subject *</label>
+                <input
+                  name="subject"
+                  value={formData.subject}
+                  onChange={handleChange}
+                  className={errors.subject ? "error" : ""}
+                />
+                {errors.subject && (
+                  <span className="error-message">{errors.subject}</span>
                 )}
+              </div>
 
-                <div className="form-footer">
-                  <motion.button
-                    type="submit"
-                    className="btn-submit"
-                    disabled={isSubmitting}
-                  >
-                    {isSubmitting ? (
-                      <>
-                        <div className="spinner" /> Sending...
-                      </>
-                    ) : (
-                      <>
-                        <Send size={18} /> Send Message
-                      </>
-                    )}
-                  </motion.button>
+              <div className="form-group">
+                <label>Message *</label>
+                <textarea
+                  name="message"
+                  rows="6"
+                  value={formData.message}
+                  onChange={handleChange}
+                  className={errors.message ? "error" : ""}
+                />
+                {errors.message && (
+                  <span className="error-message">{errors.message}</span>
+                )}
+              </div>
 
-                  {sent && (
-                    <div className="success-msg">
-                      <CheckCircle size={20} />
-                      <div>
-                        <strong>Message sent successfully!</strong>
-                        <p>I'll reply within 24 hours.</p>
-                      </div>
-                    </div>
+              {serverError && (
+                <div className="error-message">{serverError}</div>
+              )}
+
+              <div className="form-footer">
+                <button
+                  type="submit"
+                  className="btn-submit"
+                  disabled={isSubmitting}
+                >
+                  {isSubmitting ? (
+                    <>
+                      <div className="spinner" /> Sending...
+                    </>
+                  ) : (
+                    <>
+                      <Send size={18} /> Send Message
+                    </>
                   )}
-                </div>
-              </form>
-            </div>
-          </AnimatedSection>
+                </button>
+
+                {sent && (
+                  <div className="success-msg">
+                    <CheckCircle size={20} />
+                    <div>
+                      <strong>Message sent successfully!</strong>
+                      <p>I'll reply within 24 hours.</p>
+                    </div>
+                  </div>
+                )}
+              </div>
+            </form>
+          </div>
         </div>
       </section>
     </div>

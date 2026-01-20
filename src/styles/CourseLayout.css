@@ -1,0 +1,442 @@
+/* ======================================================
+   MASTER COURSE CSS (For Fundamentals & Tally)
+   ====================================================== */
+
+.android-app {
+  min-height: 100vh;
+  background: var(--bg-primary);
+  color: var(--text-primary);
+  display: flex;
+  flex-direction: column;
+}
+
+/* 🔹 TOP BAR */
+.app-bar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: var(--header-height);
+  background: var(--header-bg);
+  backdrop-filter: var(--mobnav-blur);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 var(--space-4);
+  z-index: var(--z-fixed);
+  border-bottom: 1px solid var(--border-color);
+}
+
+.app-bar-left {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+}
+
+.app-bar-title span {
+  display: block;
+  font-weight: 700;
+  font-size: var(--text-base);
+}
+
+.app-bar-title small {
+  font-size: var(--text-xs);
+  color: var(--text-secondary);
+}
+
+/* 🔹 DRAWER & OVERLAY */
+.drawer {
+  position: fixed;
+  top: 0;
+  left: -100%;
+  width: var(--sidebar-width);
+  height: 100vh;
+  background: var(--sidebar-bg);
+  z-index: var(--z-overlay);
+  transition: transform var(--transition-base), left var(--transition-base);
+  box-shadow: var(--sidebar-shadow);
+}
+
+.drawer.open {
+  left: 0;
+  transform: translateX(0);
+}
+
+.drawer-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.4);
+  z-index: calc(var(--z-overlay) - 1);
+  opacity: 0;
+  visibility: hidden;
+  transition: 0.3s;
+}
+
+.drawer-overlay.visible {
+  opacity: 1;
+  visibility: visible;
+}
+
+/* 🔹 DRAWER CONTENT */
+.drawer-header {
+  background: var(--gradient-primary);
+  color: white;
+  padding: var(--space-10) var(--space-5) var(--space-4);
+}
+
+.drawer-list {
+  height: calc(100vh - 200px);
+  overflow-y: auto;
+  padding: 10px 0;
+}
+
+.drawer-item {
+  padding: var(--space-4) var(--space-6);
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  color: var(--text-primary);
+  cursor: pointer;
+  border: none;
+  background: none;
+  width: 100%;
+}
+
+.drawer-item.active,
+.drawer-item.active-parent {
+  background: var(--primary-light);
+  color: var(--primary);
+  font-weight: 700;
+  border-right: 4px solid var(--primary);
+}
+
+/* 🔹 CONTENT AREA */
+.content-area {
+  margin-top: var(--header-height);
+  /* padding: var(--space-5); */
+  padding-bottom: 100px;
+  flex: 1;
+}
+
+.content-card {
+  background: var(--bg-card);
+  /* border-radius: var(--border-radius-xl); */
+  /* padding: var(--space-6); */
+  box-shadow: var(--shadow-md);
+  border: 1px solid var(--border-light);
+}
+
+/* 🔹 BOTTOM NAV */
+.bottom-nav {
+  position: fixed;
+  bottom: 0;
+  width: 100%;
+  height: var(--mobnav-height);
+  background: var(--mobnav-bg);
+  backdrop-filter: var(--mobnav-blur);
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  border-top: 1px solid var(--border-color);
+  z-index: var(--z-fixed);
+}
+
+.nav-tab.fab,
+.mobile-fab-menu {
+  background: var(--gradient-primary);
+  color: white;
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  transform: translateY(-15px);
+  display: grid;
+  place-items: center;
+  box-shadow: var(--nav-active-shadow);
+  border: none;
+}
+
+.icon-btn {
+  position: relative;
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  border: none;
+  background: #ffffff;
+  color: #333;
+  font-size: 22px;
+  cursor: pointer;
+  outline: none;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+  overflow: hidden;
+}
+
+/* Ripple effect */
+.icon-btn .ripple {
+  position: absolute;
+  background: rgba(0,0,0,0.25);
+  border-radius: 50%;
+  transform: scale(0);
+  animation: ripple 0.6s linear;
+}
+
+@keyframes ripple {
+  to {
+    transform: scale(4);
+    opacity: 0;
+  }
+}
+
+/* Press effect */
+.icon-btn:active {
+  box-shadow: 0 1px 3px rgba(0,0,0,0.3);
+}
+
+.exit-top-btn {
+  height: 40px;
+  padding: 0 24px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  
+  /* Pill Shape */
+  border-radius: 20px; 
+  border: none;
+  
+  /* M3 Tonal Palette */
+  background-color: #EADDFF; /* Soft lavender/grey */
+  color: #21005D; /* Deep purple text */
+  
+  font-family: 'Segoe UI', Roboto, sans-serif;
+  font-size: 0.875rem;
+  font-weight: 500;
+  letter-spacing: 0.1px;
+  
+  cursor: pointer;
+  transition: box-shadow 0.2s, background-color 0.2s;
+}
+
+.exit-top-btn:active {
+  background-color: #D0BCFF; /* Slightly darker on press */
+}
+
+
+.card,.card-body{
+  width: 100% !important;
+}
+/* ..................................Chapter Header...................  */
+.chapter-header {
+  padding: 20px 16px;
+  border-radius: 16px;
+
+  background: linear-gradient(135deg, #1e88e5, #1565c0);
+  color: #fff;
+
+  box-shadow: 0 6px 14px rgba(0,0,0,0.25);
+
+  max-width: 95%;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+/* Title */
+.chapter-header h1 {
+  margin-bottom: 6px;
+  letter-spacing: 0.5px;
+}
+
+/* Subtitle */
+.chapter-header p {
+  margin: 0;
+  font-size: 14px;
+  opacity: 0.9;
+}
+
+/* Mobile friendly */
+@media (max-width: 576px) {
+  .chapter-header {
+    padding: 16px 14px;
+    border-radius: 14px;
+  }
+
+  .chapter-header h1 {
+    font-size: 1.2rem;
+  }
+}
+/* ...........Responsive Table............  */
+@media (max-width: 576px) {
+  .table-responsive {
+    font-size: 0.8rem;
+  }
+}
+/* ....... Cards.............  */
+
+/* Material 3 Tonal Card Design */
+.android-app-card {
+  background-color: #F3EDF7 !important; /* M3 Surface Tonal Palette */
+  border-radius: 28px !important;       /* Extra rounded corners */
+  border: none !important;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+}
+
+.android-app-card:hover {
+  background-color: #EADDFF !important; /* Slightly darker on hover */
+  transform: translateY(-4px);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+}
+
+/* Icon Container - Settings style */
+.android-icon-wrapper {
+  width: 48px;
+  height: 48px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 16px;
+  background-color: #E8DEF8;
+  color: #21005D;
+  margin-bottom: 1rem;
+}
+
+/* Clean List Items */
+.android-list-unstyled {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.android-list-item {
+  display: flex;
+  align-items: center;
+  padding: 6px 0;
+  color: #49454F;
+  font-size: 0.95rem;
+  font-weight: 400;
+}
+
+.android-bullet {
+  width: 6px;
+  height: 6px;
+  background-color: #6750A4;
+  border-radius: 50%;
+  margin-right: 12px;
+  flex-shrink: 0;
+}
+
+/* Section Header Style */
+.android-section-title {
+  color: #1C1B1F;
+  font-weight: 700;
+  font-size: 1.25rem;
+  margin-bottom: 1.5rem;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+/* Learning Path Timeline Container */
+.android-timeline-card {
+  background-color: #ffffff !important;
+  border-radius: 20px !important;
+  border: 1px solid #e0e0e0 !important;
+  position: relative;
+  overflow: hidden;
+}
+
+/* Badge/Level style at the top */
+.android-level-badge {
+  display: inline-block;
+  padding: 4px 12px;
+  border-radius: 8px;
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  margin-bottom: 12px;
+}
+
+/* Custom Step List */
+.step-list {
+  list-style: none;
+  padding-left: 20px;
+  border-left: 2px dashed #6750A4; /* Path line */
+  margin-left: 10px;
+}
+
+.step-item {
+  position: relative;
+  padding-bottom: 15px;
+}
+
+/* Bullet points as "Nodes" */
+.step-item::before {
+  content: "";
+  position: absolute;
+  left: -26px;
+  top: 6px;
+  width: 10px;
+  height: 10px;
+  background-color: #6750A4;
+  border-radius: 50%;
+  border: 2px solid white;
+  box-shadow: 0 0 0 2px #6750A4;
+}/* Container for the entire timeline */
+.android-history-card {
+  background-color: #FFF !important;
+  border-radius: 28px !important;
+  border: 1px solid #CAC4D0 !important; /* M3 Outline Variant */
+  overflow: hidden;
+}
+
+/* Timeline vertical line logic */
+.android-timeline-wrapper {
+  position: relative;
+  padding-left: 24px;
+}
+
+.android-timeline-line {
+  position: absolute;
+  left: 36px;
+  top: 0;
+  bottom: 0;
+  width: 2px;
+  background-color: #EADDFF; /* Light purple line */
+  z-index: 1;
+}
+
+/* Individual Timeline Item */
+.android-history-item {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  gap: 20px;
+  padding-bottom: 32px;
+}
+
+.android-history-item:last-child {
+  padding-bottom: 0;
+}
+
+/* The Year Circle (Node) */
+.year-node {
+  width: 24px;
+  height: 24px;
+  background-color: #6750A4;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  border: 4px solid #FFF;
+  box-shadow: 0 0 0 1px #6750A4;
+}
+
+.history-content {
+  background: #F7F2FA;
+  padding: 12px 20px;
+  border-radius: 16px;
+  flex: 1;
+}

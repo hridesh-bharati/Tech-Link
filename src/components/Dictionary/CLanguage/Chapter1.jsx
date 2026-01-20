@@ -8,16 +8,16 @@ export default function Chapter1() {
     <div className="chapter-content container-fluid px-3 pb-5">
 
       {/* Header */}
-      <div className="chapter-header mb-4 text-center">
+      <div className="chapter-header my-4 py-2 text-white text-center">
         <h1 className="h2 fw-bold">
           📘 Chapter 1: Introduction to C Programming
         </h1>
-        <p className="lead text-muted">Learn the foundation of modern programming languages</p>
+        <p className="small text-light">Learn the foundation of modern programming languages</p>
       </div>
 
       {/* Hero Section */}
       <div className="card hero-card mb-4 shadow-lg">
-        <div className="card-body text-white p-4" style={{ background: 'linear-gradient(135deg, var(--primary), var(--info))' }}>
+        <div className="card-body text-white p-4 w-100" style={{ background: 'linear-gradient(135deg, var(--primary), var(--info))' }}>
           <div className="row align-items-center">
             <div className="col-md-8">
               <h1 className="display-6 fw-bold">C Programming Language</h1>

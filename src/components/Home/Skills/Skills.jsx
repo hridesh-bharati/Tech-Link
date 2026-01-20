@@ -1,11 +1,9 @@
 import React from "react";
 import { motion } from "framer-motion";
 import GradientText from "../../Shared/GradientText";
-import AnimatedSection from "../../Shared/AnimatedSection";
 import "./Skills.css";
 
 const Skills = () => {
-
   const softSkills = [
     { name: "Problem Solving", level: 95, gradient: "linear-gradient(90deg,#8E2DE2,#4A00E0)" },
     { name: "Communication", level: 90, gradient: "linear-gradient(90deg,#00C6FF,#0072FF)" },
@@ -30,10 +28,10 @@ const Skills = () => {
           <h2><GradientText>Skills & Expertise</GradientText></h2>
           <p>Technologies & tools I use professionally</p>
         </div>
-     
-        {/* SOFT + TOOLS */}
+      
         <div className="skills-columns">
-          <AnimatedSection delay={0.4}>
+          {/* Column 1: Soft Skills */}
+          <div className="skills-column-item">
             <h3 className="skills-heading"><i className="bi bi-person"></i> Soft Skills</h3>
             {softSkills.map(skill => (
               <div className="soft-skill" key={skill.name}>
@@ -48,13 +46,15 @@ const Skills = () => {
                     initial={{ width: 0 }}
                     whileInView={{ width: `${skill.level}%` }}
                     viewport={{ once: true }}
+                    transition={{ duration: 1, ease: "easeOut" }}
                   />
                 </div>
               </div>
             ))}
-          </AnimatedSection>
+          </div>
 
-          <AnimatedSection delay={0.6}>
+          {/* Column 2: Tools */}
+          <div className="skills-column-item">
             <h3 className="skills-heading"><i className="bi bi-tools"></i> Tools</h3>
             <div className="tools-grid">
               {tools.map(tool => (
@@ -74,7 +74,7 @@ const Skills = () => {
                 </motion.div>
               ))}
             </div>
-          </AnimatedSection>
+          </div>
         </div>
       </div>
     </section>
