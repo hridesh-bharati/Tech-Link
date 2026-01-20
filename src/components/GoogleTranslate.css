@@ -1,0 +1,98 @@
+/* Hide Google's banner */
+.goog-te-banner-frame {
+  display: none !important;
+}
+
+body {
+  top: 0 !important;
+}
+
+/* Widget styling */
+.google-translate-widget {
+  position: fixed !important;
+  top: 15px !important;
+  right: 15px !important;
+  z-index: 99999 !important;
+  background: white !important;
+  padding: 8px 12px !important;
+  border-radius: 10px !important;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.15) !important;
+  border: 1px solid #e0e0e0 !important;
+  min-width: 140px !important;
+}
+
+/* Dropdown styling */
+.goog-te-gadget-simple {
+  background: transparent !important;
+  border: none !important;
+  font-size: 14px !important;
+  color: #333 !important;
+}
+
+.goog-te-menu-value span {
+  color: #333 !important;
+}
+
+.goog-te-menu-value img {
+  display: none !important;
+}
+
+.goog-te-menu2 {
+  max-width: 200px !important;
+  border-radius: 8px !important;
+  overflow: hidden !important;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.15) !important;
+}
+
+
+
+
+
+/* Google Translate Fixes */
+.goog-te-banner-frame.skiptranslate {
+  display: none !important;
+}
+
+.goog-te-gadget-icon {
+  display: none !important;
+}
+
+.goog-te-menu-value {
+  color: transparent !important;
+}
+
+.goog-te-menu-value span {
+  display: none !important;
+}
+
+/* Ensure Google Translate dropdown is visible */
+.goog-te-menu2 {
+  z-index: 999999 !important;
+  position: fixed !important;
+  top: 50% !important;
+  left: 50% !important;
+  transform: translate(-50%, -50%) !important;
+  max-height: 70vh !important;
+  overflow-y: auto !important;
+}
+
+/* Hide the language bar at top */
+.goog-te-banner-frame {
+  visibility: hidden !important;
+  height: 0 !important;
+  width: 0 !important;
+  display: none !important;
+}
+
+/* Fix body positioning */
+body {
+  top: 0 !important;
+  position: static !important;
+}
+
+/* Button hover effect */
+.google-translate-btn:hover {
+  background-color: rgba(13, 110, 253, 0.1) !important;
+  transform: translateY(-2px);
+  transition: all 0.3s ease;
+}

@@ -3,7 +3,6 @@ import { HelmetProvider } from "react-helmet-async";
 import { ToastContainer } from "react-toastify";
 import { ThemeProvider } from './contexts/ThemeContext';
 import "react-toastify/dist/ReactToastify.css";
-
 /* Layout & Pages */
 import Layout from "./components/Layout/Layout";
 import CourseDetail from "./pages/CourseDetail";

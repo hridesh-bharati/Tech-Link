@@ -53,3 +53,4 @@
 /* Dark mode tweaks */
 [data-theme="dark"] .nav-pill-btn:hover { background-color: var(--bg-secondary); }
 [data-theme="dark"] .bg-body-tertiary { background-color: #202c33 !important; }
+

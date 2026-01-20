@@ -4,6 +4,7 @@ import { useAuth } from "../../contexts/AuthContext";
 import { useTheme } from "../../contexts/ThemeContext";
 import AppSidebar from "./AppSidebar";
 import "./Header.css";
+import GoogleTranslate from "../GoogleTranslate";
 
 // Navigation configuration
 const NAV_CONFIG = {
@@ -175,12 +176,12 @@ export default function Header() {
   // Effects
   useEffect(() => {
     window.addEventListener('scroll', handleScroll, { passive: true });
-    
+
     const throttledNavScroll = () => {
       requestAnimationFrame(handleMobileNavScroll);
     };
     window.addEventListener('scroll', throttledNavScroll, { passive: true });
-    
+
     window.addEventListener('resize', handleResize);
 
     // Click outside handler
@@ -244,7 +245,7 @@ export default function Header() {
             >
               <i className="bi bi-list" />
             </button>
-
+            <GoogleTranslate />
             <Link
               to="/"
               className="logo-container"
@@ -279,7 +280,7 @@ export default function Header() {
             {!isDesktop && (
               <div className="mobile-header-right">
                 {/* MOBILE THEME TOGGLE REMOVED - Now only in Desktop */}
-                
+
                 {/* Mobile User/Auth Button */}
                 {user ? (
                   <button
@@ -464,52 +465,52 @@ export default function Header() {
       </header>
 
       {/* MOBILE BOTTOM NAVIGATION */}
-{!isDesktop && (
-  <nav
-    className={`mobile-bottom-nav ${mobileNavVisible ? 'nav-visible' : 'nav-hidden'}`}
-    role="navigation"
-    aria-label="Mobile navigation"
-  >
-    {/* Background div को और prominent बनाएं */}
-    <div className="nav-background"></div>
-    
-    <div className="nav-items-container">
-      {NAV_CONFIG.mobile.map((item) => {
-        const active = isActive(item.path);
-        return (
-          <Link
-            key={item.id}
-            to={item.path}
-            className={`mobile-nav-btn ${active ? 'active' : ''}`}
-            onClick={(e) => {
-              e.preventDefault();
-              handleNavigate(item.path, { hapticFeedback: false });
-            }}
-            aria-current={active ? 'page' : undefined}
-          >
-            <div className="mobile-nav-icon-wrapper">
-              <div className="nav-icon-circle">
-                <i className={`bi ${active ? item.iconActive || item.icon : item.icon}`} />
-              </div>
-            </div>
-            <span className="mobile-nav-label">{item.label}</span>
-          </Link>
-        );
-      })}
-
-      <div className="nav-center-action">
-        <button
-          className="center-action-btn"
-          onClick={() => handleNavigate('/contact')}
-          aria-label="Create new"
+      {!isDesktop && (
+        <nav
+          className={`mobile-bottom-nav ${mobileNavVisible ? 'nav-visible' : 'nav-hidden'}`}
+          role="navigation"
+          aria-label="Mobile navigation"
         >
-          <i className="bi bi-telephone-fill"></i>
+          {/* Background div को और prominent बनाएं */}
+          <div className="nav-background"></div>
 
-        </button>
-      </div>
-    </div>
-  </nav>
-)}
+          <div className="nav-items-container">
+            {NAV_CONFIG.mobile.map((item) => {
+              const active = isActive(item.path);
+              return (
+                <Link
+                  key={item.id}
+                  to={item.path}
+                  className={`mobile-nav-btn ${active ? 'active' : ''}`}
+                  onClick={(e) => {
+                    e.preventDefault();
+                    handleNavigate(item.path, { hapticFeedback: false });
+                  }}
+                  aria-current={active ? 'page' : undefined}
+                >
+                  <div className="mobile-nav-icon-wrapper">
+                    <div className="nav-icon-circle">
+                      <i className={`bi ${active ? item.iconActive || item.icon : item.icon}`} />
+                    </div>
+                  </div>
+                  <span className="mobile-nav-label">{item.label}</span>
+                </Link>
+              );
+            })}
+
+            <div className="nav-center-action">
+              <button
+                className="center-action-btn"
+                onClick={() => handleNavigate('/contact')}
+                aria-label="Create new"
+              >
+                <i className="bi bi-telephone-fill"></i>
+
+              </button>
+            </div>
+          </div>
+        </nav>
+      )}
       {/* SPACER FOR FIXED HEADER */}
       <div style={{ height: '60px' }} aria-hidden="true" />
 
