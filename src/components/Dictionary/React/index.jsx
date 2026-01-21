@@ -1,46 +1,39 @@
+// src/components/Dictionary/ReactCourse/index.jsx
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-// FaChevronLeft remove kar diya kyunki ab uski zaroorat nahi hai
 import { FaHome, FaBars, FaTimes, FaChevronRight } from "react-icons/fa";
 
-/* ===== Chapters ===== */
-import Chapter1 from "./Chapter1"; import Chapter2 from "./Chapter2";
-import Chapter3 from "./Chapter3"; import Chapter4 from "./Chapter4";
-import Chapter5 from "./Chapter5"; import Chapter6 from "./Chapter6";
-import Chapter7 from "./Chapter7"; import Chapter8 from "./Chapter8";
-import Chapter9 from "./Chapter9"; import Chapter10 from "./Chapter10";
-import Chapter11 from "./Chapter11"; import Chapter12 from "./Chapter12";
-import Chapter13 from "./Chapter13"; import Chapter14 from "./Chapter14";
-import Chapter15 from "./Chapter15"; import Chapter16 from "./Chapter16";
-import Chapter17 from "./Chapter17"; import Chapter18 from "./Chapter18";
-import Chapter19 from "./Chapter19"; import Chapter20 from "./Chapter20";
+// Chapters Import
+import Intro from "./Chapters/Intro.jsx";
+import JSX from "./Chapters/JSX.jsx";
+// import Components from "./Chapters/Components.jsx";
+// import PropsState from "./Chapters/PropsState.jsx";
+// import Lifecycle from "./Chapters/Lifecycle.jsx";
+// import Events from "./Chapters/Events.jsx";
+// import Hooks from "./Chapters/Hooks.jsx";
+// import Router from "./Chapters/Router.jsx";
+// import Redux from "./Chapters/Redux.jsx";
+// import ContextAPI from "./Chapters/ContextAPI.jsx";
 
 const chapters = [
-  { id: 0, title: "C Introduction" }, { id: 1, title: "C Get Started" },
-  { id: 2, title: "C Syntax" }, { id: 3, title: "C Output" },
-  { id: 4, title: "C Comments" }, { id: 5, title: "C Variables" },
-  { id: 6, title: "C Data Types" }, { id: 7, title: "C Type Conversion" },
-  { id: 8, title: "C Constants" }, { id: 9, title: "C Operators" },
-  { id: 10, title: "C Booleans" }, { id: 11, title: "C If Else" },
-  { id: 12, title: "C Switch" }, { id: 13, title: "C While Loop" },
-  { id: 14, title: "C For Loop" }, { id: 15, title: "C Break Continue" },
-  { id: 16, title: "C Arrays" }, { id: 17, title: "C Strings" },
-  { id: 18, title: "C User Input" }, { id: 19, title: "C Memory Address" }
+  { id: 0, title: "Introduction", component: <Intro /> },
+  { id: 1, title: "JSX", component: <JSX /> },
+  // { id: 2, title: "Components", component: <Components /> },
+  // { id: 3, title: "Props & State", component: <PropsState /> },
+  // { id: 4, title: "Lifecycle Methods", component: <Lifecycle /> },
+  // { id: 5, title: "Events", component: <Events /> },
+  // { id: 6, title: "Hooks", component: <Hooks /> },
+  // { id: 7, title: "React Router", component: <Router /> },
+  // { id: 8, title: "Redux", component: <Redux /> },
+  // { id: 9, title: "Context API", component: <ContextAPI /> },
 ];
 
-const chapterComponents = [
-  Chapter1, Chapter2, Chapter3, Chapter4, Chapter5,
-  Chapter6, Chapter7, Chapter8, Chapter9, Chapter10,
-  Chapter11, Chapter12, Chapter13, Chapter14, Chapter15,
-  Chapter16, Chapter17, Chapter18, Chapter19, Chapter20
-];
-
-export default function CLanguage() {
+export default function ReactCourse() {
   const [selected, setSelected] = useState(0);
   const [showSidebar, setShowSidebar] = useState(false);
   const navigate = useNavigate();
 
-  const CurrentChapter = chapterComponents[selected];
+  const currentChapter = chapters[selected];
 
   useEffect(() => {
     const scrollDiv = document.querySelector(".scroll-content-unique");
@@ -53,19 +46,19 @@ export default function CLanguage() {
   }, [showSidebar]);
 
   return (
-    <div className="app-container-unique">
+    <div className="app-container-unique react-theme">
 
       {/* ===== SIDEBAR ===== */}
       <aside className={`sidebar-wrapper-unique ${showSidebar ? "open" : ""}`}>
         <div className="sidebar-header-unique">
-          <div className="header-top">
-            <div className="badge-c">C</div>
+          <div className="header-top react-bg">
+            <div className="badge-c">React</div>
             <button className="close-btn-unique" onClick={() => setShowSidebar(false)}>
               <FaTimes />
             </button>
           </div>
           <div className="header-meta">
-            <strong>C Programming</strong>
+            <strong>React Tutorial</strong>
             <div className="progress-mini">
               <div className="progress-fill" style={{ width: `${((selected + 1) / chapters.length) * 100}%` }}></div>
             </div>
@@ -100,7 +93,7 @@ export default function CLanguage() {
             <button className="hamburger-unique" onClick={() => setShowSidebar(true)}>
               <FaBars />
             </button>
-            <h5 className="chapter-title-text">{chapters[selected].title}</h5>
+            <h5 className="chapter-title-text">{currentChapter.title}</h5>
           </div>
           <button className="home-btn-unique" onClick={() => navigate("/learn")}>
             <FaHome />
@@ -109,15 +102,13 @@ export default function CLanguage() {
 
         <div className="scroll-content-unique">
           <div className="content-card-unique">
-            <CurrentChapter />
+            {currentChapter.component}
           </div>
-
-          {/* Footer buttons removed from here */}
         </div>
       </main>
 
       {/* ===== OVERLAY ===== */}
-      {showSidebar && <div className="overlay-unique" onClick={() => setShowSidebar(false)}></div>}
+      {showSidebar && <div className="overlay-unique" onClick={() => setShowSidebar(false)} />}
     </div>
   );
 }

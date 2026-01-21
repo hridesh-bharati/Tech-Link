@@ -257,7 +257,6 @@ const Layout = () => {
           </div>
         </div>
       </main>
-      <Footer />
     </div>
   );
 };

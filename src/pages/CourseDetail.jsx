@@ -8,6 +8,9 @@ import CLanguage from "../components/Dictionary/CLanguage";
 import CPlusPlus from "../components/Dictionary/CPlusPlus";
 import Tally from "../components/Dictionary/Tally";
 import TypingMaster from "../components/Dictionary/TypingMaster";
+import Html from "../components/Dictionary/Html";
+import JavaScript from "../components/Dictionary/JavaScript";
+import ReactCourse from "../components/Dictionary/React"
 
 export const AVAILABLE_COURSES = [
   { id: "fundamentals", component: <Fundamentals /> },
@@ -15,6 +18,9 @@ export const AVAILABLE_COURSES = [
   { id: "tally", component: <Tally /> },
   { id: "c", component: <CLanguage /> },
   { id: "cpp", component: <CPlusPlus /> },
+  { id: "html", component: <Html /> },
+  { id: "js", component: <JavaScript /> },
+  { id: "react", component: <ReactCourse /> },
 ];
 
 export default function CourseDetail() {

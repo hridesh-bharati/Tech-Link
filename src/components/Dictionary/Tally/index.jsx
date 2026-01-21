@@ -1,7 +1,7 @@
-// src\components\Dictionary\Tally\index.jsx
+// src/components/Dictionary/Tally/index.jsx
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { FaSignOutAlt, FaHome, FaChevronDown, FaChevronUp } from "react-icons/fa";
+import { FaHome, FaBars, FaTimes, FaChevronRight, FaChevronDown, FaChevronUp } from "react-icons/fa";
 
 import Intro from "./Chapters/Intro.jsx";
 import Company from "./Chapters/Company.jsx";
@@ -13,7 +13,7 @@ import Payment from "./Chapters/Payment.jsx";
 import Receipt from "./Chapters/Receipt.jsx";
 import Contra from "./Chapters/Contra.jsx";
 import Journal from "./Chapters/Journal.jsx";
-import SalesPurchase from "./Chapters/SalesPurchase.jsx";  
+import SalesPurchase from "./Chapters/SalesPurchase.jsx";
 
 const chapters = [
   {
@@ -54,60 +54,49 @@ const chapters = [
 ];
 
 export default function Tally() {
-  const [drawer, setDrawer] = useState(false);
-  const [activeSub, setActiveSub] = useState(chapters[0].subChapters[0]);
-  const [openDropdown, setOpenDropdown] = useState(1);
-  const [desktop, setDesktop] = useState(window.innerWidth >= 992);
+  const [selectedSub, setSelectedSub] = useState(chapters[0].subChapters[0]);
+  const [showSidebar, setShowSidebar] = useState(false);
+  const [openDropdown, setOpenDropdown] = useState(chapters[0].id);
   const navigate = useNavigate();
 
+  /* Scroll to top on chapter change */
   useEffect(() => {
-    const check = () => setDesktop(window.innerWidth >= 992);
-    window.addEventListener("resize", check);
-    return () => window.removeEventListener("resize", check);
-  }, []);
+    const scrollDiv = document.querySelector(".scroll-content-unique");
+    if (scrollDiv) scrollDiv.scrollTop = 0;
+  }, [selectedSub]);
 
+  /* Lock scroll when sidebar open */
   useEffect(() => {
-    window.scrollTo(0, 0);
-  }, [activeSub]);
+    document.body.style.overflow = showSidebar ? "hidden" : "auto";
+    return () => (document.body.style.overflow = "auto");
+  }, [showSidebar]);
 
   return (
-    <div className="android-app tally-theme">
-      {/* 🔹 TOP BAR */}
-      <header className="app-bar">
-        <div className="app-bar-left">
-          <button className="icon-btn ripple" onClick={() => setDrawer(true)}>☰</button>
-          <div className="app-bar-title">
-            <span>{activeSub.title}</span>
-            <small>Tally Prime Tutorial</small>
+    <div className="app-container-unique tally-theme">
+
+      {/* ===== SIDEBAR ===== */}
+      <aside className={`sidebar-wrapper-unique ${showSidebar ? "open" : ""}`}>
+        <div className="sidebar-header-unique">
+          <div className="header-top tally-bg">
+            <div className="badge-c">TP</div>
+            <button className="close-btn-unique" onClick={() => setShowSidebar(false)}>
+              <FaTimes />
+            </button>
           </div>
-        </div>
-        <button className="exit-top-btn" onClick={() => navigate("/learn")}>
-          <FaHome />
-        </button>
-      </header>
-
-      {/* 🔹 DRAWER OVERLAY */}
-      <div className={`drawer-overlay ${drawer ? "visible" : ""}`} onClick={() => setDrawer(false)} />
-
-      {/* 🔹 ANDROID SIDEBAR (DRAWER) */}
-      <aside className={`drawer ${drawer ? "open" : ""}`}>
-        <div className="drawer-header tally-bg">
-          <div className="drawer-logo">TP</div>
-          <div className="drawer-header-text">
-             <h4>Tally Prime</h4>
-             <p>Accounting Masterclass</p>
+          <div className="header-meta">
+            <strong>Tally Prime</strong>
           </div>
         </div>
 
-        <div className="drawer-list">
+        <div className="sidebar-list-unique">
           {chapters.map(ch => (
             <div key={ch.id} className="accordion-item">
-              <button 
-                className={`drawer-item ripple ${activeSub.id.toString().startsWith(ch.id) ? "active-parent" : ""}`}
+              <button
+                className={`list-item-unique ${selectedSub.id.toString().startsWith(ch.id) ? "active-parent" : ""}`}
                 onClick={() => setOpenDropdown(openDropdown === ch.id ? null : ch.id)}
               >
-                <span className="ch-icon">{ch.icon}</span>
-                <span className="flex-grow-1">{ch.title}</span>
+                <span className="index-circle">{ch.icon}</span>
+                <span className="chapter-title">{ch.title}</span>
                 {openDropdown === ch.id ? <FaChevronUp size={12}/> : <FaChevronDown size={12}/>}
               </button>
 
@@ -116,10 +105,10 @@ export default function Tally() {
                   {ch.subChapters.map(sub => (
                     <div
                       key={sub.id}
-                      className={`sub-item ripple ${activeSub.id === sub.id ? "active" : ""}`}
+                      className={`sub-item ${selectedSub.id === sub.id ? "active" : ""}`}
                       onClick={() => {
-                        setActiveSub(sub);
-                        setDrawer(false);
+                        setSelectedSub(sub);
+                        setShowSidebar(false);
                       }}
                     >
                       • {sub.title}
@@ -132,12 +121,30 @@ export default function Tally() {
         </div>
       </aside>
 
-      {/* 🔹 CONTENT AREA */}
-      <main className="content-area">
-        <div className="content-card ripple-entry">
-          {activeSub.component}
+      {/* ===== MAIN CONTENT ===== */}
+      <main className="main-section-unique">
+        <nav className="top-nav-unique">
+          <div className="nav-left">
+            <button className="hamburger-unique" onClick={() => setShowSidebar(true)}>
+              <FaBars />
+            </button>
+            <h5 className="chapter-title-text">{selectedSub.title}</h5>
+          </div>
+
+          <button className="home-btn-unique" onClick={() => navigate("/learn")}>
+            <FaHome />
+          </button>
+        </nav>
+
+        <div className="scroll-content-unique">
+          <div className="content-card-unique">
+            {selectedSub.component}
+          </div>
         </div>
       </main>
+
+      {/* ===== OVERLAY ===== */}
+      {showSidebar && <div className="overlay-unique" onClick={() => setShowSidebar(false)} />}
     </div>
   );
 }

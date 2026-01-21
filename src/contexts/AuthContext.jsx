@@ -1,55 +1,37 @@
 import { createContext, useContext, useEffect, useState } from "react";
-import API from "../utils/api";
 
 const AuthContext = createContext();
-export const useAuth = () => useContext(AuthContext);
 
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
 
-  // 🔁 APP LOAD → localStorage se user restore
+  // 🔁 Page refresh pe user restore
   useEffect(() => {
-    const token = localStorage.getItem("token");
-    const storedUser = localStorage.getItem("user");
-
-    if (token && storedUser) {
+    const storedUser = localStorage.getItem("authUser");
+    if (storedUser) {
       setUser(JSON.parse(storedUser));
     }
-
     setLoading(false);
   }, []);
 
-  // 🔐 SIGNUP
-  const signup = async (data) => {
-    const res = await API.post("/auth/signup", data, {
-      headers: { "Content-Type": "multipart/form-data" },
-    });
-
-    localStorage.setItem("token", res.data.token);
-    localStorage.setItem("user", JSON.stringify(res.data.user));
-    setUser(res.data.user);
-  };
-
-  // 🔐 LOGIN
-  const login = async (email, password) => {
-    const res = await API.post("/auth/login", { email, password });
-
-    localStorage.setItem("token", res.data.token);
-    localStorage.setItem("user", JSON.stringify(res.data.user));
-    setUser(res.data.user);
+  // ✅ LOGIN
+  const login = (userData) => {
+    setUser(userData);
+    localStorage.setItem("authUser", JSON.stringify(userData));
   };
 
   // 🚪 LOGOUT
   const logout = () => {
-    localStorage.removeItem("token");
-    localStorage.removeItem("user");
     setUser(null);
+    localStorage.removeItem("authUser");
   };
 
   return (
-    <AuthContext.Provider value={{ user, signup, login, logout, loading }}>
+    <AuthContext.Provider value={{ user, login, logout, loading }}>
       {children}
     </AuthContext.Provider>
   );
 };
+
+export const useAuth = () => useContext(AuthContext);

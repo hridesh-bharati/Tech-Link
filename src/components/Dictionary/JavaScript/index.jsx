@@ -1,46 +1,41 @@
+// src/components/Dictionary/JavaScript/index.jsx
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-// FaChevronLeft remove kar diya kyunki ab uski zaroorat nahi hai
 import { FaHome, FaBars, FaTimes, FaChevronRight } from "react-icons/fa";
 
-/* ===== Chapters ===== */
-import Chapter1 from "./Chapter1"; import Chapter2 from "./Chapter2";
-import Chapter3 from "./Chapter3"; import Chapter4 from "./Chapter4";
-import Chapter5 from "./Chapter5"; import Chapter6 from "./Chapter6";
-import Chapter7 from "./Chapter7"; import Chapter8 from "./Chapter8";
-import Chapter9 from "./Chapter9"; import Chapter10 from "./Chapter10";
-import Chapter11 from "./Chapter11"; import Chapter12 from "./Chapter12";
-import Chapter13 from "./Chapter13"; import Chapter14 from "./Chapter14";
-import Chapter15 from "./Chapter15"; import Chapter16 from "./Chapter16";
-import Chapter17 from "./Chapter17"; import Chapter18 from "./Chapter18";
-import Chapter19 from "./Chapter19"; import Chapter20 from "./Chapter20";
+// Chapters Import
+import Intro from "./Chapters/Intro.jsx";
+import Variables from "./Chapters/Variables.jsx";
+// import DataTypes from "./Chapters/DataTypes.jsx";
+// import Operators from "./Chapters/Operators.jsx";
+// import Functions from "./Chapters/Functions.jsx";
+// import Loops from "./Chapters/Loops.jsx";
+// import Conditionals from "./Chapters/Conditionals.jsx";
+// import Arrays from "./Chapters/Arrays.jsx";
+// import Objects from "./Chapters/Objects.jsx";
+// import DOM from "./Chapters/DOM.jsx";
+// import Events from "./Chapters/Events.jsx";
 
 const chapters = [
-  { id: 0, title: "C Introduction" }, { id: 1, title: "C Get Started" },
-  { id: 2, title: "C Syntax" }, { id: 3, title: "C Output" },
-  { id: 4, title: "C Comments" }, { id: 5, title: "C Variables" },
-  { id: 6, title: "C Data Types" }, { id: 7, title: "C Type Conversion" },
-  { id: 8, title: "C Constants" }, { id: 9, title: "C Operators" },
-  { id: 10, title: "C Booleans" }, { id: 11, title: "C If Else" },
-  { id: 12, title: "C Switch" }, { id: 13, title: "C While Loop" },
-  { id: 14, title: "C For Loop" }, { id: 15, title: "C Break Continue" },
-  { id: 16, title: "C Arrays" }, { id: 17, title: "C Strings" },
-  { id: 18, title: "C User Input" }, { id: 19, title: "C Memory Address" }
+  { id: 0, title: "Introduction", component: <Intro /> },
+  { id: 1, title: "Variables", component: <Variables /> },
+//   { id: 2, title: "Data Types", component: <DataTypes /> },
+//   { id: 3, title: "Operators", component: <Operators /> },
+//   { id: 4, title: "Functions", component: <Functions /> },
+//   { id: 5, title: "Loops", component: <Loops /> },
+//   { id: 6, title: "Conditionals", component: <Conditionals /> },
+//   { id: 7, title: "Arrays", component: <Arrays /> },
+//   { id: 8, title: "Objects", component: <Objects /> },
+//   { id: 9, title: "DOM Manipulation", component: <DOM /> },
+//   { id: 10, title: "Events", component: <Events /> },
 ];
 
-const chapterComponents = [
-  Chapter1, Chapter2, Chapter3, Chapter4, Chapter5,
-  Chapter6, Chapter7, Chapter8, Chapter9, Chapter10,
-  Chapter11, Chapter12, Chapter13, Chapter14, Chapter15,
-  Chapter16, Chapter17, Chapter18, Chapter19, Chapter20
-];
-
-export default function CLanguage() {
+export default function JavaScriptCourse() {
   const [selected, setSelected] = useState(0);
   const [showSidebar, setShowSidebar] = useState(false);
   const navigate = useNavigate();
 
-  const CurrentChapter = chapterComponents[selected];
+  const currentChapter = chapters[selected];
 
   useEffect(() => {
     const scrollDiv = document.querySelector(".scroll-content-unique");
@@ -53,19 +48,19 @@ export default function CLanguage() {
   }, [showSidebar]);
 
   return (
-    <div className="app-container-unique">
+    <div className="app-container-unique js-theme">
 
       {/* ===== SIDEBAR ===== */}
       <aside className={`sidebar-wrapper-unique ${showSidebar ? "open" : ""}`}>
         <div className="sidebar-header-unique">
-          <div className="header-top">
-            <div className="badge-c">C</div>
+          <div className="header-top js-bg">
+            <div className="badge-c">JS</div>
             <button className="close-btn-unique" onClick={() => setShowSidebar(false)}>
               <FaTimes />
             </button>
           </div>
           <div className="header-meta">
-            <strong>C Programming</strong>
+            <strong>JavaScript Tutorial</strong>
             <div className="progress-mini">
               <div className="progress-fill" style={{ width: `${((selected + 1) / chapters.length) * 100}%` }}></div>
             </div>
@@ -100,7 +95,7 @@ export default function CLanguage() {
             <button className="hamburger-unique" onClick={() => setShowSidebar(true)}>
               <FaBars />
             </button>
-            <h5 className="chapter-title-text">{chapters[selected].title}</h5>
+            <h5 className="chapter-title-text">{currentChapter.title}</h5>
           </div>
           <button className="home-btn-unique" onClick={() => navigate("/learn")}>
             <FaHome />
@@ -109,15 +104,13 @@ export default function CLanguage() {
 
         <div className="scroll-content-unique">
           <div className="content-card-unique">
-            <CurrentChapter />
+            {currentChapter.component}
           </div>
-
-          {/* Footer buttons removed from here */}
         </div>
       </main>
 
       {/* ===== OVERLAY ===== */}
-      {showSidebar && <div className="overlay-unique" onClick={() => setShowSidebar(false)}></div>}
+      {showSidebar && <div className="overlay-unique" onClick={() => setShowSidebar(false)} />}
     </div>
   );
 }

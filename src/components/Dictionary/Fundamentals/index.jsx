@@ -1,8 +1,9 @@
-// src\components\Dictionary\Fundamentals\index.jsx
+// src/components/Dictionary/Fundamentals/index.jsx
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { FaSignOutAlt, FaHome } from "react-icons/fa";
+import { FaHome, FaBars, FaTimes, FaChevronRight } from "react-icons/fa";
 
+/* ===== CHAPTERS ===== */
 import Overview from "./Overview.jsx";
 import Chapter1 from "./Chapter1";
 import Chapter2 from "./Chapter2";
@@ -13,6 +14,7 @@ import Chapter6 from "./Chapter6";
 import Chapter7 from "./Chapter7";
 import Chapter8 from "./Chapter8";
 
+/* ===== META ===== */
 const chapters = [
   { id: 0, title: "Overview" },
   { id: 1, title: "Introduction to Computer" },
@@ -25,101 +27,139 @@ const chapters = [
   { id: 8, title: "Applications of Computer" },
 ];
 
+const chapterComponents = [
+  Overview,
+  Chapter1,
+  Chapter2,
+  Chapter3,
+  Chapter4,
+  Chapter5,
+  Chapter6,
+  Chapter7,
+  Chapter8,
+];
+
 export default function Fundamentals() {
   const [selected, setSelected] = useState(0);
-  const [drawer, setDrawer] = useState(false);
-  const [desktop, setDesktop] = useState(false);
+  const [showSidebar, setShowSidebar] = useState(false);
   const navigate = useNavigate();
 
-  const total = chapters.length;
-  const current = chapters[selected];
+  const CurrentChapter = chapterComponents[selected];
 
+  /* Reset internal scroll */
   useEffect(() => {
-    const check = () => setDesktop(window.innerWidth >= 992);
-    check();
-    window.addEventListener("resize", check);
-    return () => window.removeEventListener("resize", check);
-  }, []);
-
-  useEffect(() => {
-    document.body.style.overflow = !desktop && drawer ? "hidden" : "auto";
-  }, [drawer, desktop]);
-
-  useEffect(() => {
-    window.scrollTo(0, 0);
+    const scrollDiv = document.querySelector(".scroll-content-unique");
+    if (scrollDiv) scrollDiv.scrollTop = 0;
   }, [selected]);
 
-  const next = () => selected < total - 1 && setSelected(p => p + 1);
-  const prev = () => selected > 0 && setSelected(p => p - 1);
-
-  const renderChapter = () => {
-    switch (selected) {
-      case 0: return <Overview setChapter={setSelected} />;
-      case 1: return <Chapter1 />;
-      case 2: return <Chapter2 />;
-      case 3: return <Chapter3 />;
-      case 4: return <Chapter4 />;
-      case 5: return <Chapter5 />;
-      case 6: return <Chapter6 />;
-      case 7: return <Chapter7 />;
-      case 8: return <Chapter8 />;
-      default: return <Overview />;
-    }
-  };
+  /* Lock body scroll when sidebar open */
+  useEffect(() => {
+    document.body.style.overflow = showSidebar ? "hidden" : "auto";
+    return () => (document.body.style.overflow = "auto");
+  }, [showSidebar]);
 
   return (
-    <div className="android-app">
-      {/* 🔹 TOP APP BAR */}
-      <header className="app-bar">
-        <div className="app-bar-left">
-           <button className="icon-btn ripple" onClick={() => setDrawer(true)}>☰</button>
-           <div className="app-bar-title">
-             <span>{current.title}</span>
-             <small>Chapter {selected + 1} / {total}</small>
-           </div>
-        </div>
-        
-        {/* Quick Exit Button in Top Bar */}
-        <button className="exit-top-btn" onClick={() => navigate("/learn")} title="Back to Courses">
-          <FaHome />
-        </button>
-      </header>
+    <div className="app-container-unique">
 
-      {/* 🔹 OVERLAY */}
-      <div className={`drawer-overlay ${!desktop && drawer ? "visible" : ""}`} onClick={() => setDrawer(false)} />
+      {/* ===== SIDEBAR ===== */}
+      <aside className={`sidebar-wrapper-unique ${showSidebar ? "open" : ""}`}>
+        <div className="sidebar-header-unique">
+          <div className="header-top">
+            <div className="badge-c">BC</div>
+            <button
+              className="close-btn-unique"
+              onClick={() => setShowSidebar(false)}
+            >
+              <FaTimes />
+            </button>
+          </div>
 
-      {/* 🔹 PROPER SIDEBAR (DRAWER) */}
-      <aside className={`drawer ${drawer ? "open" : ""}`}>
-        <div className="drawer-header">
-          <div className="drawer-logo">BC</div>
-          <div className="drawer-header-text">
-             <h4>Fundamentals</h4>
-             <p>Computer Course 2026</p>
+          <div className="header-meta">
+            <strong>Fundamentals</strong>
+
+            <div className="progress-mini">
+              <div
+                className="progress-fill"
+                style={{
+                  width: `${((selected + 1) / chapters.length) * 100}%`,
+                }}
+              />
+            </div>
+
+            <span>
+              {selected + 1} of {chapters.length} Chapters
+            </span>
           </div>
         </div>
 
-        <div className="drawer-list">
-          {chapters.map(ch => (
+        <div className="sidebar-list-unique">
+          {chapters.map((ch) => (
             <div
               key={ch.id}
-              className={`drawer-item ripple ${selected === ch.id ? "active" : ""}`}
+              className={`list-item-unique ${
+                selected === ch.id ? "active" : ""
+              }`}
               onClick={() => {
                 setSelected(ch.id);
-                setDrawer(false);
+                setShowSidebar(false);
               }}
             >
-              <span className="ch-num">{ch.id + 1}</span>
-              {ch.title}
+              <div className="item-content">
+                <span className="index-circle">{ch.id + 1}</span>
+                <span className="chapter-title">{ch.title}</span>
+              </div>
+
+              {selected === ch.id && (
+                <FaChevronRight className="active-arrow" />
+              )}
             </div>
           ))}
         </div>
       </aside>
 
-      {/* 🔹 MAIN CONTENT */}
-      <main className="content-area">
-        {renderChapter()}
+      {/* ===== MAIN CONTENT ===== */}
+      <main className="main-section-unique">
+        <nav className="top-nav-unique">
+          <div className="nav-left">
+            <button
+              className="hamburger-unique"
+              onClick={() => setShowSidebar(true)}
+            >
+              <FaBars />
+            </button>
+
+            <h5 className="chapter-title-text">
+              {chapters[selected].title}
+            </h5>
+          </div>
+
+          <button
+            className="home-btn-unique"
+            onClick={() => navigate("/learn")}
+          >
+            <FaHome />
+          </button>
+        </nav>
+
+        <div className="scroll-content-unique">
+          <div className="content-card-unique">
+            {/* Overview needs setter */}
+            {selected === 0 ? (
+              <Overview setChapter={setSelected} />
+            ) : (
+              <CurrentChapter />
+            )}
+          </div>
+        </div>
       </main>
 
+      {/* ===== OVERLAY ===== */}
+      {showSidebar && (
+        <div
+          className="overlay-unique"
+          onClick={() => setShowSidebar(false)}
+        />
+      )}
     </div>
   );
 }

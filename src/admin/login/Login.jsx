@@ -2,8 +2,10 @@ import { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { toast } from "react-toastify";
 import { Mail, Lock, Eye, EyeOff, ArrowLeft } from "lucide-react";
-import { useAuth } from "../../contexts/AuthContext";
+import { signInWithEmailAndPassword } from "firebase/auth";
 
+import { auth } from "../../utils/firebase/firebase";
+import { useAuth } from "../../contexts/AuthContext";
 import "../auth/auth-base.css";
 
 const AuthLogin = () => {
@@ -18,13 +20,40 @@ const AuthLogin = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (loading) return;
+
     setLoading(true);
+
     try {
-      await login(email, password);
+      // 🔥 REAL FIREBASE LOGIN
+      const userCredential = await signInWithEmailAndPassword(
+        auth,
+        email,
+        password
+      );
+
+      const user = userCredential.user;
+
+      // 🔥 AuthContext ke format me object bhejo
+      login({
+        uid: user.uid,
+        name: user.displayName || "User",
+        email: user.email,
+        photoURL: user.photoURL || null,
+        role: "admin", // 🔐 future me Firestore se lao
+        token: await user.getIdToken()
+      });
+
       toast.success("Welcome back 🚀");
       navigate("/dashboard", { replace: true });
     } catch (err) {
-      toast.error(err?.response?.data?.message || "Login failed");
+      console.error(err);
+      toast.error(
+        err.code === "auth/wrong-password"
+          ? "Wrong password"
+          : err.code === "auth/user-not-found"
+          ? "User not found"
+          : "Login failed"
+      );
     } finally {
       setLoading(false);
     }
@@ -32,12 +61,15 @@ const AuthLogin = () => {
 
   return (
     <div className="auth-container">
-      <button type="button" className="btn-back-circle" onClick={() => navigate(-1)}>
+      <button
+        type="button"
+        className="btn-back-circle"
+        onClick={() => navigate(-1)}
+      >
         <ArrowLeft size={20} />
       </button>
 
       <form className="auth-card login-layout" onSubmit={handleSubmit}>
-        {/* Title and Subtitle CSS se handle ho raha hai pseudo elements ke through */}
         <div className="auth-input-group">
           <Mail size={18} />
           <input
@@ -60,7 +92,10 @@ const AuthLogin = () => {
             disabled={loading}
             required
           />
-          <span className="toggle-password" onClick={() => setShow(!show)}>
+          <span
+            className="toggle-password"
+            onClick={() => setShow(!show)}
+          >
             {show ? <EyeOff size={18} /> : <Eye size={18} />}
           </span>
         </div>
