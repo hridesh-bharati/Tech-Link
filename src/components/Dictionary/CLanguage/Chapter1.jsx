@@ -5,10 +5,10 @@ import './Chapter1.css';
 
 export default function Chapter1() {
   return (
-    <div className="chapter-content container-fluid px-3 pb-5">
+    <div className="chapter-content container-fluid px-1">
 
       {/* Header */}
-      <div className="chapter-header my-4 py-2 text-white text-center">
+      <div className="chapter-header my-3 py-2 text-white text-center">
         <h1 className="h2 fw-bold">
           📘 Chapter 1: Introduction to C Programming
         </h1>
@@ -44,7 +44,7 @@ export default function Chapter1() {
           { icon: 'bi-code-square', value: 'ANSI/ISO', label: 'Standard' },
           { icon: 'bi-trophy', value: 'Top 5', label: 'Popularity' },
         ].map((stat, idx) => (
-          <div className="col-6 col-md-3" key={idx}>
+          <div className="col-6 col-md-3 " key={idx}>
             <div className="card shadow-sm h-100 p-2" style={{ borderLeft: '4px solid var(--primary)' }}>
               <i className={`bi ${stat.icon} fs-3 mb-1`} style={{ color: 'var(--primary)' }}></i>
               <h4 className="h5 mb-0">{stat.value}</h4>

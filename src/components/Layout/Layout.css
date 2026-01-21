@@ -1,64 +1,195 @@
-/* ===== GLOBAL FIX ===== */
-* {
-  box-sizing: border-box;
-}
 
-html,
-body {
-  margin: 0;
-  padding: 0;
-  overflow-x: hidden;
-  overscroll-behavior-x: none;
-}
 
-/* ===== LAYOUT ===== */
+/* ======================================================
+   LAYOUT
+====================================================== */
 .layout {
   width: 100vw;
   min-height: 100vh;
-  overflow-x: hidden;
   position: relative;
+  display: flex;
+  flex-direction: column;
+  background: #f8f9fa;
+  overflow-x: hidden;
 }
 
-/* ===== SLIDER ===== */
+.layout.nested-route .slider-track {
+  width: 100vw !important;
+  transform: translate3d(0, 0, 0) !important;
+}
+
+.layout.nested-route .slide {
+  display: none;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.layout.nested-route .slide.active {
+  display: block;
+  opacity: 1;
+  pointer-events: all;
+}
+
+.layout.nested-route .slide:not(.active) {
+  display: none !important;
+}
+
+/* ======================================================
+   SLIDER VIEWPORT
+====================================================== */
 .slider-viewport {
   width: 100vw;
-  height: 100%;
-  overflow: hidden;
+  flex: 1;
+  overflow-y: scroll; /* allow scrolling */
+  overflow-x: hidden;
   position: relative;
   touch-action: pan-y;
+  -webkit-overflow-scrolling: touch;
+
+  /* Hide scrollbar */
+  scrollbar-width: none;
+  -ms-overflow-style: none;
 }
 
+.slider-viewport::-webkit-scrollbar {
+  display: none;
+}
+
+/* Nested routes viewport adjustment */
+.layout.nested-route .slider-viewport {
+  height: calc(100vh - 120px);
+  overflow-y: scroll;
+  overflow-x: hidden;
+}
+
+/* ======================================================
+   SLIDER TRACK
+====================================================== */
 .slider-track {
   display: flex;
   width: 300vw;
+  height: 100%;
   transform: translate3d(-100vw, 0, 0);
   will-change: transform;
+  backface-visibility: hidden;
+  perspective: 1000px;
+  transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
-/* ===== SLIDES ===== */
+.slider-track.no-transition {
+  transition: none !important;
+}
+
+/* ======================================================
+   SLIDES
+====================================================== */
 .slide {
   width: 100vw;
   min-height: 100vh;
   flex-shrink: 0;
-  overflow-y: auto;
+  overflow-y: scroll;
   overflow-x: hidden;
+  padding: 0;
+  background: white;
+  position: relative;
+  -webkit-overflow-scrolling: touch;
+
+  /* Hide scrollbar */
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+.slide::-webkit-scrollbar {
+  display: none;
 }
 
 .slide.active {
   pointer-events: auto;
+  box-shadow: 0 0 30px rgba(0, 0, 0, 0.1);
+  z-index: 2;
 }
 
-/* ===== EDGE (EMPTY) ===== */
+.layout.nested-route .slide.active {
+  min-height: calc(100vh - 120px);
+  overflow-y: scroll;
+  height: auto;
+}
+
+/* Hide other slides in nested mode */
+.layout.nested-route .slider-track {
+  justify-content: center;
+}
+
+/* ======================================================
+   EDGE SLIDES
+====================================================== */
 .edge {
   width: 100%;
   height: 100%;
   pointer-events: none;
+  background: transparent;
+  opacity: 0;
 }
 
-/* ===== LOADER ===== */
+/* ======================================================
+   LOADER
+====================================================== */
 .slide-loader {
   display: flex;
   justify-content: center;
   align-items: center;
   min-height: 100vh;
+  background: rgba(255, 255, 255, 0.9);
+}
+
+.spinner-border {
+  width: 3rem;
+  height: 3rem;
+}
+
+/* ======================================================
+   ANIMATIONS
+====================================================== */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.slide.active > * {
+  animation: fadeIn 0.3s ease-out;
+}
+
+/* ======================================================
+   NESTED ROUTE CONTENT
+====================================================== */
+.nested-content {
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 20px;
+  min-height: calc(100vh - 180px);
+}
+
+@media (max-width: 768px) {
+  .nested-content {
+    padding: 15px;
+  }
+
+  .slide {
+    padding: 0;
+  }
+
+  .slider-track {
+    transform: translate3d(-100vw, 0, 0);
+  }
+
+  .layout.nested-route .slider-viewport {
+    height: calc(100vh - 100px);
+  }
 }

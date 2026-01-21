@@ -1,155 +1,139 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { FaSignOutAlt, FaHome } from "react-icons/fa";
+import { FaHome, FaBars, FaTimes, FaChevronRight, FaChevronLeft } from "react-icons/fa";
 
-// Chapters Import
-import Chapter1 from './Chapter1.jsx';
-import Chapter2 from './Chapter2.jsx';
-import Chapter3 from './Chapter3.jsx';
-import Chapter4 from './Chapter4.jsx';
-import Chapter5 from './Chapter5.jsx';
-import Chapter6 from './Chapter6.jsx';
-import Chapter7 from './Chapter7.jsx';
-import Chapter8 from './Chapter8.jsx';
-import Chapter9 from './Chapter9.jsx';
-import Chapter10 from './Chapter10.jsx';
-import Chapter11 from './Chapter11.jsx';
-import Chapter12 from './Chapter12.jsx';
-import Chapter13 from './Chapter13.jsx';
-import Chapter14 from './Chapter14.jsx';
-import Chapter15 from './Chapter15.jsx';
-import Chapter16 from './Chapter16.jsx';
-import Chapter17 from './Chapter17.jsx';
-import Chapter18 from './Chapter18.jsx';
-import Chapter19 from './Chapter19.jsx';
-import Chapter20 from './Chapter20.jsx';
+/* ===== Chapters (Ensure all 20 are mapped) ===== */
+import Chapter1 from "./Chapter1"; import Chapter2 from "./Chapter2";
+import Chapter3 from "./Chapter3"; import Chapter4 from "./Chapter4";
+import Chapter5 from "./Chapter5"; import Chapter6 from "./Chapter6";
+import Chapter7 from "./Chapter7"; import Chapter8 from "./Chapter8";
+import Chapter9 from "./Chapter9"; import Chapter10 from "./Chapter10";
+import Chapter11 from "./Chapter11"; import Chapter12 from "./Chapter12";
+import Chapter13 from "./Chapter13"; import Chapter14 from "./Chapter14";
+import Chapter15 from "./Chapter15"; import Chapter16 from "./Chapter16";
+import Chapter17 from "./Chapter17"; import Chapter18 from "./Chapter18";
+import Chapter19 from "./Chapter19"; import Chapter20 from "./Chapter20";
 
 const chapters = [
-  { id: 0, title: 'C Introduction' },
-  { id: 1, title: 'C Get Started' },
-  { id: 2, title: 'C Syntax' },
-  { id: 3, title: 'C Output' },
-  { id: 4, title: 'C Comments' },
-  { id: 5, title: 'C Variables' },
-  { id: 6, title: 'C Data Types' },
-  { id: 7, title: 'C Type Conversion' },
-  { id: 8, title: 'C Constants' },
-  { id: 9, title: 'C Operators' },
-  { id: 10, title: 'C Booleans' },
-  { id: 11, title: 'C If...Else' },
-  { id: 12, title: 'C Switch' },
-  { id: 13, title: 'C While Loop' },
-  { id: 14, title: 'C For Loop' },
-  { id: 15, title: 'C Break/Continue' },
-  { id: 16, title: 'C Arrays' },
-  { id: 17, title: 'C Strings' },
-  { id: 18, title: 'C User Input' },
-  { id: 19, title: 'C Memory Address' },
+  { id: 0, title: "C Introduction" }, { id: 1, title: "C Get Started" },
+  { id: 2, title: "C Syntax" }, { id: 3, title: "C Output" },
+  { id: 4, title: "C Comments" }, { id: 5, title: "C Variables" },
+  { id: 6, title: "C Data Types" }, { id: 7, title: "C Type Conversion" },
+  { id: 8, title: "C Constants" }, { id: 9, title: "C Operators" },
+  { id: 10, title: "C Booleans" }, { id: 11, title: "C If Else" },
+  { id: 12, title: "C Switch" }, { id: 13, title: "C While Loop" },
+  { id: 14, title: "C For Loop" }, { id: 15, title: "C Break Continue" },
+  { id: 16, title: "C Arrays" }, { id: 17, title: "C Strings" },
+  { id: 18, title: "C User Input" }, { id: 19, title: "C Memory Address" }
+];
+
+const chapterComponents = [
+  Chapter1, Chapter2, Chapter3, Chapter4, Chapter5,
+  Chapter6, Chapter7, Chapter8, Chapter9, Chapter10,
+  Chapter11, Chapter12, Chapter13, Chapter14, Chapter15,
+  Chapter16, Chapter17, Chapter18, Chapter19, Chapter20
 ];
 
 export default function CLanguage() {
-  const [selected, setSelected] = useState(0); // 0-based index like Fundamentals
-  const [drawer, setDrawer] = useState(false);
-  const [desktop, setDesktop] = useState(window.innerWidth >= 992);
+  const [selected, setSelected] = useState(0);
+  const [showSidebar, setShowSidebar] = useState(false);
   const navigate = useNavigate();
 
-  const total = chapters.length;
-  const current = chapters[selected];
+  const CurrentChapter = chapterComponents[selected];
 
-  // Sync with window size
+  // Scroll to top when chapter changes
   useEffect(() => {
-    const check = () => setDesktop(window.innerWidth >= 992);
-    window.addEventListener("resize", check);
-    return () => window.removeEventListener("resize", check);
-  }, []);
-
-  // Scroll to top on change
-  useEffect(() => {
-    window.scrollTo(0, 0);
+    const scrollDiv = document.querySelector(".scroll-content-unique");
+    if (scrollDiv) scrollDiv.scrollTop = 0;
   }, [selected]);
 
-  const next = () => selected < total - 1 && setSelected(p => p + 1);
-  const prev = () => selected > 0 && setSelected(p => p - 1);
-
-  // Switch Case rendering like Fundamentals
-  const renderChapter = () => {
-    switch (selected) {
-      case 0: return <Chapter1 />;
-      case 1: return <Chapter2 />;
-      case 2: return <Chapter3 />;
-      case 3: return <Chapter4 />;
-      case 4: return <Chapter5 />;
-      case 5: return <Chapter6 />;
-      case 6: return <Chapter7 />;
-      case 7: return <Chapter8 />;
-      case 8: return <Chapter9 />;
-      case 9: return <Chapter10 />;
-      case 10: return <Chapter11 />;
-      case 11: return <Chapter12 />;
-      case 12: return <Chapter13 />;
-      case 13: return <Chapter14 />;
-      case 14: return <Chapter15 />;
-      case 15: return <Chapter16 />;
-      case 16: return <Chapter17 />;
-      case 17: return <Chapter18 />;
-      case 18: return <Chapter19 />;
-      case 19: return <Chapter20 />;
-      default: return <Chapter1 />;
-    }
-  };
+  useEffect(() => {
+    document.body.style.overflow = showSidebar ? "hidden" : "auto";
+    return () => (document.body.style.overflow = "auto");
+  }, [showSidebar]);
 
   return (
-    <div className="android-app">
-      {/* 🔹 TOP APP BAR */}
-      <header className="app-bar">
-        <div className="app-bar-left">
-          <button className="icon-btn ripple" onClick={() => setDrawer(true)}>☰</button>
-          <div className="app-bar-title">
-            <span>{current.title}</span>
-            <small>Chapter {selected + 1} / {total}</small>
-          </div>
+    <div className="app-container-unique">
+      
+      {/* ===== SIDEBAR ===== */}
+      <aside className={`sidebar-wrapper-unique ${showSidebar ? "open" : ""}`}>
+  <div className="sidebar-header-unique">
+    <div className="header-top">
+      <div className="badge-c">C</div>
+      <button className="close-btn-unique" onClick={() => setShowSidebar(false)}>
+        <FaTimes />
+      </button>
+    </div>
+    <div className="header-meta">
+      <strong>C Programming</strong>
+      <div className="progress-mini">
+        <div className="progress-fill" style={{ width: `${((selected + 1) / chapters.length) * 100}%` }}></div>
+      </div>
+      <span>{selected + 1} of {chapters.length} Chapters</span>
+    </div>
+  </div>
+
+  <div className="sidebar-list-unique">
+    {chapters.map((ch) => (
+      <div
+        key={ch.id}
+        className={`list-item-unique ${selected === ch.id ? "active" : ""}`}
+        onClick={() => {
+          setSelected(ch.id);
+          setShowSidebar(false);
+        }}
+      >
+        <div className="item-content">
+          <span className="index-circle">{ch.id + 1}</span>
+          <span className="chapter-title">{ch.title}</span>
         </div>
-        <button className="exit-top-btn" onClick={() => navigate("/learn")}>
-          <FaHome />
-        </button>
-      </header>
+        {selected === ch.id && <FaChevronRight className="active-arrow" />}
+      </div>
+    ))}
+  </div>
+</aside>
 
-      {/* 🔹 OVERLAY */}
-      <div className={`drawer-overlay ${!desktop && drawer ? "visible" : ""}`} onClick={() => setDrawer(false)} />
-
-      {/* 🔹 SIDEBAR (DRAWER) */}
-      <aside className={`drawer ${drawer ? "open" : ""}`}>
-        <div className="drawer-header">
-          <div className="drawer-logo">C</div>
-          <div className="drawer-header-text">
-            <h4>C Language</h4>
-            <p>Programming Course 2026</p>
+      {/* ===== MAIN CONTENT ===== */}
+      <main className="main-section-unique">
+        <nav className="top-nav-unique">
+          <div className="nav-left">
+            <button className="hamburger-unique" onClick={() => setShowSidebar(true)}>
+              <FaBars />
+            </button>
+            <h5 className="chapter-title-text">{chapters[selected].title}</h5>
           </div>
-        </div>
+          <button className="home-btn-unique" onClick={() => navigate("/learn")}>
+            <FaHome />
+          </button>
+        </nav>
 
-        <div className="drawer-list">
-          {chapters.map((ch) => (
-            <div
-              key={ch.id}
-              className={`drawer-item ripple ${selected === ch.id ? "active" : ""}`}
-              onClick={() => {
-                setSelected(ch.id);
-                setDrawer(false);
-              }}
+        <div className="scroll-content-unique">
+          <div className="content-card-unique">
+            <CurrentChapter />
+          </div>
+
+          <div className="nav-footer-unique">
+            <button
+              className="btn-prev-next"
+              disabled={selected === 0}
+              onClick={() => setSelected((s) => s - 1)}
             >
-              <span className="ch-num">{ch.id + 1}</span>
-              {ch.title}
-            </div>
-          ))}
-        </div>
-      </aside>
+              <FaChevronLeft /> Previous
+            </button>
 
-      {/* 🔹 MAIN CONTENT */}
-      <main className="content-area">
-        <div className="content-card">
-           {renderChapter()}
+            <button
+              className="btn-prev-next primary"
+              disabled={selected === chapters.length - 1}
+              onClick={() => setSelected((s) => s + 1)}
+            >
+              Next <FaChevronRight />
+            </button>
+          </div>
         </div>
       </main>
+
+      {/* ===== OVERLAY ===== */}
+      {showSidebar && <div className="overlay-unique" onClick={() => setShowSidebar(false)}></div>}
     </div>
   );
 }
