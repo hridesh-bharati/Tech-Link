@@ -5,11 +5,9 @@ import { Mail, Lock, Eye, EyeOff, ArrowLeft } from "lucide-react";
 import { signInWithEmailAndPassword } from "firebase/auth";
 
 import { auth } from "../../utils/firebase/firebase";
-import { useAuth } from "../../contexts/AuthContext";
 import "../auth/auth-base.css";
 
 const AuthLogin = () => {
-  const { login } = useAuth();
   const navigate = useNavigate();
 
   const [email, setEmail] = useState("");
@@ -21,39 +19,13 @@ const AuthLogin = () => {
     e.preventDefault();
     if (loading) return;
 
-    setLoading(true);
-
     try {
-      // 🔥 REAL FIREBASE LOGIN
-      const userCredential = await signInWithEmailAndPassword(
-        auth,
-        email,
-        password
-      );
-
-      const user = userCredential.user;
-
-      // 🔥 AuthContext ke format me object bhejo
-      login({
-        uid: user.uid,
-        name: user.displayName || "User",
-        email: user.email,
-        photoURL: user.photoURL || null,
-        role: "admin", // 🔐 future me Firestore se lao
-        token: await user.getIdToken()
-      });
-
+      setLoading(true);
+      await signInWithEmailAndPassword(auth, email, password);
       toast.success("Welcome back 🚀");
       navigate("/dashboard", { replace: true });
     } catch (err) {
-      console.error(err);
-      toast.error(
-        err.code === "auth/wrong-password"
-          ? "Wrong password"
-          : err.code === "auth/user-not-found"
-          ? "User not found"
-          : "Login failed"
-      );
+      toast.error("Login failed");
     } finally {
       setLoading(false);
     }
@@ -92,10 +64,7 @@ const AuthLogin = () => {
             disabled={loading}
             required
           />
-          <span
-            className="toggle-password"
-            onClick={() => setShow(!show)}
-          >
+          <span onClick={() => setShow(!show)}>
             {show ? <EyeOff size={18} /> : <Eye size={18} />}
           </span>
         </div>

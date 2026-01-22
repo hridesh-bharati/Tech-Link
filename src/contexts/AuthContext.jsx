@@ -1,4 +1,6 @@
 import { createContext, useContext, useEffect, useState } from "react";
+import { onAuthStateChanged } from "firebase/auth";
+import { auth } from "../utils/firebase/firebase";
 
 const AuthContext = createContext();
 
@@ -6,30 +8,32 @@ export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
 
-  // 🔁 Page refresh pe user restore
   useEffect(() => {
-    const storedUser = localStorage.getItem("authUser");
-    if (storedUser) {
-      setUser(JSON.parse(storedUser));
-    }
-    setLoading(false);
+    const unsub = onAuthStateChanged(auth, (firebaseUser) => {
+      if (firebaseUser) {
+        setUser({
+          uid: firebaseUser.uid,
+          name: firebaseUser.displayName,
+          email: firebaseUser.email,
+          photoURL: firebaseUser.photoURL,
+        });
+      } else {
+        setUser(null);
+      }
+      setLoading(false);
+    });
+
+    return () => unsub();
   }, []);
 
-  // ✅ LOGIN
-  const login = (userData) => {
-    setUser(userData);
-    localStorage.setItem("authUser", JSON.stringify(userData));
-  };
-
-  // 🚪 LOGOUT
-  const logout = () => {
-    setUser(null);
-    localStorage.removeItem("authUser");
+  const login = () => {}; // no-op (firebase handles)
+  const logout = async () => {
+    await auth.signOut();
   };
 
   return (
-    <AuthContext.Provider value={{ user, login, logout, loading }}>
-      {children}
+    <AuthContext.Provider value={{ user, logout, loading }}>
+      {!loading && children}
     </AuthContext.Provider>
   );
 };

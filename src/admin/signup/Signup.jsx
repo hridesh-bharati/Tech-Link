@@ -6,13 +6,11 @@ import { User, Mail, Lock, Eye, EyeOff, ArrowLeft } from "lucide-react";
 import { auth, db } from "../../utils/firebase/firebase";
 import { createUserWithEmailAndPassword, updateProfile } from "firebase/auth";
 import { doc, setDoc } from "firebase/firestore";
-import { useAuth } from "../../contexts/AuthContext";
 
 import "../auth/auth-base.css";
 
 const AuthSignup = () => {
   const navigate = useNavigate();
-  const { login } = useAuth(); // 🔥 IMPORTANT
 
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
@@ -22,15 +20,14 @@ const AuthSignup = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
     if (!name || !email || !password) {
       toast.error("All fields are required");
       return;
     }
 
-    setLoading(true);
-
     try {
+      setLoading(true);
+
       const { user } = await createUserWithEmailAndPassword(
         auth,
         email,
@@ -39,20 +36,7 @@ const AuthSignup = () => {
 
       await updateProfile(user, { displayName: name });
 
-      // 🔥 LOGIN USER IMMEDIATELY
-      login({
-        uid: user.uid,
-        name,
-        email: user.email,
-        photoURL: user.photoURL || null,
-        role: "admin",
-        token: await user.getIdToken(),
-      });
-
-      toast.success("Account created 🎉");
-      navigate("/dashboard", { replace: true });
-
-      // Firestore (background)
+      // Firestore (background – no wait)
       setDoc(doc(db, "users", user.uid), {
         uid: user.uid,
         name,
@@ -61,6 +45,8 @@ const AuthSignup = () => {
         createdAt: new Date(),
       }).catch(console.error);
 
+      toast.success("Account created 🎉");
+      navigate("/dashboard", { replace: true });
     } catch (err) {
       toast.error(err.message);
     } finally {
@@ -113,11 +99,11 @@ const AuthSignup = () => {
         <button className="btn-auth-submit" disabled={loading}>
           {loading ? "Creating Account..." : "Sign Up"}
         </button>
-
       </form>
-        <p className="auth-footer-text">
-          Already have an account? <Link to="/login">Login</Link>
-        </p>
+
+      <p className="auth-footer-text">
+        Already have an account? <Link to="/login">Login</Link>
+      </p>
     </div>
   );
 };
