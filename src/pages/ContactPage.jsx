@@ -320,10 +320,77 @@
 // };
 
 // export default ContactPage;
-import React from 'react'
+import React, { useState } from "react";
 
-export default function ContactPage() {
+const Contact = () => {
+  const [form, setForm] = useState({ name: "", email: "", message: "" });
+  const [submitted, setSubmitted] = useState(false);
+
+  const handleChange = (e) => {
+    setForm({ ...form, [e.target.name]: e.target.value });
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    // For now just simulate submission
+    console.log("Contact form submitted:", form);
+    setSubmitted(true);
+    setForm({ name: "", email: "", message: "" });
+  };
+
   return (
-    <div>ContactPage</div>
-  )
-}
+    <div className="container mx-auto p-4">
+      <h1 className="text-3xl font-bold mb-4">Contact Us</h1>
+
+      {submitted && (
+        <div className="bg-green-100 text-green-800 p-3 rounded mb-4">
+          Your message has been sent successfully!
+        </div>
+      )}
+
+      <form onSubmit={handleSubmit} className="space-y-4 max-w-lg">
+        <div>
+          <label className="block mb-1 font-semibold">Name</label>
+          <input
+            type="text"
+            name="name"
+            value={form.name}
+            onChange={handleChange}
+            required
+            className="w-full border rounded p-2"
+          />
+        </div>
+        <div>
+          <label className="block mb-1 font-semibold">Email</label>
+          <input
+            type="email"
+            name="email"
+            value={form.email}
+            onChange={handleChange}
+            required
+            className="w-full border rounded p-2"
+          />
+        </div>
+        <div>
+          <label className="block mb-1 font-semibold">Message</label>
+          <textarea
+            name="message"
+            value={form.message}
+            onChange={handleChange}
+            required
+            rows={5}
+            className="w-full border rounded p-2"
+          ></textarea>
+        </div>
+        <button
+          type="submit"
+          className="bg-primary text-white px-4 py-2 rounded hover:bg-primary-dark"
+        >
+          Send Message
+        </button>
+      </form>
+    </div>
+  );
+};
+
+export default Contact;

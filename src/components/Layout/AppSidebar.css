@@ -1,56 +1,48 @@
+/* Sidebar Slide Animation */
 .app-sidebar {
   position: fixed;
-  top: 0; left: 0; bottom: 0;
-  width: 310px;
-  background-color: var(--bg-primary);
-  z-index: var(--z-fixed);
-  display: flex;
-  flex-direction: column;
-  border-radius: 0 28px 28px 0; /* Modern Android Curve */
+  top: 0;
+  left: 0;
+  width: 280px;
+  height: 100vh;
+  z-index: 1050;
+  transition: transform 0.3s ease-in-out;
+  border-right: 1px solid rgba(0,0,0,0.1);
 }
 
-/* .sidebar-backdrop {
+.sidebar-backdrop {
   position: fixed;
   inset: 0;
-  background-color: rgba(0, 0, 0, 0.4);
-  backdrop-filter: blur(4px);
-  z-index: var(--z-overlay);
-} */
-
-.brand-icon-box {
-  width: 38px; height: 38px;
-  background: var(--gradient-primary);
-  color: white;
-  border-radius: 12px;
-  display: grid; place-items: center;
-  font-size: 1.1rem;
+  background: rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(2px);
+  z-index: 1040;
 }
 
-.avatar-sm { width: 42px; height: 42px; font-size: 1.1rem; }
-
-.x-small { font-size: 0.72rem; letter-spacing: 0.03em; }
-.clickable:active { transform: scale(0.97); transition: 0.1s; }
-
-/* Material 3 Nav Pill */
-.nav-pill-btn {
-  padding: 12px 18px;
-  background: transparent;
-  color: var(--text-primary);
-  border-radius: 28px; /* Android M3 Shape */
-  transition: 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+/* Hover Effects */
+.list-group-item {
+  min-height: 48px;
+  border: none !important;
+  margin: 2px 8px;
+  transition: all 0.2s ease;
+  color: var(--bs-body-color);
 }
 
-.nav-pill-btn:hover { background-color: var(--gray-100); }
+.list-group-item:hover {
+  background-color: rgba(25, 135, 84, 0.1) !important; /* light success */
+  transform: translateX(5px);
+}
 
-.nav-pill-btn.active {
-  background-color: var(--primary) !important; /* WhatsApp Green */
+.list-group-item.active {
+  background-color: #198754 !important; /* Bootstrap Success */
   color: white !important;
+  font-weight: 500;
 }
 
-.nav-pill-btn.active .icon-wrap { color: white !important; }
-.icon-wrap { font-size: 1.2rem; color: var(--primary); width: 26px; text-align: center; }
-
-/* Dark mode tweaks */
-[data-theme="dark"] .nav-pill-btn:hover { background-color: var(--bg-secondary); }
-[data-theme="dark"] .bg-body-tertiary { background-color: #202c33 !important; }
-
+/* Custom Scrollbar */
+.overflow-auto::-webkit-scrollbar {
+  width: 5px;
+}
+.overflow-auto::-webkit-scrollbar-thumb {
+  background: #cbd5e0;
+  border-radius: 10px;
+}

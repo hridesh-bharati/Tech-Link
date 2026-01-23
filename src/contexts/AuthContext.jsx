@@ -1,5 +1,5 @@
 import { createContext, useContext, useEffect, useState } from "react";
-import { onAuthStateChanged } from "firebase/auth";
+import { onAuthStateChanged, signOut } from "firebase/auth";
 import { auth, db } from "../utils/firebase/firebase";
 import { doc, getDoc } from "firebase/firestore";
 
@@ -11,30 +11,41 @@ export const AuthProvider = ({ children }) => {
 
   useEffect(() => {
     const unsub = onAuthStateChanged(auth, async (firebaseUser) => {
-      if (firebaseUser) {
-        // Get additional user data from Firestore
-        const docRef = doc(db, "users", firebaseUser.uid);
-        const docSnap = await getDoc(docRef);
+      try {
+        if (firebaseUser) {
+          const docRef = doc(db, "users", firebaseUser.uid);
+          const docSnap = await getDoc(docRef);
+          const dbUser = docSnap.exists() ? docSnap.data() : {};
 
-        setUser({
-          uid: firebaseUser.uid,
-          name: firebaseUser.displayName,
-          email: firebaseUser.email,
-          photoURL: firebaseUser.photoURL,
-          avatar: docSnap.exists() ? docSnap.data().avatar : null,
-          role: docSnap.exists() ? docSnap.data().role : "Admin",
-        });
-      } else {
+          setUser({
+            uid: firebaseUser.uid,
+            name: dbUser.name || firebaseUser.displayName || "Student",
+            email: firebaseUser.email,
+            avatar:
+              dbUser.avatar ||
+              firebaseUser.photoURL ||
+              null,
+            role: dbUser.role || "student",
+            activeCourses: dbUser.activeCourses || 0,
+            verified: firebaseUser.emailVerified,
+          });
+        } else {
+          setUser(null);
+        }
+      } catch (error) {
+        console.error("Auth Error:", error);
         setUser(null);
+      } finally {
+        setLoading(false);
       }
-      setLoading(false);
     });
 
     return () => unsub();
   }, []);
 
   const logout = async () => {
-    await auth.signOut();
+    await signOut(auth);
+    localStorage.clear(); // analytics + session clean
   };
 
   return (

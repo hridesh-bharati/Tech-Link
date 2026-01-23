@@ -1,116 +1,157 @@
-import { motion, AnimatePresence } from "framer-motion";
+import React from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { useAuth } from "../../contexts/AuthContext";
 import { useTheme } from "../../contexts/ThemeContext";
-import { FaLaptopCode, FaTimes, FaSun, FaMoon, FaDownload, FaFilePdf, FaProjectDiagram } from "react-icons/fa";
+import {
+  FaLaptopCode, FaPlayCircle, FaFilePdf, FaQuestionCircle,
+  FaDownload, FaProjectDiagram, FaSun, FaMoon,
+  FaCode, FaCertificate, FaTrophy, FaSignOutAlt, FaUserGraduate
+} from "react-icons/fa";
 import "./AppSidebar.css";
 
-// Reusable NavItem to keep code DRY
-const NavItem = ({ item, isActive, onClick }) => (
-  <button 
-    onClick={() => onClick(item.path)}
-    className={`nav-pill-btn d-flex align-items-center gap-3 w-100 border-0 mb-1 ${isActive ? 'active shadow-sm' : ''}`}
-  >
-    <span className="icon-wrap">{item.icon}</span>
-    <span className="flex-grow-1 text-start small fw-medium">{item.label}</span>
-    {item.badge && <span className="badge rounded-pill bg-danger x-small">{item.badge}</span>}
-  </button>
-);
+const sections = [
+  {
+    title: "Learning Path",
+    items: [
+      { path: "/courses", label: "My Courses", icon: <FaLaptopCode /> },
+      { path: "/playground", label: "Code Editor", icon: <FaCode />, badge: "PRO" },
+      { path: "/videos", label: "Video Lessons", icon: <FaPlayCircle /> },
+      { path: "/notes", label: "Study Material", icon: <FaFilePdf /> },
+    ],
+  },
+  {
+    title: "Portfolio & Growth",
+    items: [
+      { path: "/projects", label: "My Projects", icon: <FaProjectDiagram /> },
+      { path: "/certificates", label: "Certificates", icon: <FaCertificate /> },
+      { path: "/quizzes", label: "Skill Assessment", icon: <FaQuestionCircle /> },
+      { path: "/leaderboard", label: "Rankings", icon: <FaTrophy /> },
+    ],
+  },
+];
 
 export default function AppSidebar({ open, onClose }) {
-  const { user, logout } = useAuth();
-  const { theme, toggleTheme } = useTheme();
-  const location = useLocation();
+  const { pathname } = useLocation();
   const navigate = useNavigate();
+  const { user, logout } = useAuth(); // Get real user info from AuthContext
+  const { theme, toggleTheme } = useTheme();
 
-  const sections = [
-    {
-      title: "Learning",
-      items: [
-        { path: "/courses", icon: <FaLaptopCode />, label: "Computer Courses" },
-        { path: "/notes", icon: <FaFilePdf />, label: "Notes & PDFs", badge: "NEW" },
-        { path: "/downloads", icon: <FaDownload />, label: "Downloads" },
-      ]
-    },
-    {
-      title: "Portfolio",
-      items: [
-        { path: "/projects", icon: <FaProjectDiagram />, label: "My Projects" },
-        { path: "/contact", icon: <i className="bi bi-chat-dots" />, label: "Hire Me" },
-      ]
-    }
-  ];
+  if (!open) return null;
 
-  const handleNav = (path) => { navigate(path); onClose(); };
+  const handleNavigation = (path) => {
+    navigate(path);
+    onClose();
+  };
+
+  // Compute user initial if avatar is missing
+  const userInitial = user?.name ? user.name.charAt(0).toUpperCase() : "U";
+  const userRole = user?.role || "Student"; // Fallback role
 
   return (
-    <AnimatePresence>
-      {open && (
-        <>
-          <motion.div className="sidebar-backdrop" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} onClick={onClose} />
-          
-          <motion.aside 
-            className="app-sidebar shadow-lg border-0"
-            initial={{ x: "-100%" }} animate={{ x: 0 }} exit={{ x: "-100%" }}
-            transition={{ type: "spring", damping: 22, stiffness: 200 }}
+    <>
+      <div className="sidebar-backdrop" onClick={onClose} />
+
+      <aside className={`app-sidebar bg-body shadow-lg d-flex flex-column`}>
+
+        {/* Header: Logo */}
+        <div className="p-3 d-flex align-items-center justify-content-between border-bottom">
+          <div className="d-flex align-items-center gap-2">
+            <div className="bg-success rounded-3 p-1 text-white">
+              <FaUserGraduate size={20} />
+            </div>
+            <span className="fw-bold fs-5 tracking-tight">CoursePort</span>
+          </div>
+          <button className="btn-close btn-sm" onClick={onClose}></button>
+        </div>
+
+        {/* User Profile & Progress */}
+        {user && (
+          <div className="p-3 border-bottom bg-light bg-opacity-10">
+            <div className="d-flex align-items-center gap-3 mb-2" 
+                 role="button" onClick={() => handleNavigation("/profile")}>
+              {user.avatar ? (
+                <img 
+                  src={user.avatar} 
+                  alt={user.name} 
+                  className="rounded-circle"
+                  style={{ width: 45, height: 45, objectFit: "cover" }}
+                />
+              ) : (
+                <div className="avatar-circle bg-primary text-white rounded-circle d-flex align-items-center justify-content-center fw-bold"
+                     style={{ width: 45, height: 45, minWidth: 45 }}>
+                  {userInitial}
+                </div>
+              )}
+              <div className="overflow-hidden">
+                <div className="fw-bold text-truncate">{user.name}</div>
+                <div className="text-muted small text-truncate">{userRole}</div>
+              </div>
+            </div>
+
+            {/* Learning Progress Bar */}
+            <div className="mt-3">
+              <div className="d-flex justify-content-between small mb-1">
+                <span className="text-muted">Course Progress</span>
+                <span className="fw-bold">{user.progress || 0}%</span>
+              </div>
+              <div className="progress" style={{ height: "6px" }}>
+                <div className="progress-bar bg-success" style={{ width: `${user.progress || 0}%` }}></div>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* Navigation Links */}
+        <div className="flex-grow-1 overflow-auto py-3">
+          {sections.map((sec) => (
+            <div key={sec.title} className="mb-4">
+              <h6 className="px-4 text-uppercase text-muted small fw-bold mb-2" style={{ letterSpacing: '1px' }}>
+                {sec.title}
+              </h6>
+              <div className="list-group list-group-flush">
+                {sec.items.map((item) => {
+                  const isActive = pathname === item.path;
+                  return (
+                    <button
+                      key={item.path}
+                      onClick={() => handleNavigation(item.path)}
+                      className={`list-group-item list-group-item-action d-flex align-items-center gap-3 rounded-3 ${isActive ? "active shadow-sm" : ""}`}
+                    >
+                      <span className={isActive ? "text-white" : "text-success"}>{item.icon}</span>
+                      <span className="flex-grow-1">{item.label}</span>
+                      {item.badge && (
+                        <span className="badge rounded-pill bg-warning text-dark small">{item.badge}</span>
+                      )}
+                    </button>
+                  );
+                })}
+              </div>
+            </div>
+          ))}
+        </div>
+
+        {/* Theme & Settings */}
+        <div className="p-3 border-top mt-auto bg-light bg-opacity-10">
+          <div className="btn-group w-100 mb-3" role="group">
+            <input type="radio" className="btn-check" name="theme" id="light" checked={theme === "light"} onChange={() => toggleTheme("light")} />
+            <label className="btn btn-outline-secondary btn-sm d-flex align-items-center justify-content-center gap-2" htmlFor="light">
+              <FaSun /> Light
+            </label>
+
+            <input type="radio" className="btn-check" name="theme" id="dark" checked={theme === "dark"} onChange={() => toggleTheme("dark")} />
+            <label className="btn btn-outline-secondary btn-sm d-flex align-items-center justify-content-center gap-2" htmlFor="dark">
+              <FaMoon /> Dark
+            </label>
+          </div>
+
+          <button 
+            className={`btn w-100 d-flex align-items-center justify-content-center gap-2 ${user ? "btn-outline-danger" : "btn-success"}`}
+            onClick={user ? logout : () => handleNavigation("/login")}
           >
-            {/* Header: Brand + Close */}
-            <div className="p-4">
-              <div className="d-flex justify-content-between align-items-center mb-4">
-                <div className="d-flex align-items-center gap-2">
-                  <div className="brand-icon-box shadow-sm"> <FaLaptopCode /> </div>
-                  <h6 className="mb-0 fw-bold tracking-tight text-uppercase">CoursePort</h6>
-                </div>
-                <button className="btn btn-light rounded-circle p-2 d-flex shadow-sm border-0" onClick={onClose}> <FaTimes /> </button>
-              </div>
-
-              {/* User Card: Android Style */}
-              <div className="p-3 rounded-4 d-flex align-items-center gap-3 bg-body-tertiary border border-light-subtle shadow-sm clickable" onClick={() => handleNav('/profile')}>
-                <div className="avatar-sm bg-primary text-white rounded-circle d-grid place-items-center fw-bold shadow-sm">
-                  {user?.name?.[0] || 'H'}
-                </div>
-                <div className="overflow-hidden">
-                  <div className="text-truncate fw-bold small">{user?.name || "Hridesh Bharati"}</div>
-                  <div className="text-muted x-small text-truncate">Frontend Developer</div>
-                </div>
-              </div>
-            </div>
-
-            {/* Content: Material Scroll Area */}
-            <div className="p-3 flex-grow-1 overflow-auto">
-              {sections.map((sec, i) => (
-                <div key={i} className="mb-4">
-                  <label className="text-uppercase x-small fw-bold text-primary px-3 mb-2 d-block opacity-75">{sec.title}</label>
-                  {sec.items.map(item => (
-                    <NavItem 
-                      key={item.path} 
-                      item={item} 
-                      isActive={location.pathname === item.path} 
-                      onClick={handleNav} 
-                    />
-                  ))}
-                </div>
-              ))}
-
-              {/* Theme Toggle: Segmented Control */}
-              <div className="px-2">
-                <label className="text-uppercase x-small fw-bold text-primary mb-2 d-block opacity-75">Appearance</label>
-                <div className="btn-group w-100 rounded-pill p-1 bg-body-tertiary shadow-sm">
-                  <button className={`btn rounded-pill border-0 py-2 small fw-medium ${theme==='light'?'bg-white shadow-sm text-primary':'text-muted'}`} onClick={()=>toggleTheme('light')}><FaSun className="me-2"/> Light</button>
-                  <button className={`btn rounded-pill border-0 py-2 small fw-medium ${theme==='dark'?'bg-dark text-white shadow-sm':'text-muted'}`} onClick={()=>toggleTheme('dark')}><FaMoon className="me-2"/> Dark</button>
-                </div>
-              </div>
-            </div>
-
-            {/* Footer: Bottom Button */}
-            <div className="p-4 border-top border-light-subtle">
-              <button className={`btn w-100 rounded-pill py-2 fw-bold shadow-sm ${user?'btn-outline-danger border-2':'btn-primary'}`} onClick={user?logout:()=>handleNav('/login')}>
-                {user?'Sign Out':'Student Sign In'}
-              </button>
-            </div>
-          </motion.aside>
-        </>
-      )}
-    </AnimatePresence>
+            {user ? <><FaSignOutAlt /> Sign Out</> : "Student Sign In"}
+          </button>
+        </div>
+      </aside>
+    </>
   );
 }
