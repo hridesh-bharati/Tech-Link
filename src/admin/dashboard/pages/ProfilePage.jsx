@@ -1,139 +1,50 @@
-import React, { useEffect, useState } from "react";
-import { auth, db } from "../../../utils/firebase/firebase";
-import { doc, onSnapshot, updateDoc, deleteDoc } from "firebase/firestore";
-import { onAuthStateChanged, deleteUser, updateProfile } from "firebase/auth";
-import { toast } from "react-toastify";
-import { useNavigate } from "react-router-dom";
+import React from "react";
+import { useAuth } from "../../../contexts/AuthContext";
+import { User, Mail, Shield, Calendar } from "lucide-react";
 
 const Profile = () => {
-  const navigate = useNavigate();
+  const { user } = useAuth();
 
-  const [userData, setUserData] = useState({
-    name: "",
-    email: "",
-    role: "",
-  });
-  const [loading, setLoading] = useState(true);
-  const [saving, setSaving] = useState(false);
-
-  useEffect(() => {
-    let unsubSnap;
-
-    const unsubAuth = onAuthStateChanged(auth, (user) => {
-      if (!user) {
-        navigate("/login");
-        return;
-      }
-
-      const docRef = doc(db, "users", user.uid);
-
-      // Real-time listener for Firestore
-      unsubSnap = onSnapshot(
-        docRef,
-        (snap) => {
-          if (snap.exists()) {
-            setUserData(snap.data());
-          } else {
-            toast.error("Profile not found");
-          }
-          setLoading(false);
-        },
-        (err) => {
-          toast.error(err.message);
-          setLoading(false);
-        }
-      );
-    });
-
-    return () => {
-      unsubAuth();
-      if (unsubSnap) unsubSnap();
-    };
-  }, [navigate]);
-
-  // 🔹 UPDATE PROFILE
-  const handleUpdate = async () => {
-    if (!userData.name.trim()) {
-      toast.error("Name is required");
-      return;
-    }
-
-    try {
-      setSaving(true);
-      const user = auth.currentUser;
-
-      // Optimistically update local state (UI updates immediately)
-      setUserData((prev) => ({ ...prev, name: userData.name }));
-
-      // Update Firebase Auth
-      await updateProfile(user, { displayName: userData.name });
-
-      // Update Firestore
-      await updateDoc(doc(db, "users", user.uid), { name: userData.name });
-
-      toast.success("Profile updated ✅");
-    } catch (err) {
-      toast.error(err.message);
-    } finally {
-      setSaving(false);
-    }
-  };
-
-  // 🔹 DELETE PROFILE
-  const handleDelete = async () => {
-    const confirm = window.confirm(
-      "Are you sure? This will permanently delete your account."
-    );
-    if (!confirm) return;
-
-    try {
-      const user = auth.currentUser;
-
-      // Delete Firestore data
-      await deleteDoc(doc(db, "users", user.uid));
-
-      // Delete Auth user
-      await deleteUser(user);
-
-      toast.success("Account deleted 🗑️");
-      navigate("/signup");
-    } catch (err) {
-      toast.error("Re-login required to delete account");
-    }
-  };
-
-  if (loading) return <p>Loading profile...</p>;
+  if (!user) return <p>Loading profile...</p>;
 
   return (
-    <div style={{ maxWidth: "400px", margin: "auto", padding: "20px" }}>
-      <h2>My Profile</h2>
+    <div className="container mt-4">
+      <h2 className="mb-3">My Profile</h2>
 
-      <label>Name</label>
-      <input
-        value={userData.name}
-        onChange={(e) =>
-          setUserData({ ...userData, name: e.target.value })
-        }
-      />
+      <div className="card shadow-sm p-4" style={{ maxWidth: "500px" }}>
+        <div className="text-center mb-4">
+          <img
+            src={user.avatar || user.photoURL || "/default-avatar.png"}
+            alt="Profile"
+            className="rounded-circle shadow"
+            style={{ width: "120px", height: "120px", objectFit: "cover" }}
+          />
+        </div>
 
-      <label>Email (readonly)</label>
-      <input value={userData.email} disabled />
+        <div className="d-flex align-items-center gap-2 mb-3">
+          <User size={18} />
+          <strong>Name:</strong>
+          <span>{user.name}</span>
+        </div>
 
-      <label>Role</label>
-      <input value={userData.role} disabled />
+        <div className="d-flex align-items-center gap-2 mb-3">
+          <Mail size={18} />
+          <strong>Email:</strong>
+          <span>{user.email}</span>
+        </div>
 
-      <button onClick={handleUpdate} disabled={saving}>
-        {saving ? "Saving..." : "Update Profile"}
-      </button>
+        <div className="d-flex align-items-center gap-2 mb-3">
+          <Shield size={18} />
+          <strong>Role:</strong>
+          <span>{user.role}</span>
+        </div>
 
-      <hr />
-
-      <button
-        onClick={handleDelete}
-        style={{ background: "red", color: "white" }}
-      >
-        Delete Account
-      </button>
+        <div className="d-flex align-items-center gap-2">
+          <Calendar size={18} />
+          <strong>UID:</strong>
+          <span>{user.uid}</span>
+        </div>
+      </div>
     </div>
   );
 };

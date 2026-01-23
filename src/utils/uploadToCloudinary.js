@@ -3,8 +3,8 @@ export const uploadToCloudinary = async (file) => {
 
   const formData = new FormData();
   formData.append("file", file);
-  formData.append("upload_preset", "techlink_preset"); 
-  formData.append("cloud_name", "dn1etnx2l");       
+  formData.append("upload_preset", "techlink_preset");
+  formData.append("cloud_name", "dn1etnx2l");
 
   const response = await fetch(
     "https://api.cloudinary.com/v1_1/dn1etnx2l/image/upload",
@@ -19,6 +19,5 @@ export const uploadToCloudinary = async (file) => {
   }
 
   const data = await response.json();
-
   return data.secure_url;
 };

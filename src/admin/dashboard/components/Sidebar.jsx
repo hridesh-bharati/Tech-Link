@@ -22,6 +22,7 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen, isMobile }) => {
     { path: "users", label: "Users", icon: <Users size={18} /> },
     { path: "courses", label: "Courses", icon: <BookOpen size={18} /> },
     { path: "analytics", label: "Analytics", icon: <BarChart3 size={18} /> },
+    { path: "profile-edit", label: "Edit", icon: <UserCircle size={18} /> },
     { path: "profile", label: "Profile", icon: <UserCircle size={18} /> },
     { path: "settings", label: "Settings", icon: <Settings size={18} /> },
   ];

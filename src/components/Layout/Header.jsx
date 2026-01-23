@@ -4,70 +4,30 @@ import { useAuth } from "../../contexts/AuthContext";
 import { useTheme } from "../../contexts/ThemeContext";
 import AppSidebar from "./AppSidebar";
 import "./Header.css";
-import GoogleTranslate from "../GoogleTranslate";
 
-// Navigation configuration
 const NAV_CONFIG = {
   desktop: [
-    { id: "home", label: "Home", path: "/", icon: "bi-house-fill" },
-    { id: "about", label: "About", path: "/about", icon: "bi-person-fill" },
-    { id: "learn", label: "Learn", path: "/learn", icon: "bi-code-slash" },
-    { id: "projects", label: "Projects", path: "/projects", icon: "bi-briefcase-fill" },
-    { id: "contact", label: "Contact", path: "/contact", icon: "bi-chat-dots-fill" },
+    { id: "home", label: "Home", path: "/", icon: "bi-house" },
+    { id: "about", label: "About", path: "/about", icon: "bi-person" },
+    { id: "learn", label: "Learn", path: "/learn", icon: "bi-code-square" },
+    { id: "projects", label: "Projects", path: "/projects", icon: "bi-briefcase" },
+    { id: "contact", label: "Contact", path: "/contact", icon: "bi-chat" },
   ],
   mobile: [
-    { id: "home", path: "/", icon: "bi-house-door-fill", label: "Home", iconActive: "bi-house-fill" },
+    { id: "home", path: "/", icon: "bi-house", label: "Home", iconActive: "bi-house-fill" },
     { id: "about", path: "/about", icon: "bi-person", label: "About", iconActive: "bi-person-fill" },
-    { id: "contact", path: "/contact", icon: "", label: "Contact", iconActive: "bi-chat-dots-fill" },
+    { id: "contact", path: "/contact", icon: "", label: "Contact", iconActive: "" },
     { id: "learn", path: "/learn", icon: "bi-code-square", label: "Learn", iconActive: "bi-code-slash" },
     { id: "projects", path: "/projects", icon: "bi-briefcase", label: "Projects", iconActive: "bi-briefcase-fill" },
   ]
 };
 
-// User menu options
 const USER_MENU_OPTIONS = [
-  {
-    id: "profile",
-    label: "Profile",
-    path: "/profile",
-    icon: "bi-person-circle",
-    description: "View your profile"
-  },
-  {
-    id: "dashboard",
-    label: "Dashboard",
-    path: "/dashboard",
-    icon: "bi-speedometer2",
-    description: "Your activity"
-  },
-  {
-    id: "settings",
-    label: "Settings",
-    path: "/settings",
-    icon: "bi-gear",
-    description: "Account settings"
-  },
-  {
-    id: "logout",
-    label: "Logout",
-    icon: "bi-box-arrow-left",
-    isLogout: true,
-    className: "text-danger"
-  }
+  { id: "profile", label: "Profile", path: "/profile", icon: "bi-person-circle" },
+  { id: "dashboard", label: "Dashboard", path: "/dashboard", icon: "bi-speedometer2" },
+  { id: "settings", label: "Settings", path: "/settings", icon: "bi-gear" },
+  { id: "logout", label: "Logout", icon: "bi-box-arrow-left", isLogout: true }
 ];
-
-// Haptic feedback utility
-const haptic = (pattern = "light") => {
-  if ("vibrate" in navigator) {
-    const patterns = {
-      light: 5,
-      medium: 10,
-      heavy: 20,
-      navigation: 15,
-    };
-    navigator.vibrate(patterns[pattern] || patterns.light);
-  }
-};
 
 export default function Header() {
   const { pathname } = useLocation();
@@ -75,7 +35,6 @@ export default function Header() {
   const { user, logout } = useAuth();
   const { theme, toggleTheme } = useTheme();
 
-  // State
   const [scrolled, setScrolled] = useState(false);
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [isDesktop, setIsDesktop] = useState(() => window.innerWidth >= 1025);
@@ -83,12 +42,10 @@ export default function Header() {
   const [mobileNavVisible, setMobileNavVisible] = useState(true);
   const [lastScrollY, setLastScrollY] = useState(0);
 
-  // Refs
   const headerRef = useRef(null);
   const userMenuRef = useRef(null);
   const hideTimeoutRef = useRef(null);
 
-  // Memoized values
   const activePath = useMemo(() => pathname, [pathname]);
 
   const userInitial = useMemo(() => {
@@ -96,29 +53,15 @@ export default function Header() {
     return user.name.charAt(0).toUpperCase();
   }, [user]);
 
-  // Check if path is active
   const isActive = useCallback((path) => {
     if (path === "/") return activePath === "/";
     return activePath.startsWith(path);
   }, [activePath]);
 
-  // Haptic feedback
-  const triggerHaptic = useCallback((intensity = "light") => {
-    haptic(intensity);
-  }, []);
-
-  // Handle theme toggle
-  const handleThemeToggle = useCallback(() => {
-    triggerHaptic("medium");
-    toggleTheme();
-  }, [toggleTheme, triggerHaptic]);
-
-  // Scroll handler
   const handleScroll = useCallback(() => {
     setScrolled(window.scrollY > 20);
   }, []);
 
-  // Mobile nav scroll handler
   const handleMobileNavScroll = useCallback(() => {
     if (isDesktop) return;
 
@@ -126,15 +69,13 @@ export default function Header() {
     const scrollDelta = scrollY - lastScrollY;
 
     if (Math.abs(scrollDelta) > 10) {
-      if (scrollDelta > 0) {
-        // Scrolling DOWN - hide nav
+      if (scrollDelta > 0 && scrollY > 100) {
         setMobileNavVisible(false);
         if (hideTimeoutRef.current) clearTimeout(hideTimeoutRef.current);
         hideTimeoutRef.current = setTimeout(() => {
           setMobileNavVisible(true);
         }, 2000);
       } else if (scrollDelta < 0) {
-        // Scrolling UP - show nav
         setMobileNavVisible(true);
         if (hideTimeoutRef.current) clearTimeout(hideTimeoutRef.current);
       }
@@ -142,10 +83,8 @@ export default function Header() {
     setLastScrollY(scrollY);
   }, [lastScrollY, isDesktop]);
 
-  // Resize handler
   const handleResize = useCallback(() => {
-    const width = window.innerWidth;
-    const desktop = width >= 1025;
+    const desktop = window.innerWidth >= 1025;
     setIsDesktop(desktop);
     if (desktop) {
       setSidebarOpen(false);
@@ -153,99 +92,76 @@ export default function Header() {
     }
   }, []);
 
-  // Navigation handler
   const handleNavigate = useCallback((path, options = {}) => {
-    const { hapticFeedback = true, closeMenu = true } = options;
-    if (hapticFeedback) triggerHaptic("navigation");
+    const { closeMenu = true } = options;
     if (closeMenu) {
       setSidebarOpen(false);
       setShowUserMenu(false);
     }
     if (!isDesktop) setMobileNavVisible(true);
     navigate(path);
-  }, [navigate, triggerHaptic, isDesktop]);
+  }, [navigate, isDesktop]);
 
-  // Logout handler
   const handleLogout = useCallback(() => {
-    triggerHaptic("heavy");
     logout();
     setShowUserMenu(false);
     navigate('/login');
-  }, [logout, navigate, triggerHaptic]);
+  }, [logout, navigate]);
 
-  // Effects
   useEffect(() => {
-    window.addEventListener('scroll', handleScroll, { passive: true });
-
-    const throttledNavScroll = () => {
-      requestAnimationFrame(handleMobileNavScroll);
-    };
-    window.addEventListener('scroll', throttledNavScroll, { passive: true });
-
+    window.addEventListener('scroll', handleScroll);
+    window.addEventListener('scroll', handleMobileNavScroll);
     window.addEventListener('resize', handleResize);
 
-    // Click outside handler
     const handleClickOutside = (event) => {
       if (userMenuRef.current && !userMenuRef.current.contains(event.target)) {
         setShowUserMenu(false);
       }
     };
+
     document.addEventListener('mousedown', handleClickOutside);
 
-    // Cleanup
     return () => {
       window.removeEventListener('scroll', handleScroll);
-      window.removeEventListener('scroll', throttledNavScroll);
+      window.removeEventListener('scroll', handleMobileNavScroll);
       window.removeEventListener('resize', handleResize);
       document.removeEventListener('mousedown', handleClickOutside);
       if (hideTimeoutRef.current) clearTimeout(hideTimeoutRef.current);
     };
   }, [handleScroll, handleMobileNavScroll, handleResize]);
 
-  // Keyboard navigation
   useEffect(() => {
     const handleKeyDown = (e) => {
       if (e.key === 'Escape') {
         setShowUserMenu(false);
         setSidebarOpen(false);
-        triggerHaptic("light");
       }
       if ((e.ctrlKey || e.metaKey) && e.key === 'k') {
         e.preventDefault();
-        handleNavigate('/search', { hapticFeedback: true });
-      }
-      if ((e.ctrlKey || e.metaKey) && e.key === 't') {
-        e.preventDefault();
-        handleThemeToggle();
+        handleNavigate('/search');
       }
     };
+
     document.addEventListener('keydown', handleKeyDown);
     return () => document.removeEventListener('keydown', handleKeyDown);
-  }, [handleThemeToggle, handleNavigate, triggerHaptic]);
+  }, [handleNavigate]);
 
   return (
     <>
       <header
         ref={headerRef}
-        className={`my-header theme-transition ${scrolled ? 'scrolled' : ''}`}
-        role="banner"
+        className={`my-header ${scrolled ? 'scrolled' : ''}`}
       >
         <div className="header-container">
-          {/* HEADER LEFT */}
           <div className="header-left">
             <button
-              type="button"
               className="menu-btn"
-              onClick={() => {
-                triggerHaptic("medium");
-                setSidebarOpen(true);
-              }}
+              onClick={() => setSidebarOpen(true)}
               aria-label="Open menu"
-              aria-expanded={sidebarOpen}
             >
               <i className="bi bi-list" />
             </button>
-            <GoogleTranslate />
+
             <Link
               to="/"
               className="logo-container"
@@ -253,13 +169,12 @@ export default function Header() {
                 e.preventDefault();
                 handleNavigate("/");
               }}
-              aria-label="Home"
             >
               <div className="logo-wrapper">
                 <img
                   src="/icons/logo2.png"
                   alt="Portfolio Pro"
-                  className="header-logo rounded-0"
+                  className="header-logo"
                   onError={(e) => {
                     e.target.style.display = 'none';
                     e.target.nextElementSibling.style.display = 'flex';
@@ -269,34 +184,26 @@ export default function Header() {
                   <div className="logo-icon">
                     <i className="bi bi-code-slash"></i>
                   </div>
-                  <div className="logo-text">
-                    <span className="logo-title">Portfolio Pro</span>
-                    <span className="logo-subtitle">Learn • Build • Share</span>
-                  </div>
+                  <div className="logo-title">Portfolio Pro</div>
                 </div>
               </div>
             </Link>
 
             {!isDesktop && (
               <div className="mobile-header-right">
-                {/* MOBILE THEME TOGGLE REMOVED - Now only in Desktop */}
-
-                {/* Mobile User/Auth Button */}
                 {user ? (
                   <button
-                    type="button"
                     className="mobile-user-btn"
                     onClick={() => handleNavigate('/profile')}
-                    aria-label="Go to profile"
+                    aria-label="User profile"
                   >
                     <i className="bi bi-person-circle" />
                     {user.notifications > 0 && (
-                      <span className="notification-badge">{user.notifications}</span>
+                      <span className="notification-badge" />
                     )}
                   </button>
                 ) : (
                   <button
-                    type="button"
                     className="mobile-auth-btn"
                     onClick={() => handleNavigate('/login')}
                     aria-label="Login"
@@ -308,172 +215,153 @@ export default function Header() {
             )}
           </div>
 
-          {/* DESKTOP NAVIGATION */}
           {isDesktop && (
-            <nav className="desktop-nav" aria-label="Primary navigation">
-              <div className="nav-items">
-                {NAV_CONFIG.desktop.map((item) => {
-                  const active = isActive(item.path);
-                  return (
-                    <Link
-                      key={item.id}
-                      to={item.path}
-                      className={`nav-item ${active ? 'active' : ''}`}
-                      onClick={(e) => {
-                        e.preventDefault();
-                        handleNavigate(item.path);
-                      }}
-                      aria-current={active ? 'page' : undefined}
-                    >
-                      <i className={`bi ${item.icon}`} />
-                      <span>{item.label}</span>
-                      {active && <div className="active-indicator" />}
-                    </Link>
-                  );
-                })}
-              </div>
-            </nav>
-          )}
+            <>
+              <nav className="desktop-nav" aria-label="Main navigation">
+                <div className="nav-items">
+                  {NAV_CONFIG.desktop.map((item) => {
+                    const active = isActive(item.path);
+                    return (
+                      <Link
+                        key={item.id}
+                        to={item.path}
+                        className={`nav-item ${active ? 'active' : ''}`}
+                        onClick={(e) => {
+                          e.preventDefault();
+                          handleNavigate(item.path);
+                        }}
+                        aria-current={active ? 'page' : undefined}
+                      >
+                        <i className={`bi ${item.icon}`} />
+                        <span>{item.label}</span>
+                      </Link>
+                    );
+                  })}
+                </div>
+              </nav>
 
-          {/* DESKTOP HEADER RIGHT */}
-          {isDesktop && (
-            <div className="header-right">
-              <div className="header-actions">
-                <button
-                  type="button"
-                  className="action-btn"
-                  onClick={() => handleNavigate('/search')}
-                  aria-label="Search"
-                >
-                  <i className="bi bi-search" />
-                </button>
+              <div className="header-right">
+                <div className="header-actions">
+                  <button
+                    className="action-btn"
+                    onClick={() => handleNavigate('/search')}
+                    aria-label="Search"
+                  >
+                    <i className="bi bi-search" />
+                  </button>
 
-                <button
-                  type="button"
-                  className="action-btn notification-btn"
-                  onClick={() => handleNavigate('/notifications')}
-                  aria-label="Notifications"
-                >
-                  <i className="bi bi-bell" />
-                  {user?.notifications > 0 && (
-                    <span className="notification-badge">{user.notifications}</span>
-                  )}
-                </button>
+                  <button
+                    className="action-btn notification-btn"
+                    onClick={() => handleNavigate('/notifications')}
+                    aria-label="Notifications"
+                  >
+                    <i className="bi bi-bell" />
+                    {user?.notifications > 0 && (
+                      user.notifications > 9 ? (
+                        <span className="notification-badge" />
+                      ) : (
+                        <span className="notification-count">{user.notifications}</span>
+                      )
+                    )}
+                  </button>
 
-                {/* Desktop Theme Toggle */}
-                <button
-                  type="button"
-                  className="theme-toggle-btn"
-                  onClick={handleThemeToggle}
-                  aria-label={`Switch to ${theme === 'light' ? 'dark' : 'light'} theme`}
-                >
-                  <div className="theme-toggle-inner">
+                  <button
+                    className="theme-toggle-btn"
+                    onClick={toggleTheme}
+                    aria-label={`Switch to ${theme === 'light' ? 'dark' : 'light'} theme`}
+                  >
                     <i className="bi bi-sun theme-icon-sun" />
                     <i className="bi bi-moon theme-icon-moon" />
-                  </div>
-                </button>
+                  </button>
 
-                {user ? (
-                  <div className="user-menu-container" ref={userMenuRef}>
-                    <button
-                      type="button"
-                      className="user-btn"
-                      onClick={() => setShowUserMenu(!showUserMenu)}
-                      aria-expanded={showUserMenu}
-                      aria-haspopup="true"
-                    >
-                      {user.avatar ? (
-                        <img src={user.avatar} alt={`${user.name}'s profile`} className="user-avatar" />
-                      ) : (
-                        <div className="user-initials">
-                          <span>{userInitial}</span>
+                  {user ? (
+                    <div className="user-menu-container" ref={userMenuRef}>
+                      <button
+                        className="user-btn"
+                        onClick={() => setShowUserMenu(!showUserMenu)}
+                        aria-expanded={showUserMenu}
+                        aria-haspopup="true"
+                      >
+                        {user.avatar ? (
+                          <img src={user.avatar} alt={user.name} className="user-avatar" />
+                        ) : (
+                          <div className="user-initials">{userInitial}</div>
+                        )}
+                      </button>
+
+                      {showUserMenu && (
+                        <div className="user-dropdown-menu" role="menu">
+                          <div className="user-dropdown-content">
+                            <div className="user-info-section">
+                              <div className="user-avatar-small">
+                                {user.avatar ? (
+                                  <img src={user.avatar} alt={user.name} />
+                                ) : (
+                                  <div className="user-initials">{userInitial}</div>
+                                )}
+                              </div>
+                              <div>
+                                <div className="user-name">{user.name || 'User'}</div>
+                                <div className="user-email">{user.email || ''}</div>
+                              </div>
+                            </div>
+
+                            <hr className="dropdown-divider" />
+
+                            {USER_MENU_OPTIONS.map((option) =>
+                              option.isLogout ? (
+                                <button
+                                  key={option.id}
+                                  className="dropdown-item"
+                                  onClick={handleLogout}
+                                  role="menuitem"
+                                >
+                                  <i className={`bi ${option.icon}`} />
+                                  <span>{option.label}</span>
+                                </button>
+                              ) : (
+                                <Link
+                                  key={option.id}
+                                  to={option.path}
+                                  className="dropdown-item"
+                                  onClick={(e) => {
+                                    e.preventDefault();
+                                    handleNavigate(option.path);
+                                  }}
+                                  role="menuitem"
+                                >
+                                  <i className={`bi ${option.icon}`} />
+                                  <span>{option.label}</span>
+                                </Link>
+                              )
+                            )}
+                          </div>
                         </div>
                       )}
+                    </div>
+                  ) : (
+                    <button
+                      className="auth-btn"
+                      onClick={() => handleNavigate('/login')}
+                      aria-label="Login"
+                    >
+                      <i className="bi bi-person-circle" />
+                      <span>Sign in</span>
                     </button>
-
-                    {showUserMenu && (
-                      <div className="user-dropdown-menu" role="menu">
-                        <div className="user-dropdown-content">
-                          <div className="user-info-section">
-                            <div className="user-avatar-small">
-                              {user.avatar ? (
-                                <img src={user.avatar} alt={user.name} />
-                              ) : (
-                                <div className="user-initials-small">{userInitial}</div>
-                              )}
-                            </div>
-                            <div>
-                              <div className="user-name">{user.name || 'User'}</div>
-                              <div className="user-email">{user.email || ''}</div>
-                            </div>
-                          </div>
-
-                          <hr className="dropdown-divider" />
-
-                          {USER_MENU_OPTIONS.map((option) =>
-                            option.isLogout ? (
-                              <button
-                                key={option.id}
-                                type="button"
-                                className={`dropdown-item ${option.className}`}
-                                onClick={handleLogout}
-                                role="menuitem"
-                              >
-                                <i className={`bi ${option.icon}`} />
-                                <span>{option.label}</span>
-                              </button>
-                            ) : (
-                              <Link
-                                key={option.id}
-                                to={option.path}
-                                className="dropdown-item"
-                                onClick={(e) => {
-                                  e.preventDefault();
-                                  handleNavigate(option.path);
-                                }}
-                                role="menuitem"
-                              >
-                                <i className={`bi ${option.icon}`} />
-                                <div>
-                                  <div className="dropdown-item-label">{option.label}</div>
-                                  {option.description && (
-                                    <div className="dropdown-item-desc">{option.description}</div>
-                                  )}
-                                </div>
-                              </Link>
-                            )
-                          )}
-                        </div>
-                      </div>
-                    )}
-                  </div>
-                ) : (
-                  <button
-                    type="button"
-                    className="auth-btn"
-                    onClick={() => handleNavigate('/login')}
-                    aria-label="Login"
-                  >
-                    <i className="bi bi-person-circle" />
-                    <span>Login</span>
-                  </button>
-                )}
+                  )}
+                </div>
               </div>
-            </div>
+            </>
           )}
         </div>
       </header>
 
-      {/* MOBILE BOTTOM NAVIGATION */}
       {!isDesktop && (
         <nav
-          className={`mobile-bottom-nav ${mobileNavVisible ? 'nav-visible' : 'nav-hidden'}`}
+          className={`mobile-bottom-nav ${mobileNavVisible ? '' : 'nav-hidden'}`}
           role="navigation"
           aria-label="Mobile navigation"
         >
-          {/* Background div को और prominent बनाएं */}
-          <div className="nav-background"></div>
-
           <div className="nav-items-container">
             {NAV_CONFIG.mobile.map((item) => {
               const active = isActive(item.path);
@@ -481,17 +369,15 @@ export default function Header() {
                 <Link
                   key={item.id}
                   to={item.path}
-                  className={`mobile-nav-btn ${active ? 'active' : ''}`}
+                  className={`mobile-nav-btn${active ? 'active' : ''}`}
                   onClick={(e) => {
                     e.preventDefault();
-                    handleNavigate(item.path, { hapticFeedback: false });
+                    handleNavigate(item.path);
                   }}
                   aria-current={active ? 'page' : undefined}
                 >
                   <div className="mobile-nav-icon-wrapper">
-                    <div className="nav-icon-circle">
-                      <i className={`bi ${active ? item.iconActive || item.icon : item.icon}`} />
-                    </div>
+                    <i className={`bi ${active ? item.iconActive || item.icon : item.icon}`} />
                   </div>
                   <span className="mobile-nav-label">{item.label}</span>
                 </Link>
@@ -502,19 +388,17 @@ export default function Header() {
               <button
                 className="center-action-btn"
                 onClick={() => handleNavigate('/contact')}
-                aria-label="Create new"
+                aria-label="Contact"
               >
-                <i className="bi bi-telephone-fill"></i>
-
+                <i class="bi bi-telephone-fill"></i>
               </button>
             </div>
           </div>
         </nav>
       )}
-      {/* SPACER FOR FIXED HEADER */}
-      <div style={{ height: '60px' }} aria-hidden="true" />
 
-      {/* SIDEBAR */}
+      <div style={{ height: isDesktop ? '70px' : '60px' }} aria-hidden="true" />
+
       <AppSidebar
         open={sidebarOpen}
         onClose={() => setSidebarOpen(false)}

@@ -9,6 +9,7 @@ import UsersPage from "./pages/UsersPage";
 import CoursesPage from "./pages/CoursesPage";
 import AnalyticsPage from "./pages/AnalyticsPage";
 import ProfilePage from "./pages/ProfilePage";
+import ProfileEdit from "./pages/ProfileEdit";
 import SettingsPage from "./pages/SettingsPage";
 
 const Dashboard = () => {
@@ -50,6 +51,7 @@ const Dashboard = () => {
             <Route path="courses" element={<CoursesPage />} />
             <Route path="analytics" element={<AnalyticsPage />} />
             <Route path="profile" element={<ProfilePage />} />
+            <Route path="profile-edit" element={<ProfileEdit />} />
             <Route path="settings" element={<SettingsPage />} />
           </Routes>
         </main>
