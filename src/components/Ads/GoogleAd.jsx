@@ -19,6 +19,7 @@ const GoogleAd = ({ client, slot, style = {}, format = "auto" }) => {
       data-ad-client={client}
       data-ad-slot={slot}
       data-ad-format={format}
+      data-full-width-responsive="true"
       ref={adRef}
     />
   );
