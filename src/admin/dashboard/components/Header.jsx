@@ -63,11 +63,10 @@ const Header = ({ toggleSidebar }) => {
 
             {/* Home Button */}
             <button
-              className="btn btn-outline-primary btn-sm d-none d-sm-flex align-items-center gap-1"
+              className="btn btn-primary btn-sm align-items-center gap-1"
               onClick={() => navigate("/")}
             >
-              <Home size={16} />
-              Home
+              <Home size={16} /> Home
             </button>
 
             {/* Notifications */}
