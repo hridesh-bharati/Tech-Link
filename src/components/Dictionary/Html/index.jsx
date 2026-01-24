@@ -6,26 +6,30 @@ import "./index.css"
 const Intro = lazy(() => import("./Chapters/Intro.jsx"));
 const Elements = lazy(() => import("./Chapters/Elements.jsx"));
 const Attributes = lazy(() => import("./Chapters/Attributes.jsx"));
+const Comment = lazy(() => import("./Chapters/Comment.jsx"));
 const Headings = lazy(() => import("./Chapters/Headings.jsx"));
 const Paragraphs = lazy(() => import("./Chapters/Paragraphs.jsx"));
+const Formatting = lazy(() => import("./Chapters/Formatting.jsx"));
 const Links = lazy(() => import("./Chapters/Links.jsx"));
 const Images = lazy(() => import("./Chapters/Images.jsx"));
 const Lists = lazy(() => import("./Chapters/Lists.jsx"));
 const Tables = lazy(() => import("./Chapters/Tables.jsx"));
-// const Forms = lazy(() => import("./Chapters/Forms.jsx"));
 
+// const Forms = lazy(() => import("./Chapters/Forms.jsx"));
 const chapters = [
   { id: 0, title: "Introduction", component: <Intro /> },
   { id: 1, title: "HTML Elements", component: <Elements /> },
-  { id: 2, title: "Attributes", component: <Attributes /> },
-  { id: 3, title: "Headings", component: <Headings /> },
-  { id: 4, title: "Paragraphs", component: <Paragraphs /> },
-  { id: 5, title: "Links", component: <Links /> },
-  { id: 6, title: "Images", component: <Images /> },
-  { id: 7, title: "Lists", component: <Lists /> },
-  { id: 8, title: "Tables", component: <Tables /> },
-  // { id: 9, title: "Forms", component: <Forms /> },
-];
+  { id: 2, title: "HTML Comments", component: <Comment /> },
+  { id: 3, title: "Attributes", component: <Attributes /> },
+  { id: 4, title: "Headings", component: <Headings /> },
+  { id: 5, title: "Paragraphs", component: <Paragraphs /> },
+  { id: 6, title: "Formatting", component: <Formatting /> },
+  { id: 7, title: "Links", component: <Links /> },
+  { id: 8, title: "Images", component: <Images /> },
+  { id: 9, title: "Lists", component: <Lists /> },
+  { id: 10, title: "Tables", component: <Tables /> },
+]
+
 
 export default function HTML() {
   const [selected, setSelected] = useState(0);
