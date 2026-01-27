@@ -9,9 +9,9 @@ const NAV_CONFIG = {
   desktop: [
     { id: "home", label: "Home", path: "/", icon: "bi-house" },
     { id: "about", label: "About", path: "/about", icon: "bi-person" },
-    { id: "contact", label: "Contact", path: "/contact", icon: "bi-chat" },
     { id: "learn", label: "Learn", path: "/learn", icon: "bi-code-square" },
     { id: "projects", label: "Projects", path: "/projects", icon: "bi-briefcase" },
+    { id: "contact", label: "Contact", path: "/contact", icon: "bi-chat" },
   ],
   mobile: [
     { id: "home", path: "/", icon: "bi-house", label: "Home", iconActive: "bi-house-fill" },

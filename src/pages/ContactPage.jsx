@@ -1,396 +1,209 @@
-// import React, { useState } from "react";
-// import {
-//   Mail,
-//   Phone,
-//   MapPin,
-//   Clock,
-//   Send,
-//   CheckCircle,
-//   Linkedin,
-//   Github,
-//   Twitter,
-// } from "lucide-react";
-// import API from "../utils/api.js";
-// import "./ContactPage.css";
-
-// const ContactPage = () => {
-//   const [formData, setFormData] = useState({
-//     name: "",
-//     email: "",
-//     subject: "",
-//     message: "",
-//   });
-
-//   const [isSubmitting, setIsSubmitting] = useState(false);
-//   const [sent, setSent] = useState(false);
-//   const [errors, setErrors] = useState({});
-//   const [serverError, setServerError] = useState("");
-
-//   /* ================= VALIDATION ================= */
-//   const validateForm = () => {
-//     const newErrors = {};
-
-//     if (!formData.name.trim()) newErrors.name = "Name is required";
-
-//     if (!formData.email.trim()) {
-//       newErrors.email = "Email is required";
-//     } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)) {
-//       newErrors.email = "Please enter a valid email";
-//     }
-
-//     if (!formData.subject.trim()) newErrors.subject = "Subject is required";
-
-//     if (!formData.message.trim()) {
-//       newErrors.message = "Message is required";
-//     } else if (formData.message.length < 10) {
-//       newErrors.message = "Message must be at least 10 characters";
-//     }
-
-//     setErrors(newErrors);
-//     return Object.keys(newErrors).length === 0;
-//   };
-
-//   /* ================= CHANGE ================= */
-//   const handleChange = (e) => {
-//     const { name, value } = e.target;
-//     setFormData((prev) => ({ ...prev, [name]: value }));
-
-//     if (errors[name]) {
-//       setErrors((prev) => ({ ...prev, [name]: "" }));
-//     }
-//   };
-
-//   /* ================= REAL SUBMIT ================= */
-//   const handleSubmit = async (e) => {
-//     e.preventDefault();
-//     setServerError("");
-
-//     if (!validateForm()) return;
-
-//     setIsSubmitting(true);
-
-//     try {
-//       const res = await API.post("/contact", formData);
-
-//       console.log("✅ CONTACT API RESPONSE:", res.data);
-//       console.log("📧 MAIL STATUS:", res.data.debug);
-//       console.log("🕒 TIME:", res.data.debug?.time);
-
-//       setSent(true);
-//       setFormData({
-//         name: "",
-//         email: "",
-//         subject: "",
-//         message: "",
-//       });
-
-//       setTimeout(() => setSent(false), 4000);
-//     } catch (err) {
-//       console.error("❌ CONTACT ERROR:", err.response?.data || err.message);
-
-//       setServerError(
-//         err.response?.data?.message ||
-//           "❌ Server error. Please try again later."
-//       );
-//     } finally {
-//       setIsSubmitting(false);
-//     }
-//   };
-
-//   /* ================= STATIC DATA ================= */
-//   const contactDetails = [
-//     {
-//       icon: <Mail size={20} />,
-//       label: "Email",
-//       value: "hridesh027@gmail.com",
-//       link: "mailto:hridesh027@gmail.com",
-//       color: "var(--primary)",
-//     },
-//     {
-//       icon: <Phone size={20} />,
-//       label: "Phone",
-//       value: "+91 72679 95307",
-//       link: "tel:+917267995307",
-//       color: "var(--success)",
-//     },
-//     {
-//       icon: <MapPin size={20} />,
-//       label: "Location",
-//       value: "Maharajganj, Uttar Pradesh, India",
-//       color: "var(--warning)",
-//     },
-//     {
-//       icon: <Clock size={20} />,
-//       label: "Availability",
-//       value: "Open for remote & onsite work",
-//       color: "var(--accent)",
-//     },
-//   ];
-
-//   const socialLinks = [
-//     {
-//       icon: <Github size={20} />,
-//       url: "https://github.com/hrideshbharati",
-//     },
-//     {
-//       icon: <Linkedin size={20} />,
-//       url: "https://linkedin.com/in/hrideshbharati",
-//     },
-//     {
-//       icon: <Twitter size={20} />,
-//       url: "https://twitter.com/hrideshbharati",
-//     },
-//   ];
-
-//   /* ================= JSX ================= */
-//   return (
-//     <div className="contact-page">
-//       {/* HEADER */}
-//       <section className="contact-header pb-4">
-//         <div className="container">
-//           <div>
-//             <h1>Let's Connect & Create</h1>
-//             <p className="subtitle">
-//               Have a project in mind? Let's discuss how we can work together to
-//               bring your ideas to life.
-//             </p>
-//           </div>
-//         </div>
-//       </section>
-
-//       {/* CONTENT */}
-//       <section className="contact-content mt-2">
-//         <div className="container contact-grid">
-//           {/* LEFT INFO */}
-//           <div className="contact-info">
-//             <div className="info-header">
-//               <h2>Contact Information</h2>
-//               <p>
-//                 I'm always open to discussing freelance work, full-time roles,
-//                 or collaboration.
-//               </p>
-//             </div>
-
-//             <div className="contact-details">
-//               {contactDetails.map((item, i) => (
-//                 <div className="detail-item" key={i}>
-//                   <div
-//                     className="detail-icon"
-//                     style={{ background: item.color }}
-//                   >
-//                     {item.icon}
-//                   </div>
-//                   <div className="detail-content">
-//                     <span className="detail-label">{item.label}</span>
-//                     {item.link ? (
-//                       <a href={item.link} className="detail-value my-2">
-//                         {item.value}
-//                       </a>
-//                     ) : (
-//                       <span className="detail-value">{item.value}</span>
-//                     )}
-//                   </div>
-//                 </div>
-//               ))}
-//             </div>
-
-//             <div className="social-links">
-//               <h3>Follow & Connect</h3>
-//               <div className="social-icons">
-//                 {socialLinks.map((s, i) => (
-//                   <a
-//                     key={i}
-//                     href={s.url}
-//                     target="_blank"
-//                     rel="noopener noreferrer"
-//                     className="social-icon"
-//                   >
-//                     {s.icon}
-//                   </a>
-//                 ))}
-//               </div>
-//             </div>
-
-//             <div className="response-time">
-//               <Clock size={18} />
-//               <span>Typically respond within 24 hours</span>
-//             </div>
-//           </div>
-
-//           {/* RIGHT FORM */}
-//           <div className="contact-form-container">
-//             <div className="form-header">
-//               <h2>Send me a message</h2>
-//               <p>Fill the form and I'll get back to you.</p>
-//             </div>
-
-//             <form className="contact-form" onSubmit={handleSubmit}>
-//               <div className="form-row">
-//                 <div className="form-group">
-//                   <label>Full Name *</label>
-//                   <input
-//                     name="name"
-//                     value={formData.name}
-//                     onChange={handleChange}
-//                     className={errors.name ? "error" : ""}
-//                   />
-//                   {errors.name && (
-//                     <span className="error-message">{errors.name}</span>
-//                   )}
-//                 </div>
-
-//                 <div className="form-group">
-//                   <label>Email *</label>
-//                   <input
-//                     name="email"
-//                     value={formData.email}
-//                     onChange={handleChange}
-//                     className={errors.email ? "error" : ""}
-//                   />
-//                   {errors.email && (
-//                     <span className="error-message">{errors.email}</span>
-//                   )}
-//                 </div>
-//               </div>
-
-//               <div className="form-group">
-//                 <label>Subject *</label>
-//                 <input
-//                   name="subject"
-//                   value={formData.subject}
-//                   onChange={handleChange}
-//                   className={errors.subject ? "error" : ""}
-//                 />
-//                 {errors.subject && (
-//                   <span className="error-message">{errors.subject}</span>
-//                 )}
-//               </div>
-
-//               <div className="form-group">
-//                 <label>Message *</label>
-//                 <textarea
-//                   name="message"
-//                   rows="6"
-//                   value={formData.message}
-//                   onChange={handleChange}
-//                   className={errors.message ? "error" : ""}
-//                 />
-//                 {errors.message && (
-//                   <span className="error-message">{errors.message}</span>
-//                 )}
-//               </div>
-
-//               {serverError && (
-//                 <div className="error-message">{serverError}</div>
-//               )}
-
-//               <div className="form-footer">
-//                 <button
-//                   type="submit"
-//                   className="btn-submit"
-//                   disabled={isSubmitting}
-//                 >
-//                   {isSubmitting ? (
-//                     <>
-//                       <div className="spinner" /> Sending...
-//                     </>
-//                   ) : (
-//                     <>
-//                       <Send size={18} /> Send Message
-//                     </>
-//                   )}
-//                 </button>
-
-//                 {sent && (
-//                   <div className="success-msg">
-//                     <CheckCircle size={20} />
-//                     <div>
-//                       <strong>Message sent successfully!</strong>
-//                       <p>I'll reply within 24 hours.</p>
-//                     </div>
-//                   </div>
-//                 )}
-//               </div>
-//             </form>
-//           </div>
-//         </div>
-//       </section>
-//     </div>
-//   );
-// };
-
-// export default ContactPage;
 import React, { useState } from "react";
+import emailjs from "@emailjs/browser";
+import {
+  Mail,
+  Phone,
+  MapPin,
+  Clock,
+  Send,
+  CheckCircle,
+  Linkedin,
+  Github,
+  Twitter,
+} from "lucide-react";
+import "./ContactPage.css";
 
-const Contact = () => {
-  const [form, setForm] = useState({ name: "", email: "", message: "" });
-  const [submitted, setSubmitted] = useState(false);
+const ContactPage = () => {
+  const [formData, setFormData] = useState({
+    name: "",
+    email: "",
+    subject: "",
+    message: "",
+  });
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [sent, setSent] = useState(false);
+  const [errors, setErrors] = useState({});
+  const [serverError, setServerError] = useState("");
 
-  const handleChange = (e) => {
-    setForm({ ...form, [e.target.name]: e.target.value });
+  /* ================= VALIDATION ================= */
+  const validateForm = () => {
+    const newErrors = {};
+    if (!formData.name.trim()) newErrors.name = "Name is required";
+    if (!formData.email.trim()) newErrors.email = "Email is required";
+    else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email))
+      newErrors.email = "Please enter a valid email";
+    if (!formData.subject.trim()) newErrors.subject = "Subject is required";
+    if (!formData.message.trim()) newErrors.message = "Message is required";
+    else if (formData.message.length < 10)
+      newErrors.message = "Message must be at least 10 characters";
+
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
   };
 
+  /* ================= CHANGE ================= */
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormData((prev) => ({ ...prev, [name]: value }));
+    if (errors[name]) setErrors((prev) => ({ ...prev, [name]: "" }));
+  };
+
+  /* ================= SUBMIT WITH EMAILJS ================= */
   const handleSubmit = (e) => {
     e.preventDefault();
-    // For now just simulate submission
-    console.log("Contact form submitted:", form);
-    setSubmitted(true);
-    setForm({ name: "", email: "", message: "" });
+    setServerError("");
+    if (!validateForm()) return;
+
+    setIsSubmitting(true);
+
+    emailjs
+      .send(
+        "service_a1jmn6q",     // Your EmailJS service ID
+        "template_rym4nhl",    // Your EmailJS template ID
+        formData,              // form data
+        "8VANIXFp8ZzrP5SsZ"   // Your EmailJS public key
+      )
+      .then(() => {
+        setSent(true);
+        setFormData({ name: "", email: "", subject: "", message: "" });
+        setTimeout(() => setSent(false), 4000);
+      })
+      .catch(() => setServerError("❌ Failed to send message"))
+      .finally(() => setIsSubmitting(false));
   };
 
+  const contactDetails = [
+    { icon: <Mail size={20} />, label: "Email", value: "hridesh027@gmail.com", link: "mailto:hridesh027@gmail.com", color: "var(--primary)" },
+    { icon: <Phone size={20} />, label: "Phone", value: "+91 72679 95307", link: "tel:+917267995307", color: "var(--success)" },
+    { icon: <MapPin size={20} />, label: "Location", value: "Maharajganj, Uttar Pradesh, India", color: "var(--warning)" },
+    { icon: <Clock size={20} />, label: "Availability", value: "Open for remote & onsite work", color: "var(--accent)" },
+  ];
+
+  const socialLinks = [
+    { icon: <Github size={20} />, url: "https://github.com/hrideshbharati" },
+    { icon: <Linkedin size={20} />, url: "https://linkedin.com/in/hrideshbharati" },
+    { icon: <Twitter size={20} />, url: "https://twitter.com/hrideshbharati" },
+  ];
+
   return (
-    <div className="container mx-auto p-4">
-      <h1 className="text-3xl font-bold mb-4">Contact Us</h1>
+    <div className="contact-page">
+      {/* HEADER */}
+      <section className="contact-header pb-4">
+        <div className="container">
+          <div>
+            <h1>Let's Connect & Create</h1>
+            <p className="subtitle">
+              Have a project in mind? Let's discuss how we can work together to bring your ideas to life.
+            </p>
+          </div>
+        </div>
+      </section>
 
-      {submitted && (
-        <div className="bg-green-100 text-green-800 p-3 rounded mb-4">
-          Your message has been sent successfully!
-        </div>
-      )}
+      {/* CONTENT */}
+      <section className="contact-content mt-2">
+        <div className="container contact-grid">
+          {/* LEFT INFO */}
+          <div className="contact-info">
+            <div className="info-header">
+              <h2>Contact Information</h2>
+              <p>I'm always open to discussing freelance work, full-time roles, or collaboration.</p>
+            </div>
 
-      <form onSubmit={handleSubmit} className="space-y-4 max-w-lg">
-        <div>
-          <label className="block mb-1 font-semibold">Name</label>
-          <input
-            type="text"
-            name="name"
-            value={form.name}
-            onChange={handleChange}
-            required
-            className="w-full border rounded p-2"
-          />
+            <div className="contact-details">
+              {contactDetails.map((item, i) => (
+                <div className="detail-item" key={i}>
+                  <div className="detail-icon" style={{ background: item.color }}>{item.icon}</div>
+                  <div className="detail-content">
+                    <span className="detail-label">{item.label}</span>
+                    {item.link ? (
+                      <a href={item.link} className="detail-value my-2">{item.value}</a>
+                    ) : (
+                      <span className="detail-value">{item.value}</span>
+                    )}
+                  </div>
+                </div>
+              ))}
+            </div>
+
+            <div className="social-links">
+              <h3>Follow & Connect</h3>
+              <div className="social-icons">
+                {socialLinks.map((s, i) => (
+                  <a key={i} href={s.url} target="_blank" rel="noopener noreferrer" className="social-icon">{s.icon}</a>
+                ))}
+              </div>
+            </div>
+
+            <div className="response-time">
+              <Clock size={18} />
+              <span>Typically respond within 24 hours</span>
+            </div>
+          </div>
+
+          {/* RIGHT FORM */}
+          <div className="contact-form-container">
+            <div className="form-header">
+              <h2>Send me a message</h2>
+              <p>Fill the form and I'll get back to you.</p>
+            </div>
+
+            <form className="contact-form" onSubmit={handleSubmit}>
+              <div className="form-row">
+                <div className="form-group">
+                  <label>Full Name *</label>
+                  <input name="name" value={formData.name} onChange={handleChange} className={errors.name ? "error" : ""} />
+                  {errors.name && <span className="error-message">{errors.name}</span>}
+                </div>
+                <div className="form-group">
+                  <label>Email *</label>
+                  <input name="email" value={formData.email} onChange={handleChange} className={errors.email ? "error" : ""} />
+                  {errors.email && <span className="error-message">{errors.email}</span>}
+                </div>
+              </div>
+
+              <div className="form-group">
+                <label>Subject *</label>
+                <input name="subject" value={formData.subject} onChange={handleChange} className={errors.subject ? "error" : ""} />
+                {errors.subject && <span className="error-message">{errors.subject}</span>}
+              </div>
+
+              <div className="form-group">
+                <label>Message *</label>
+                <textarea name="message" rows="6" value={formData.message} onChange={handleChange} className={errors.message ? "error" : ""} />
+                {errors.message && <span className="error-message">{errors.message}</span>}
+              </div>
+
+              {serverError && <div className="error-message">{serverError}</div>}
+
+              <div className="form-footer">
+                <button type="submit" className="btn-submit" disabled={isSubmitting}>
+                  {isSubmitting ? (
+                    <>
+                      <div className="spinner" /> Sending...
+                    </>
+                  ) : (
+                    <>
+                      <Send size={18} /> Send Message
+                    </>
+                  )}
+                </button>
+
+                {sent && (
+                  <div className="success-msg">
+                    <CheckCircle size={20} />
+                    <div>
+                      <strong>Message sent successfully!</strong>
+                      <p>I'll reply within in just minutes.</p>
+                    </div>
+                  </div>
+                )}
+              </div>
+            </form>
+          </div>
         </div>
-        <div>
-          <label className="block mb-1 font-semibold">Email</label>
-          <input
-            type="email"
-            name="email"
-            value={form.email}
-            onChange={handleChange}
-            required
-            className="w-full border rounded p-2"
-          />
-        </div>
-        <div>
-          <label className="block mb-1 font-semibold">Message</label>
-          <textarea
-            name="message"
-            value={form.message}
-            onChange={handleChange}
-            required
-            rows={5}
-            className="w-full border rounded p-2"
-          ></textarea>
-        </div>
-        <button
-          type="submit"
-          className="bg-primary text-white px-4 py-2 rounded hover:bg-primary-dark"
-        >
-          Send Message
-        </button>
-      </form>
+      </section>
     </div>
   );
 };
 
-export default Contact;
+export default ContactPage;
