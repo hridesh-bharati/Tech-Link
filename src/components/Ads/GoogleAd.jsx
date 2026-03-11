@@ -1,27 +1,23 @@
-// src/components/Ads/GoogleAd.jsx
-import { useEffect, useRef } from "react";
+// components/Ads/GoogleAd.jsx
+import React, { useEffect } from "react";
 
-const GoogleAd = ({ client, slot, style = {}, format = "auto" }) => {
-  const adRef = useRef(null);
+const GoogleAd = ({ slot, style }) => {
 
   useEffect(() => {
     try {
       (window.adsbygoogle = window.adsbygoogle || []).push({});
-    } catch (err) {
-      console.error("Adsense Error:", err);
-    }
+    } catch (e) {}
   }, []);
 
   return (
     <ins
       className="adsbygoogle"
       style={{ display: "block", ...style }}
-      data-ad-client={client}
+      data-ad-client="ca-pub-2600596733955664"
       data-ad-slot={slot}
-      data-ad-format={format}
+      data-ad-format="auto"
       data-full-width-responsive="true"
-      ref={adRef}
-    />
+    ></ins>
   );
 };
 
