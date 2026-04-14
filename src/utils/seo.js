@@ -14,7 +14,7 @@ export const generateMetaDescription = (content, maxLength = 160) => {
 
 // Generate canonical URL (Vite compatible)
 export const generateCanonicalUrl = (path = '') => {
-  const baseUrl = import.meta.env.VITE_APP_BASE_URL || 'https://hrideshbharati.com';
+  const baseUrl = import.meta.env.VITE_APP_BASE_URL || 'https://hrideshncl.vercel.app/';
   const cleanPath = path === '/' ? '' : path;
   return `${baseUrl}${cleanPath}`;
 };

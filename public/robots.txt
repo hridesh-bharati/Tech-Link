@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://hrideshncl.vercel.app/sitemap.xml
